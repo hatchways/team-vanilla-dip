@@ -4,7 +4,7 @@ This is a little description about your project.
 
 **Tech Stack:** MongoDB, Express.js, React.js, Node.js, Typescript
 
-**Contributors**: [Prashant](https://github.com/Prashant-Dhanak/),
+**Contributors**: [Prashant-Dhanak](https://github.com/Prashant-Dhanak/),
 
 ---
 
