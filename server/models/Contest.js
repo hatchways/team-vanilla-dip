@@ -17,14 +17,14 @@ const contestSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  dateCreated: {
-    type: Date,
-    default: Date.now,
-  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
     required: true,
+  },
+  dateCreated: {
+    type: Date,
+    default: Date.now,
   }
 });
 
