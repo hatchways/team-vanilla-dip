@@ -18,7 +18,7 @@ exports.createContest = asyncHandler(async (req, res, next) => {
         if (!result) {
             return res.status(400).json({ status: "contest not saved!!" });
         }
-        res.status(201).json({
+        res.status(200).json({
             status: "contest saved!!",
             contest,
         });
@@ -45,7 +45,7 @@ exports.updateContestById = asyncHandler(async (req, res, next) => {
                 .json({ status: "contest doesn't exist in records!!" });
         }
         // updating contest
-        res.status(201).json({
+        res.status(200).json({
             status: "contest updated!!",
             contest: updatedContest,
         });
@@ -62,7 +62,7 @@ exports.getContestById = asyncHandler(async (req, res, next) => {
     if (!foundContest) {
     return res.status(404).json({ status: "contest not found!!" });
     }
-    res.status(201).json({
+    res.status(200).json({
     status: "contest found!!",
     contest: foundContest,
     });
@@ -78,8 +78,8 @@ exports.getContests = asyncHandler(async (req, res, next) => {
     if (contests.length === 0) {
       return res.status(404).json({ status: "no contests in records!!" });
     }
-    res.status(201).json({
-      contestsFound: contests.length,
+    res.status(200).json({
+        numberOfContests: contests.length,
       contests,
     });
     } catch (error) {
