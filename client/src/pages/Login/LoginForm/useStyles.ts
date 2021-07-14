@@ -8,10 +8,9 @@ const useStyles = makeStyles((theme) => ({
   label: {
     fontSize: 19,
     color: 'rgb(0,0,0,0.4)',
-    paddingLeft: '5px',
   },
   inputs: {
-    marginTop: '.8rem',
+    // marginTop: '.8rem',
     height: '2rem',
     padding: '5px',
   },
@@ -24,10 +23,8 @@ const useStyles = makeStyles((theme) => ({
     padding: 10,
     width: 160,
     height: 56,
-    borderRadius: theme.shape.borderRadius,
     marginTop: 49,
     fontSize: 16,
-    backgroundColor: '#3a8dff',
     fontWeight: 'bold',
   },
 }));
