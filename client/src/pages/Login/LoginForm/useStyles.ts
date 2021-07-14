@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
     color: 'rgb(0,0,0,0.4)',
   },
   inputs: {
-    // marginTop: '.8rem',
     height: '2rem',
     padding: '5px',
   },
