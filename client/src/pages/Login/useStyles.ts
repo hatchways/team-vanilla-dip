@@ -13,13 +13,17 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
     flexDirection: 'column',
     minHeight: '100vh',
-    paddingTop: 23,
+  },
+  loginPaper: {
+    padding: '3em',
+    textAlign: 'center',
   },
   welcome: {
     fontSize: 26,
     paddingBottom: 20,
     color: '#000000',
     fontWeight: 700,
+    boxShadow: 'none',
     fontFamily: "'Open Sans'",
   },
 }));
