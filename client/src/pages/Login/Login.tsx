@@ -40,13 +40,13 @@ export default function Login(): JSX.Element {
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Box width="100%" className={classes.authWrapper}>
-        <AuthHeader linkTo="/signup" asideText="TATTOO ART" btnText="Create account" />
+        <AuthHeader linkTo="/signup" asideText="TATTOO ART" btnText="SIGN IN" />
         <Box width="100%" maxWidth={450} p={3} alignSelf="center">
           <Paper className={classes.loginPaper}>
             <Grid container>
               <Grid item xs>
                 <Typography className={classes.welcome} component="h1" variant="h5">
-                  Sign In
+                  SIGN IN
                 </Typography>
               </Grid>
             </Grid>

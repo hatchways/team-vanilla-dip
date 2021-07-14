@@ -54,6 +54,7 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
             id="email"
             fullWidth
             margin="normal"
+            placeholder="Enter e-mail address"
             InputLabelProps={{
               shrink: true,
             }}
@@ -76,6 +77,7 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
             id="password"
             fullWidth
             margin="normal"
+            placeholder="Enter password"
             InputLabelProps={{
               shrink: true,
             }}
@@ -92,7 +94,7 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
           />
           <Box textAlign="center">
             <Button type="submit" size="large" variant="contained" color="primary" className={classes.submit}>
-              {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Login'}
+              {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'LOG IN'}
             </Button>
           </Box>
           <div style={{ height: 95 }} />
