@@ -41,7 +41,7 @@ export default function Register(): JSX.Element {
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Box width="100%" className={classes.authWrapper}>
-        <AuthHeader linkTo="/login" asideText="TATTOO ART" btnText="SIGN UP" />
+        <AuthHeader linkTo="/login" asideText="TATTOO ART" btnText="SIGN IN" />
         <Box width="100%" maxWidth={450} p={3} alignSelf="center">
           <Paper className={classes.signupPager}>
             <Grid container>
