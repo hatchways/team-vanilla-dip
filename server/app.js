@@ -11,7 +11,7 @@ const logger = require("morgan");
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
-const contestRouter = requires("./routes/contest");
+const contestRouter = require("./routes/contest");
 
 const { json, urlencoded } = express;
 
