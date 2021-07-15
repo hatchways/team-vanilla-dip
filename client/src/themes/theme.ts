@@ -2,7 +2,7 @@ import { createTheme } from '@material-ui/core';
 
 export const theme = createTheme({
   typography: {
-    fontFamily: '"Poppins-SemiBold", "Poppins-Regular"',
+    fontFamily: 'Poppins',
     fontSize: 12,
     button: {
       textTransform: 'none',
