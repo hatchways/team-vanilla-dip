@@ -3,10 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles(() => ({
   dashboardHeader: {
     alignSelf: 'stretch',
-    justifyContent: 'space-between',
     alignItems: 'center',
     display: 'flex',
-    flexWrap: 'wrap',
     backgroundColor: '#000000',
   },
   title: {
@@ -25,6 +23,7 @@ const useStyles = makeStyles(() => ({
     height: 54,
     boxShadow: 'none',
     marginRight: 35,
+    textTransform: 'uppercase',
   },
 }));
 

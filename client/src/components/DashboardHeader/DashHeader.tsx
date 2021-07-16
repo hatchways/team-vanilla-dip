@@ -19,7 +19,7 @@ const DashHeader = (): JSX.Element => {
       <Button color="secondary">Messages</Button>
       <Button color="secondary">Notifications</Button>
       <Button color="secondary" className={classes.createContestBtn} variant="outlined">
-        CREATE CONTEST
+        Create Contest
       </Button>
       {loggedInUser != null && <AvatarDisplay loggedIn={true} user={loggedInUser} />}
       <Button color="secondary">Account</Button>

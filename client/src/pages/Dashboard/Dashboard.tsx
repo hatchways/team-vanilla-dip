@@ -28,7 +28,7 @@ export default function Dashboard(): JSX.Element {
   }
 
   return (
-    <Grid container component="main" className={classes.root}>
+    <Grid container className={classes.root}>
       <CssBaseline />
       <Box width="100%" className={classes.drawerWrapper}>
         <DashHeader />
