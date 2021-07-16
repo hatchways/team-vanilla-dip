@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     borderColor: 'white',
     borderRadius: 0,
+    textTransform: 'uppercase',
     minWidth: 120,
   },
   logo: {

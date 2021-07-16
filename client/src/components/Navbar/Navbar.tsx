@@ -77,7 +77,7 @@ const Navbar = (): JSX.Element => {
               className={classes.authButton}
               variant="outlined"
             >
-              SIGNUP
+              sign up
             </Button>
           )}
 
@@ -91,13 +91,13 @@ const Navbar = (): JSX.Element => {
               className={classes.authButton}
               variant="outlined"
             >
-              LOGIN
+              log in
             </Button>
           )}
 
           {location.pathname == '/createContest' && (
             <Button size="large" color="primary" className={classes.authButton} variant="outlined">
-              CREATE CONTEST
+              create contest
             </Button>
           )}
         </Box>
