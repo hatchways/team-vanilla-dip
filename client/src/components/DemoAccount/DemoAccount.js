@@ -3,11 +3,13 @@ import Button from '@material-ui/core/Button';
 import login from '../../helpers/APICalls/login';
 import useStyles from '../../pages/Login/LoginForm/useStyles';
 import { useSnackBar } from '../../context/useSnackbarContext';
+import { useAuth } from '../../context/useAuthContext';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function DemoAccount() {
   const classes = useStyles();
   const { updateSnackBarMessage } = useSnackBar();
+  const { updateLoginContext } = useAuth();
 
   const demoAccount = () => {
     login('johndoe@gmail.com', 'password').then((data) => {
