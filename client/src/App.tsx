@@ -1,6 +1,7 @@
 import { MuiThemeProvider } from '@material-ui/core';
 import { theme } from './themes/theme';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -20,9 +21,9 @@ function App(): JSX.Element {
               <Switch>
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
-                <Route exact path="/dashboard">
+                <ProtectedRoute exact path="/dashboard">
                   <Dashboard />
-                </Route>
+                </ProtectedRoute>
                 <Route path="*">
                   <Redirect to="/login" />
                 </Route>

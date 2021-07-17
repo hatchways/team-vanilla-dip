@@ -13,7 +13,10 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
     flexDirection: 'column',
     minHeight: '100vh',
-    paddingTop: 23,
+  },
+  signupPager: {
+    padding: '3em',
+    textAlign: 'center',
   },
   welcome: {
     fontSize: 26,

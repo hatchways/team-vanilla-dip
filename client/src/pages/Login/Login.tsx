@@ -38,23 +38,23 @@ export default function Login(): JSX.Element {
 
   return (
     <Grid container component="main" className={classes.root}>
-      <Navbar />
       <CssBaseline />
-      <Grid item xs={12} sm={8} md={7} elevation={6} component={Paper} square>
-        <Box className={classes.authWrapper}>
-          <Box width="100%" maxWidth={450} p={3} alignSelf="center">
+      <Box width="100%" className={classes.authWrapper}>
+        <Navbar />
+        <Box width="100%" maxWidth={450} p={3} alignSelf="center">
+          <Paper className={classes.loginPaper}>
             <Grid container>
               <Grid item xs>
                 <Typography className={classes.welcome} component="h1" variant="h5">
-                  Welcome back!
+                  SIGN IN
                 </Typography>
               </Grid>
             </Grid>
             <LoginForm handleSubmit={handleSubmit} />
-          </Box>
-          <Box p={1} alignSelf="center" />
+          </Paper>
         </Box>
-      </Grid>
+        <Box p={1} alignSelf="center" />
+      </Box>
     </Grid>
   );
 }
