@@ -5,16 +5,14 @@ import useStyles from './useStyles';
 import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
 import { useEffect } from 'react';
-import DashHeader from '../../components/DashboardHeader/DashHeader';
-import Box from '@material-ui/core/Box';
+import Navbar from '../../components/Navbar/Navbar';
+import { Box, Typography, Button } from '@material-ui/core';
 import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
 import ProfileTabs from '../../components/ProfileTabs/ProfileTabs';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
-
   const { loggedInUser } = useAuth();
   const { initSocket } = useSocket();
 
@@ -31,7 +29,8 @@ export default function Dashboard(): JSX.Element {
     <Grid container className={classes.root}>
       <CssBaseline />
       <Box width="100%" className={classes.drawerWrapper}>
-        <DashHeader />
+        <Navbar />
+        <ChatSideBanner loggedInUser={loggedInUser} />
         <AvatarDisplay
           style={{
             height: '100px',

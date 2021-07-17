@@ -13,3 +13,4 @@ const AvatarDisplay = ({ user, style }: Props): JSX.Element => {
 };
 
 export default AvatarDisplay;
+git 
