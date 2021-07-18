@@ -1,4 +1,5 @@
 const Contest = require("../models/Contest");
+const Submission = require("../models/Submission");
 const asyncHandler = require("express-async-handler");
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -85,4 +86,31 @@ exports.getContests = asyncHandler(async (req, res, next) => {
     } catch (error) {
     return res.status(500).send({ error });
     }
+})
+
+
+exports.createSubmission = asyncHandler(async (req, res, next) => {
+    const userID = req.user.id;
+    const contestID = req.params.id;
+    const { imageFiles } = req.body;
+    const active = true;
+    const submission = new Submission({
+        contestID,
+        userID,
+        active,
+        imageFiles
+    })
+    try {
+        const result = await submission.save();
+        if (!result) {
+            return res.status(400).json({ status: "submission not saved"})
+        }
+        res.status(200).json({
+            status: "submission saved",
+            submission
+        })
+    }
+    catch (error) {
+        return res.status(500).send( {error} );
+    }  
 })

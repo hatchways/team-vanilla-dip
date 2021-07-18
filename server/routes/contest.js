@@ -5,11 +5,13 @@ const {
     createContest,
     getContestById,
     getContests,
-    updateContestById
+    updateContestById,
+    createSubmission
 } = require("../controllers/contest");
 
-// CREATE
+// CREATE  
 router.route("/create").post(createContest);
+router.route("/:id/submission").post(createSubmission)
 
 // READ
 router.route("/:id").get(getContestById);
