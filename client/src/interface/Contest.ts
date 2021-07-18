@@ -2,12 +2,13 @@ export interface Contest {
   title: string;
   description: string;
   prizeAmount: number;
-  deadlineDate: Date;
+  deadlineDate: string;
   userID: string;
-  dateCreated: Date;
+  dateCreated: string;
 }
 
 export interface SearchContestApiData {
   contests?: Contest[];
   error?: { message: string };
+
 }

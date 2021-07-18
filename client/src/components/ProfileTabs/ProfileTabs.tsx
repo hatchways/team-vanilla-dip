@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import useStyles from './useStyles';
 import { useContests } from '../../context/useContestContext';
-import { CardContent } from '@material-ui/core';
+import { Card, CardContent } from '@material-ui/core';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -42,16 +42,19 @@ export default function ProfileTabs(): JSX.Element {
       <ContestTabPanel index={0} value={value}>
         {allContests
           .filter((context) => {
-            return context.deadlineDate <= new Date();
+            return new Date(context.deadlineDate) <= new Date();
           })
           .map((contest, index) => {
             return (
-              <Grid item xs={12} sm={5} md={5} lg={5} key={index}>
-                <CardContent>
-                  <Typography gutterBottom className={classes.contextTitle} noWrap>
-                    {contest.title}
-                  </Typography>
-                </CardContent>
+              <Grid item key={'in progress' + index}>
+                <Card>
+                  <CardContent>
+                    <Typography gutterBottom variant={'h2'} noWrap>
+                      {contest.title}
+                    </Typography>
+                    <Typography gutterBottom>{contest.description}</Typography>
+                  </CardContent>
+                </Card>
               </Grid>
             );
           })}
@@ -59,15 +62,16 @@ export default function ProfileTabs(): JSX.Element {
       <ContestTabPanel index={1} value={value}>
         {allContests
           .filter((context) => {
-            return context.deadlineDate > new Date();
+            return new Date(context.deadlineDate) > new Date();
           })
           .map((contest, index) => {
             return (
-              <Grid item xs={12} sm={5} md={5} lg={5} key={index}>
+              <Grid item key={'completed' + index}>
                 <CardContent>
-                  <Typography className={classes.contextTitle} gutterBottom noWrap>
+                  <Typography gutterBottom variant={'h2'} noWrap>
                     {contest.title}
                   </Typography>
+                  <Typography gutterBottom>{contest.description}</Typography>
                 </CardContent>
               </Grid>
             );

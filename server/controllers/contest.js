@@ -90,16 +90,14 @@ exports.getContests = asyncHandler(async (req, res, next) => {
 // return A list of contests that belongs to the userId
 exports.getContestsByUserId = asyncHandler(async (req, res, next) =>{
     const userId = await User.findOne({_id: req.params.userId}).select('-password')
-
     try {
         const foundContest = await Contest.find({userID:userId});
-        console.log(foundContest);
         if (!foundContest) {
             return res.status(404).json({ status: "contest not found!!" });
         }
         res.status(200).json({
             status: "contest found!!",
-            contest: foundContest,
+            contests: foundContest,
         });
     } catch (error) {
         return res.status(500).json({ error });

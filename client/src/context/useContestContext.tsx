@@ -11,13 +11,13 @@ export const ContestContext = createContext<IContestContext>({
 });
 export const ContestProvider: FunctionComponent = ({ children }): JSX.Element => {
   const { loggedInUser } = useAuth();
-
   // get all contests and submission by userID
   useEffect(() => {
     if (loggedInUser) {
       const getAllContestByUserId = async () => {
         const contests = await fetchAllContestByUserId({ userId: loggedInUser.id });
         setAllContext(contests.contests);
+        console.log(contests);
       };
       getAllContestByUserId();
     }
