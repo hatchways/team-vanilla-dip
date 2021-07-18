@@ -9,7 +9,7 @@ import Link from '@material-ui/core/Link';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 import useStyles from './useStyles';
-import DashHeader from '../../components/DashboardHeader/DashHeader';
+import Navbar from '../../components/Navbar/Navbar';
 import SubmissionTabs from '../../components/SubmissionTabs/SubmissionTabs';
 
 import './Submission.css';
@@ -39,7 +39,7 @@ export default function Submission(): JSX.Element {
     <Grid container component="main" className={classes.root}>
       <CssBasline />
       <Box width="100%">
-        <DashHeader />
+        <Navbar />
         <Box p={3} m={5}>
           <Grid container className={classes.returnPanel}>
             <ArrowBackIosIcon style={{ fontSize: 10 }} />
