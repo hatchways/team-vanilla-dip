@@ -1,6 +1,6 @@
 const Contest = require("../models/Contest");
 const asyncHandler = require("express-async-handler");
-const ObjectId = require("mongoose").Types.ObjectId;
+const User = require("../models/User");
 
 // Given parameters passed in, create a contest
 exports.createContest = asyncHandler(async (req, res, next) => {
@@ -84,5 +84,24 @@ exports.getContests = asyncHandler(async (req, res, next) => {
     });
     } catch (error) {
     return res.status(500).send({ error });
+    }
+})
+
+// return A list of contests that belongs to the userId
+exports.getContestsByUserId = asyncHandler(async (req, res, next) =>{
+    const userId = await User.findOne({_id: req.params.userId}).select('-password')
+
+    try {
+        const foundContest = await Contest.find({userID:userId});
+        console.log(foundContest);
+        if (!foundContest) {
+            return res.status(404).json({ status: "contest not found!!" });
+        }
+        res.status(200).json({
+            status: "contest found!!",
+            contest: foundContest,
+        });
+    } catch (error) {
+        return res.status(500).json({ error });
     }
 })
