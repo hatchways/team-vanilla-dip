@@ -4,7 +4,7 @@ const User = require("../models/User");
 
 // Given parameters passed in, create a contest
 exports.createContest = asyncHandler(async (req, res, next) => {
-    const userID = req.user.id
+    const userID = req.user._id
     const { title, description, prizeAmount, deadlineDate } = req.body;
     const contest = new Contest({
         title,
@@ -89,9 +89,13 @@ exports.getContests = asyncHandler(async (req, res, next) => {
 
 // return A list of contests that belongs to the userId
 exports.getContestsByUserId = asyncHandler(async (req, res, next) =>{
-    const userId = await User.findOne({_id: req.params.userId}).select('-password')
+    const userId = req.user._id
     try {
-        const foundContest = await Contest.find({userID:userId});
+        const foundContest = await Contest.aggregate([
+            { $match: { userID: userId } },
+            { $addFields: {id:"$_id" } },
+        ]);
+
         if (!foundContest) {
             return res.status(404).json({ status: "contest not found!!" });
         }

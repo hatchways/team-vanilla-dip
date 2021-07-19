@@ -18,11 +18,7 @@ function ContestTabPanel(props: TabPanelProps) {
 
   return (
     <div hidden={value !== index} id={`landing-tab-panel-${index}`} aria-labelledby={`tab-${index}`} {...other}>
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box p={3}>{children}</Box>}
     </div>
   );
 }
@@ -41,12 +37,12 @@ export default function ProfileTabs(): JSX.Element {
       </Tabs>
       <ContestTabPanel index={0} value={value}>
         {allContests
-          .filter((context) => {
-            return new Date(context.deadlineDate) <= new Date();
+          .filter((contest) => {
+            return new Date(contest.deadlineDate) <= new Date();
           })
-          .map((contest, index) => {
+          .map((contest) => {
             return (
-              <Grid item key={'in progress' + index}>
+              <Grid item key={contest.id}>
                 <Card>
                   <CardContent>
                     <Typography gutterBottom variant={'h2'} noWrap>
@@ -64,9 +60,9 @@ export default function ProfileTabs(): JSX.Element {
           .filter((context) => {
             return new Date(context.deadlineDate) > new Date();
           })
-          .map((contest, index) => {
+          .map((contest) => {
             return (
-              <Grid item key={'completed' + index}>
+              <Grid item key={contest.id}>
                 <CardContent>
                   <Typography gutterBottom variant={'h2'} noWrap>
                     {contest.title}

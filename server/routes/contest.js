@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const {protect} = require('../middleware/contest');
 const {
     createContest,
     getContestById,
@@ -15,7 +15,7 @@ router.route("/create").post(createContest);
 // READ
 router.route("/:id").get(getContestById);
 router.route("/").get(getContests);
-router.route("/user/:userId").get(getContestsByUserId);
+router.route("/user/:userId").get(protect, getContestsByUserId);
 
 // UPDATE
 router.route("/:id").patch(updateContestById);

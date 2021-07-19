@@ -5,10 +5,10 @@ export interface Contest {
   deadlineDate: string;
   userID: string;
   dateCreated: string;
+  id: string;
 }
 
 export interface SearchContestApiData {
   contests?: Contest[];
   error?: { message: string };
-
 }
