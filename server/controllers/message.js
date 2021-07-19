@@ -18,3 +18,18 @@ exports.createMessage = asyncHandler(async (req, res) => {
         res.status(500).json(error);
     }
 })
+
+//Based on ConversationID, get all the messages
+exports.getMessages = asyncHandler(async (req, res) => {
+    const { convoID } = req.params;
+    console.log(convoID);
+    try {
+        const allMessages = await Message.find({
+            conversationID: convoID,
+        });
+        console.log(allMessages);
+        res.status(200).json(allMessages);
+    } catch(error){
+        res.status(500).json(error);
+    }
+})
