@@ -13,6 +13,7 @@ const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const contestRouter = require("./routes/contest");
 const conversationRouter = require("./routes/conversation");
+const messageRouter = require("./routes/message");
 
 const { json, urlencoded } = express;
 
@@ -47,6 +48,7 @@ app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/contest", contestRouter);
 app.use("/chat", conversationRouter);
+app.use("/chat/message", messageRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
