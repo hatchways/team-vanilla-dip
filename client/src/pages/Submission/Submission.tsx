@@ -63,7 +63,9 @@ export default function Submission(): JSX.Element {
               <Box className={classes.profileDetails}>
                 <Avatar />
                 <Box className={classes.profileName}>
-                  <h3>By Kenneth Stewart</h3>
+                  <Typography variant="h6" component="h3">
+                    By Kenneth Stewart
+                  </Typography>
                 </Box>
               </Box>
             </Grid>

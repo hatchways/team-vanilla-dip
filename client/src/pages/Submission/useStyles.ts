@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
   submitBtn: {
     textTransform: 'uppercase',
     border: '1px solid #000',
-    padding: '10px 20px',
+    padding: '15px 25px',
   },
   profileDetails: {
     display: 'flex',

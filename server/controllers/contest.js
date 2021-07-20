@@ -93,24 +93,27 @@ exports.createSubmission = asyncHandler(async (req, res, next) => {
     const userID = req.user.id;
     const contestID = req.params.id;
     const { imageFiles } = req.body;
-    const active = true;
-    const submission = new Submission({
-        contestID,
-        userID,
-        active,
-        imageFiles
-    })
     try {
+        const submission = await Submission.findOneAndUpdate({userID:userID, contestID:contestID},{imageFiles:imageFiles},{new:true});
+        if (!submission){
+            const submission = new Submission({
+                contestID: contestID,
+                userID: userID,
+                imageFiles: imageFiles
+            })
+        }
+        
         const result = await submission.save();
         if (!result) {
             return res.status(400).json({ status: "submission not saved"})
         }
-        res.status(200).json({
+        res.status(201).json({
             status: "submission saved",
             submission
         })
-    }
+        }
     catch (error) {
         return res.status(500).send( {error} );
     }  
+    
 })
