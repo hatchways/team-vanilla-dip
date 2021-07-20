@@ -7,9 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
 import login from '../../helpers/APICalls/login';
 import LoginForm from './LoginForm/LoginForm';
-import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
+import Navbar from '../../components/Navbar/Navbar';
 
 export default function Login(): JSX.Element {
   const classes = useStyles();
@@ -40,7 +40,7 @@ export default function Login(): JSX.Element {
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Box width="100%" className={classes.authWrapper}>
-        <AuthHeader linkTo="/signup" asideText="TATTOO ART" btnText="SIGN UP" />
+        <Navbar />
         <Box width="100%" maxWidth={450} p={3} alignSelf="center">
           <Paper className={classes.loginPaper}>
             <Grid container>

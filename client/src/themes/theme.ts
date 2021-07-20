@@ -9,7 +9,6 @@ export const theme = createTheme({
       fontWeight: 700,
     },
   },
-
   palette: {
     primary: { main: '#000000' },
     secondary: { main: '#ffffff' },
