@@ -25,7 +25,7 @@ function App(): JSX.Element {
                 <ProtectedRoute exact path="/dashboard">
                   <Dashboard />
                 </ProtectedRoute>
-                <ProtectedRoute exact path="/submission">
+                <ProtectedRoute exact path="/contest/:id">
                   <Submission />
                 </ProtectedRoute>
                 <Route path="*">

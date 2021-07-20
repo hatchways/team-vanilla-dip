@@ -94,7 +94,7 @@ exports.createSubmission = asyncHandler(async (req, res, next) => {
     const contestID = req.params.id;
     const { imageFiles } = req.body;
     try {
-        const submission = await Submission.findOneAndUpdate({userID:userID, contestID:contestID},{imageFiles:imageFiles},{new:true});
+        const submission = await Submission.findOneAndUpdate({userID:userID, contestID:contestID},{$addToSet: {imageFiles: { $each: [imageFiles] } } },{new:true});
         if (!submission){
             const submission = new Submission({
                 contestID: contestID,

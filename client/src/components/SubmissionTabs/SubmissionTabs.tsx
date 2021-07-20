@@ -3,8 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
-import TabPanel from '@material-ui/core/Tab';
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import { Paper } from '@material-ui/core';
 import useStyles from './useStyles';
 
@@ -57,13 +56,15 @@ function SubmissionTabs({ card }: cardProps): JSX.Element {
             <Grid container spacing={5}>
               {card.map((data, key) => (
                 <Grid item md={3} xs={12} key={key}>
-                  <SubmissionCard imageSrc={data.imageSrc} title={data.title} text={data.text} />
+                  <SubmissionCard imageSrc={data.imageSrc} title={data.title} author={data.author} />
                 </Grid>
               ))}
             </Grid>
           </SubmissionTabPanel>
           <SubmissionTabPanel value={value} index={1}>
-            <h1>Brief</h1>
+            <Typography component="h3" variant="h6">
+              Brief
+            </Typography>
           </SubmissionTabPanel>
         </Box>
       </Paper>

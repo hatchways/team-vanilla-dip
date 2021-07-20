@@ -12,23 +12,26 @@ import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
 import SubmissionTabs from '../../components/SubmissionTabs/SubmissionTabs';
 
+import firstImage from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
+import secondImage from '../../Images/775db5e79c5294846949f1f55059b53317f51e30.png';
+import profile from '../../Images/profile.png';
 import './Submission.css';
 
 const submissionData = [
   {
-    imageSrc: 'http://imageSrc',
+    imageSrc: profile,
     title: 'Lizard',
-    text: 'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica',
+    author: 'jesse',
   },
   {
-    imageSrc: 'http://imageSrc',
+    imageSrc: firstImage,
     title: 'Sheep',
-    text: 'Sheeps are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica',
+    author: 'anthony',
   },
   {
-    imageSrc: 'http://imageSrc',
+    imageSrc: secondImage,
     title: 'Monkeys',
-    text: 'Monkeys are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica',
+    author: 'denise',
   },
 ];
 
