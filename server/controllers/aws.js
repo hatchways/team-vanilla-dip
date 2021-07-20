@@ -22,7 +22,7 @@ const upload = multer({fileFilter,
         s3: s3,
         bucket: 'team-vanilla-dip',
         key: function (req, file, cb) {
-            cb(null, Date.now().toString());
+            cb(null, Date.now().toString()+'.'+file.originalname.split('.').pop());
         },metadata: function (req, file, cb) {
             cb(null, { fieldName: "TESTING_METADATA" });
         },
