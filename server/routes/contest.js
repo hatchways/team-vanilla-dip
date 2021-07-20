@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {protect} = require('../middleware/contest');
+const protect = require('../middleware/auth');
 const {
     createContest,
     getContestById,
