@@ -4,8 +4,8 @@ multer = require('multer')
 multerS3 = require('multer-s3');
 const asyncHandler = require("express-async-handler");
 aws.config.update({
-    secretAccessKey: 'process.env.AWS_SECRET_ACCESS_KEY',
-    accessKeyId: 'process.env.AWS_ACCESS_KEY_ID',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     region: 'ca-central-1'
 });
 const s3 = new aws.S3();
@@ -29,8 +29,9 @@ const upload = multer({fileFilter,
     })
 });
 
+
 exports.uploadImage =  asyncHandler ((req, res)=> {
-    upload(req, res, function (err) {
+    upload.single("image")(req, res, function (err) {
         if (err) {
             return res.json({
                 error: { message: err.message }

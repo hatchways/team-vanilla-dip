@@ -1,4 +1,4 @@
-import {uploadImage} from "../controllers/aws";
+const  {uploadImage} = require("../controllers/aws")
 const express = require('express');
 const protect = require('../middleware/auth');
 const router = express.Router();
