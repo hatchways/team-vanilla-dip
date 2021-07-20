@@ -1,10 +1,10 @@
 const Contest = require("../models/Contest");
 const asyncHandler = require("express-async-handler");
-const ObjectId = require("mongoose").Types.ObjectId;
+const mongoose = require('mongoose');
 
 // Given parameters passed in, create a contest
 exports.createContest = asyncHandler(async (req, res, next) => {
-    const userID = req.user.id
+    const userID = req.user._id
     const { title, description, prizeAmount, deadlineDate } = req.body;
     const contest = new Contest({
         title,
@@ -84,5 +84,25 @@ exports.getContests = asyncHandler(async (req, res, next) => {
     });
     } catch (error) {
     return res.status(500).send({ error });
+    }
+})
+
+// return A list of contests that belongs to the userId
+exports.getContestsByUserId = asyncHandler(async (req, res, next) =>{
+    const userId = mongoose.Types.ObjectId(req.user.id)
+    try {
+        const foundContest = await Contest.aggregate([
+            { $match: { userID: userId } },
+            { $addFields: {id:"$_id" } },
+        ]);
+        if (!foundContest) {
+            return res.status(404).json({ status: "contest not found!!" });
+        }
+        res.status(200).json({
+            status: "contest found!!",
+            contests: foundContest,
+        });
+    } catch (error) {
+        return res.status(500).json({ error });
     }
 })
