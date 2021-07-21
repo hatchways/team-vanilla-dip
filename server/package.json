@@ -10,7 +10,7 @@
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
-    "aws-sdk": "^2.950.0",
+    "aws-sdk": "^2.949.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "colors": "^1.4.0",
