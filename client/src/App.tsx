@@ -11,6 +11,7 @@ import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
 
 import './App.css';
+import { ContestProvider } from './context/useContestContext';
 
 function App(): JSX.Element {
   return (
@@ -19,19 +20,21 @@ function App(): JSX.Element {
         <SnackBarProvider>
           <AuthProvider>
             <SocketProvider>
-              <Switch>
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/signup" component={Signup} />
-                <ProtectedRoute exact path="/dashboard">
-                  <Dashboard />
-                </ProtectedRoute>
-                <ProtectedRoute exact path="/contest/:id">
-                  <Submission />
-                </ProtectedRoute>
-                <Route path="*">
-                  <Redirect to="/login" />
-                </Route>
-              </Switch>
+              <ContestProvider>
+                <Switch>
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/signup" component={Signup} />
+                  <ProtectedRoute exact path="/dashboard">
+                    <Dashboard />
+                  </ProtectedRoute>
+                  <ProtectedRoute exact path="/contest/:id">
+                    <Submission />
+                  </ProtectedRoute>
+                  <Route path="*">
+                    <Redirect to="/login" />
+                  </Route>
+                </Switch>
+              </ContestProvider>
             </SocketProvider>
           </AuthProvider>
         </SnackBarProvider>
