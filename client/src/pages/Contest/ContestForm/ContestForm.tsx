@@ -1,8 +1,10 @@
 import { Formik } from 'formik';
 import { useState } from 'react';
-import moment from 'moment-timezone';
+import momentTimezone from 'moment-timezone';
+import moment from 'moment';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import * as Yup from 'yup';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
@@ -27,14 +29,17 @@ interface MyFormValues {
   title: string;
   description: string;
   prizeAmount: number;
-  date: Date | null | undefined;
-  time: Date | null | undefined;
-  timezone: string;
+  date: MaterialUiPickersDate | null | string | undefined;
+  time: MaterialUiPickersDate | null | string | undefined;
+  timeZone: string;
 }
 
 export const ContestForm: React.FC = () => {
   const classes = useStyles();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedDate, handleDateChange] = useState<MaterialUiPickersDate>(moment());
+  const [selectedTime, handleTimeChange] = useState<MaterialUiPickersDate>(moment());
+  const [timeZone, setTimeZone] = useState<string | unknown>(moment.tz.guess());
 
   const selectImages = (image: string) => {
     const newSelectedImages = selectedImages;
@@ -46,9 +51,9 @@ export const ContestForm: React.FC = () => {
     title: '',
     description: '',
     prizeAmount: 0,
-    date: new Date(),
-    time: new Date(),
-    timezone: 'America/Toronto',
+    date: moment(),
+    time: moment(),
+    timeZone: moment.tz.guess(),
   };
   return (
     <Formik
@@ -56,17 +61,17 @@ export const ContestForm: React.FC = () => {
       validationSchema={Yup.object().shape({
         title: Yup.string().required('Contest title is required'),
         description: Yup.string().required('Contest description is required'),
-        prizeAmount: Yup.number().required().positive().integer(),
+        prizeAmount: Yup.number().positive().integer().required(),
         date: Yup.date().required('Date is required'),
         time: Yup.date().required('Time is required'),
-        timezone: Yup.string().required('Time zone is required'),
+        timeZone: Yup.string().required('Time zone is required'),
       })}
       onSubmit={(values, actions) => {
         console.log({ values, actions });
         actions.setSubmitting(false);
       }}
     >
-      {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
+      {({ handleSubmit, handleChange, values, touched, errors, isSubmitting, setFieldValue }) => (
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
           <Grid container direction="column">
             <Grid item style={{ marginBottom: 0 }}>
@@ -130,7 +135,7 @@ export const ContestForm: React.FC = () => {
                     name="prizeAmount"
                     helperText={touched.prizeAmount ? errors.prizeAmount : ''}
                     error={touched.prizeAmount && Boolean(errors.prizeAmount)}
-                    value={values.prizeAmount}
+                    value={values.prizeAmount === 0 ? '' : values.prizeAmount}
                     onChange={handleChange}
                     fullWidth
                   />
@@ -148,8 +153,12 @@ export const ContestForm: React.FC = () => {
                         id="date"
                         format="MM/DD/yyyy"
                         error={touched.date && Boolean(errors.date)}
-                        value={values.date}
-                        onChange={handleChange}
+                        value={selectedDate}
+                        minDate={moment()}
+                        onChange={(date) => {
+                          handleDateChange(date);
+                          setFieldValue('date', date);
+                        }}
                       />
                     </Grid>
                     <Grid item xs={4}>
@@ -161,8 +170,11 @@ export const ContestForm: React.FC = () => {
                         mask="__:__ _M"
                         format="HH:mm a"
                         error={touched.time && Boolean(errors.time)}
-                        value={values.time}
-                        onChange={handleChange}
+                        value={selectedTime}
+                        onChange={(time) => {
+                          handleTimeChange(time);
+                          setFieldValue('time', time);
+                        }}
                       />
                     </Grid>
                     <Grid item xs={3}>
@@ -172,11 +184,14 @@ export const ContestForm: React.FC = () => {
                           labelId="timeZone-label"
                           name="timeZone"
                           defaultValue="America/Toronto"
-                          value={values.timezone}
-                          onChange={handleChange}
+                          value={timeZone}
+                          onChange={(e) => {
+                            setTimeZone(e.target.value);
+                            setFieldValue('timeZone', e.target.value);
+                          }}
                         >
-                          {moment.tz.names().map((tz, i) => (
-                            <MenuItem key={i} value={tz}>
+                          {momentTimezone.tz.names().map((tz) => (
+                            <MenuItem key={tz} value={tz}>
                               {tz}
                             </MenuItem>
                           ))}
