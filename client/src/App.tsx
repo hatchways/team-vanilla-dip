@@ -6,6 +6,7 @@ import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Submission from './pages/Submission/Submission';
+import Submit from './pages/Submit/Submit';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
@@ -29,6 +30,9 @@ function App(): JSX.Element {
                   </ProtectedRoute>
                   <ProtectedRoute exact path="/contest/:id">
                     <Submission />
+                  </ProtectedRoute>
+                  <ProtectedRoute exact path="/submit">
+                    <Submit />
                   </ProtectedRoute>
                   <Route path="*">
                     <Redirect to="/login" />

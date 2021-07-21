@@ -6,7 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import useStyles from './useStyles';
 import { useContests } from '../../context/useContestContext';
-import { Card, CardContent } from '@material-ui/core';
+import { Card, CardActionArea, CardContent } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,12 +45,14 @@ export default function ProfileTabs(): JSX.Element {
             return (
               <Grid item key={contest.id}>
                 <Card>
-                  <CardContent>
-                    <Typography gutterBottom variant={'h2'} noWrap>
-                      {contest.title}
-                    </Typography>
-                    <Typography gutterBottom>{contest.description}</Typography>
-                  </CardContent>
+                  <CardActionArea component={Link} to={'/contest/' + contest.id}>
+                    <CardContent>
+                      <Typography gutterBottom variant={'h2'} noWrap>
+                        {contest.title}
+                      </Typography>
+                      <Typography gutterBottom>{contest.description}</Typography>
+                    </CardContent>
+                  </CardActionArea>
                 </Card>
               </Grid>
             );
