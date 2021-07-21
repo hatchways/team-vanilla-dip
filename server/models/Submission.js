@@ -4,7 +4,7 @@ const submissionSchema = new mongoose.Schema({
     contestID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "contest",
-        required: true
+        required: true,
     },
     userID: {
         type: mongoose.Schema.Types.ObjectId,

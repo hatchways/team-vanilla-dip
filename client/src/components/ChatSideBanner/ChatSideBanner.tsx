@@ -8,6 +8,8 @@ import AvatarDisplay from '../AvatarDisplay/AvatarDisplay';
 import Search from '../Search/Search';
 import AuthMenu from '../AuthMenu/AuthMenu';
 
+import { Link } from 'react-router-dom';
+
 interface Props {
   loggedInUser: User;
   handleDrawerToggle?: () => void;
@@ -29,6 +31,7 @@ const ChatSideBanner = ({ loggedInUser }: Props): JSX.Element => {
   return (
     <Grid className={classes.chatSideBanner}>
       <Box className={classes.userPanel}>
+        <Link to="/contest">Submission</Link>
         <AvatarDisplay loggedIn user={loggedInUser} />
         <Typography className={classes.userText} variant="h5">
           {loggedInUser.username}
