@@ -5,6 +5,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import DoneIcon from '@material-ui/icons/Done';
 
 import useStyles from './useStyles';
 import SubmissionCardProps from '../SumissionCardInterface';
@@ -22,14 +24,19 @@ function SubmissionCard({ imageSrc, title, author }: SubmissionCardProps): JSX.E
           image={imageSrc}
           title="Contemplative Reptile"
         />
-        <CardContent className={classes.submissionContent}>
-          <Typography gutterBottom variant="h5" component="h2">
-            <Button>{title}</Button>
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            By @{author}
-          </Typography>
-        </CardContent>
+        <Box className={classes.displayOver}>
+          <CardContent className={classes.submissionContent}>
+            <Typography gutterBottom variant="h5" component="h2">
+              <Button className={classes.winner}>
+                <DoneIcon />
+                Winner
+              </Button>
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              By @{author}
+            </Typography>
+          </CardContent>
+        </Box>
       </CardActionArea>
     </Card>
   );

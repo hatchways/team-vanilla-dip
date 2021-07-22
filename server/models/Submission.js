@@ -16,7 +16,7 @@ const submissionSchema = new mongoose.Schema({
         default: true
     },
     imageFiles: {
-        type: [{type: String}]
+        type: [String]
     }
 }, {timestamps: true});
 

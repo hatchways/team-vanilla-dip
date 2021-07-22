@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import CssBasline from '@material-ui/core/CssBaseline';
 import Button from '@material-ui/core/Button';
@@ -7,6 +7,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+
+import { useParams } from 'react-router-dom';
 
 import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
@@ -37,6 +39,13 @@ const submissionData = [
 
 export default function Submission(): JSX.Element {
   const classes = useStyles();
+  const [submission, setSubmission] = useState(submissionData);
+  const { contestId } = useParams<{ contestId: string }>();
+
+  useEffect(() => {
+    if (contestId) {
+    }
+  }, [contestId]);
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -78,7 +87,7 @@ export default function Submission(): JSX.Element {
               </Button>
             </Grid>
           </Grid>
-          <SubmissionTabs card={submissionData} />
+          <SubmissionTabs card={submission} />
         </Box>
       </Box>
     </Grid>

@@ -1,14 +1,11 @@
 const Contest = require("../models/Contest");
-const Submission = require("../models/Submission");
 const asyncHandler = require("express-async-handler");
 const mongoose = require('mongoose');
 
 // Given parameters passed in, create a contest
 exports.createContest = asyncHandler(async (req, res, next) => {
-    const userID = req.user._id
+    const userID = req.user.id
     const { title, description, prizeAmount, deadlineDate } = req.body;
-    console.log(`Body: ${req.body} ${title}, ${description}`);
-    console.log(`User: ${req.user}`)
     
     const contest = new Contest({
         title,
@@ -33,7 +30,7 @@ exports.createContest = asyncHandler(async (req, res, next) => {
 
 // Given an ID and new parameters, update the contest for any future edits
 exports.updateContestById = asyncHandler(async (req, res, next) => {
-    const userID = req.user._id;
+    const userID = req.user.id;
     const contestID = req.params.id;
     const { title, description, prizeAmount, deadlineDate } = req.body;
     try {
@@ -65,14 +62,14 @@ exports.getContestById = asyncHandler(async (req, res, next) => {
   try {
     const foundContest = await Contest.findById({ _id: contestID });
     if (!foundContest) {
-    return res.status(404).json({ status: "contest not found!!" });
+        return res.status(404).json({ status: "contest not found!!" });
     }
     res.status(200).json({
-    status: "contest found!!",
-    contest: foundContest,
+        status: "contest found!!",
+        contest: foundContest,
     });
   } catch (error) {
-    return res.status(500).json({ error });
+        return res.status(500).json({ error });
   }
 })
 
@@ -110,33 +107,4 @@ exports.getContestsByUserId = asyncHandler(async (req, res, next) =>{
     } catch (error) {
         return res.status(500).json({ error });
     }
-})
-
-exports.createSubmission = asyncHandler(async (req, res, next) => {
-    const userID = req.user.id;
-    const contestID = req.params.id;
-    const { imageFiles } = req.body;
-    try {
-        const submission = await Submission.findOneAndUpdate({userID:userID, contestID:contestID},{$addToSet: {imageFiles: { $each: [imageFiles] } } },{new:true});
-        if (!submission){
-            const submission = new Submission({
-                contestID: contestID,
-                userID: userID,
-                imageFiles: imageFiles
-            })
-        }
-        
-        const result = await submission.save();
-        if (!result) {
-            return res.status(400).json({ status: "submission not saved"})
-        }
-        res.status(201).json({
-            status: "submission saved",
-            submission
-        })
-        }
-    catch (error) {
-        return res.status(500).send( {error} );
-    }  
-    
 })

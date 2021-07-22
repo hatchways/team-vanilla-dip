@@ -9,6 +9,8 @@ const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
+const { addUser, removeUser, getUser } = require('./utils/users');
+
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const contestRouter = require("./routes/contest");
@@ -27,7 +29,25 @@ const io = socketio(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("connected");
+  console.log("A user connected");
+  io.emit("Welocme", "Hello to the socket server")
+
+  socket.on("addUser", (userId) =>{
+    const users = addUser(userId, socket.id);
+    io.emit("getUsers", users);
+  })
+
+
+  socket.on("sendMessage", ({senderId, receiverId,text})=>{
+    const user = getUser(receiverId);
+    io.to(user.socketId).emit('getMessage', {senderId, text, createdAt: new Date().getTime()})
+  })
+  
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+    const users = removeUSer(socket.id);
+    io.emit("getUsers", users);
+  })
 });
 
 if (process.env.NODE_ENV === "development") {

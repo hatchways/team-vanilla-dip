@@ -18,6 +18,7 @@ interface Props {
 const ChatSideBanner = ({ loggedInUser }: Props): JSX.Element => {
   const [search, setSearch] = useState<string>('test');
   const [newChatUser, setNewChatUser] = useState<User | null>(null);
+  const submissionId = '60f3ea7aafec9515544adf23';
   const classes = useStyles();
 
   // React.FormEvent<FormControl & FormControlProps>)
@@ -31,7 +32,7 @@ const ChatSideBanner = ({ loggedInUser }: Props): JSX.Element => {
   return (
     <Grid className={classes.chatSideBanner}>
       <Box className={classes.userPanel}>
-        <Link to="/contest">Submission</Link>
+        <Link to={`/contest/${submissionId}`}>Submission</Link>
         <AvatarDisplay loggedIn user={loggedInUser} />
         <Typography className={classes.userText} variant="h5">
           {loggedInUser.username}
