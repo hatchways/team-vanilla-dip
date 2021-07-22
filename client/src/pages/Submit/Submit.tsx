@@ -6,16 +6,16 @@ import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Box } from '@material-ui/core';
 import Navbar from '../../components/Navbar/Navbar';
-import './Submit.css';
 import { uploadImage } from '../../helpers/APICalls/uploadImage';
 import { useHistory } from 'react-router-dom';
+import useStyles from './useStyles';
 export default function Submit(): JSX.Element {
   const { loggedInUser } = useAuth();
   const { initSocket } = useSocket();
   useEffect(() => {
     initSocket();
   }, [initSocket]);
-
+  const classes = useStyles();
   if (loggedInUser === undefined) return <CircularProgress />;
   if (!loggedInUser) {
     return <CircularProgress />;
@@ -23,7 +23,7 @@ export default function Submit(): JSX.Element {
   return (
     <Grid container>
       <CssBaseline />
-      <Box width="100%">
+      <Box className={classes.contentWrapper}>
         <Navbar />
         <FileUploader />
       </Box>
@@ -63,27 +63,6 @@ function FileUploader(): JSX.Element {
     }
   };
 
-  // File content to be displayed after
-  // file upload is complete
-  const fileData = () => {
-    if (selectedFile) {
-      return (
-        <div>
-          <h2>File Details:</h2>
-          <p>File Name: {selectedFile.name}</p>
-          <p>File Type: {selectedFile.type}</p>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <br />
-          <h4>Choose before Pressing the Upload button</h4>
-        </div>
-      );
-    }
-  };
-
   return (
     <div>
       <h1>Upload Image</h1>
@@ -91,7 +70,6 @@ function FileUploader(): JSX.Element {
         <input type="file" accept="image/*" onChange={onFileChange} />
         <button onClick={onFileUpload}>Upload!</button>
       </div>
-      {fileData()}
     </div>
   );
 }
