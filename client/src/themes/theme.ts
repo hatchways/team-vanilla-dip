@@ -22,7 +22,6 @@ export const theme = createTheme({
       opacity: 0.6,
     },
   },
-
   palette: {
     primary: { main: '#000000' },
     secondary: { main: '#ffffff' },

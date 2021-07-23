@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
 import { CircularProgress } from '@material-ui/core';
+import DemoAccount from '../../../components/DemoAccount/DemoAccount';
 
 interface Props {
   handleSubmit: (
@@ -31,7 +32,6 @@ interface Props {
 
 const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
   const classes = useStyles();
-
   return (
     <Formik
       initialValues={{
@@ -123,6 +123,8 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
             <Button type="submit" size="large" variant="contained" color="primary" className={classes.submit}>
               {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'SIGN IN'}
             </Button>
+
+            <DemoAccount />
           </Box>
         </form>
       )}

@@ -6,11 +6,13 @@ import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Contest from './pages/Contest/Contest';
+import Submission from './pages/Submission/Submission';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
 
 import './App.css';
+import { ContestProvider } from './context/useContestContext';
 
 function App(): JSX.Element {
   return (
@@ -19,17 +21,22 @@ function App(): JSX.Element {
         <SnackBarProvider>
           <AuthProvider>
             <SocketProvider>
-              <Switch>
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/signup" component={Signup} />
-                <Route exact path="/contest" component={Contest} />
-                <ProtectedRoute exact path="/dashboard">
-                  <Dashboard />
-                </ProtectedRoute>
-                <Route path="*">
-                  <Redirect to="/login" />
-                </Route>
-              </Switch>
+              <ContestProvider>
+                <Switch>
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/signup" component={Signup} />
+                  <Route exact path="/contest" component={Contest} />
+                  <ProtectedRoute exact path="/dashboard">
+                    <Dashboard />
+                  </ProtectedRoute>
+                  <ProtectedRoute exact path="/contest/:id">
+                    <Submission />
+                  </ProtectedRoute>
+                  <Route path="*">
+                    <Redirect to="/login" />
+                  </Route>
+                </Switch>
+              </ContestProvider>
             </SocketProvider>
           </AuthProvider>
         </SnackBarProvider>
