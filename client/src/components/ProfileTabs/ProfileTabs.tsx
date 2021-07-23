@@ -39,7 +39,7 @@ export default function ProfileTabs(): JSX.Element {
       <ContestTabPanel index={0} value={value}>
         {allContests
           .filter((contest) => {
-            return new Date(contest.deadlineDate) <= new Date();
+            return new Date(contest.deadlineDate) > new Date();
           })
           .map((contest) => {
             return (
@@ -61,7 +61,7 @@ export default function ProfileTabs(): JSX.Element {
       <ContestTabPanel index={1} value={value}>
         {allContests
           .filter((context) => {
-            return new Date(context.deadlineDate) > new Date();
+            return new Date(context.deadlineDate) <= new Date();
           })
           .map((contest) => {
             return (
