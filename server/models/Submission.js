@@ -15,13 +15,9 @@ const submissionSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    created: {
-        type: Date,
-        default: Date.now
-    },
     imageFiles: {
-        type: Array
+        type: [{type: String}]
     }
-});
+}, {timestamps: true});
 
 module.exports = Submission = mongoose.model("submission", submissionSchema)
