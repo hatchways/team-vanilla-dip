@@ -1,6 +1,5 @@
 import { useAuth } from '../../context/useAuthContext';
-import { useSocket } from '../../context/useSocketContext';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,22 +7,17 @@ import { Box } from '@material-ui/core';
 import Navbar from '../../components/Navbar/Navbar';
 import { uploadImage } from '../../helpers/APICalls/uploadImage';
 import { useHistory } from 'react-router-dom';
-import useStyles from './useStyles';
+import Typography from '@material-ui/core/Typography';
 export default function Submit(): JSX.Element {
   const { loggedInUser } = useAuth();
-  const { initSocket } = useSocket();
-  useEffect(() => {
-    initSocket();
-  }, [initSocket]);
-  const classes = useStyles();
   if (loggedInUser === undefined) return <CircularProgress />;
   if (!loggedInUser) {
     return <CircularProgress />;
   }
   return (
-    <Grid container>
+    <Grid container direction="column">
       <CssBaseline />
-      <Box className={classes.contentWrapper}>
+      <Box display="flex" flexDirection="column" alignItems="center">
         <Navbar />
         <FileUploader />
       </Box>
@@ -46,14 +40,6 @@ function FileUploader(): JSX.Element {
   // On file upload (click the upload button)
   const onFileUpload = () => {
     if (selectedFile) {
-      // Create an object of formData
-      const formData = new FormData();
-
-      // Update the formData object
-      formData.append('myFile', selectedFile, selectedFile.name);
-
-      // Details of the uploaded file
-      console.log(selectedFile);
       uploadImage({ image: selectedFile }).then((r) => {
         console.log(r);
         history.goBack();
@@ -64,12 +50,12 @@ function FileUploader(): JSX.Element {
   };
 
   return (
-    <div>
-      <h1>Upload Image</h1>
-      <div>
+    <Box>
+      <Typography variant="h5">Upload Image</Typography>
+      <Box>
         <input type="file" accept="image/*" onChange={onFileChange} />
         <button onClick={onFileUpload}>Upload!</button>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
