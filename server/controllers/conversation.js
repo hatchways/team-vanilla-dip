@@ -15,11 +15,6 @@ exports.createConversation = asyncHandler(async (req, res) => {
         return res.status(200).json(existingConvo[0]);
     }
 
-    if(senderID === receiverID) {
-        res.status(400);
-        throw new Error("Cannot create a conversation for one user.")
-    }
-
     const newConvo = new Conversation({
         participants: [senderID, receiverID],
     });
