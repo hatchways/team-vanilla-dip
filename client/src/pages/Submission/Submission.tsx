@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import CssBasline from '@material-ui/core/CssBaseline';
 import Button from '@material-ui/core/Button';
@@ -36,6 +37,8 @@ const submissionData = [
 ];
 
 export default function Submission(): JSX.Element {
+  const [submission, setSubmission] = useState(submissionData);
+  const { contestId } = useParams<{ contestId: string }>();
   const classes = useStyles();
 
   return (
@@ -78,7 +81,7 @@ export default function Submission(): JSX.Element {
               </Button>
             </Grid>
           </Grid>
-          <SubmissionTabs card={submissionData} />
+          <SubmissionTabs card={submission} />
         </Box>
       </Box>
     </Grid>
