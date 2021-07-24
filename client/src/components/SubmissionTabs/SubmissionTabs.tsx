@@ -8,10 +8,10 @@ import { Paper } from '@material-ui/core';
 import useStyles from './useStyles';
 
 import SubmissionCard from './SubmissionCard/SubmissionCard';
-import SubmissionCardProps from './SumissionCardInterface';
+import { Submission } from '../../interface/Submission';
 
 interface cardProps {
-  card: SubmissionCardProps[];
+  card: Submission[];
 }
 
 interface TabPanelProps {
@@ -56,7 +56,7 @@ function SubmissionTabs({ card }: cardProps): JSX.Element {
             <Grid container spacing={5}>
               {card.map((data, key) => (
                 <Grid item md={3} xs={12} key={key}>
-                  <SubmissionCard imageSrc={data.imageSrc} title={data.title} author={data.author} />
+                  <SubmissionCard imageSrc={data.imageFile} title={data.title} author={data.userID} />
                 </Grid>
               ))}
             </Grid>

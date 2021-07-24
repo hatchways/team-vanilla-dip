@@ -66,12 +66,16 @@ export default function ProfileTabs(): JSX.Element {
           .map((contest) => {
             return (
               <Grid item key={contest.id}>
-                <CardContent>
-                  <Typography gutterBottom variant={'h2'} noWrap>
-                    {contest.title}
-                  </Typography>
-                  <Typography gutterBottom>{contest.description}</Typography>
-                </CardContent>
+                <Card>
+                  <CardActionArea component={Link} to={'/contest/' + contest.id}>
+                    <CardContent>
+                      <Typography gutterBottom variant={'h2'} noWrap>
+                        {contest.title}
+                      </Typography>
+                      <Typography gutterBottom>{contest.description}</Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
               </Grid>
             );
           })}

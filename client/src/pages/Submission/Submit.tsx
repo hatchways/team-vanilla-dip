@@ -6,8 +6,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Box } from '@material-ui/core';
 import Navbar from '../../components/Navbar/Navbar';
 import { uploadImage } from '../../helpers/APICalls/uploadImage';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import { addSubmissionToContest } from '../../helpers/APICalls/searchContest';
+import { SubmissionParams } from './SubmissionParams';
+import { bool } from 'yup';
+import { useSnackBar } from '../../context/useSnackbarContext';
 export default function Submit(): JSX.Element {
   const { loggedInUser } = useAuth();
   if (loggedInUser === undefined) return <CircularProgress />;
@@ -27,7 +32,11 @@ export default function Submit(): JSX.Element {
 
 function FileUploader(): JSX.Element {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
+  const [title, setTitle] = useState<string>('');
+  const [processing, setProcessing] = useState<boolean>(false);
+  const { id } = useParams<SubmissionParams>();
+  const history = useHistory();
+  const { updateSnackBarMessage } = useSnackBar();
   // On file select (from the pop up)
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // Update the state
@@ -35,27 +44,41 @@ function FileUploader(): JSX.Element {
       setSelectedFile(event.target.files[0]);
     }
   };
-  const history = useHistory();
-
+  const onTitleChange = (text: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTitle(text.target.value);
+  };
   // On file upload (click the upload button)
   const onFileUpload = () => {
-    if (selectedFile) {
+    if (selectedFile && title) {
+      setProcessing(true);
       uploadImage({ image: selectedFile }).then((r) => {
-        console.log(r);
-        history.goBack();
+        if (r.success) {
+          addSubmissionToContest({ title: title, contestID: id, imageFile: r.success }).then((r) => {
+            if (r.submission) {
+              history.goBack();
+            } else {
+              setProcessing(false);
+              updateSnackBarMessage(r.status);
+            }
+          });
+        } else {
+          setProcessing(false);
+          updateSnackBarMessage(r.error ?? '');
+        }
       });
       // Request made to the backend api
       // Send formData object
     }
   };
-
+  if (processing) return <CircularProgress />;
   return (
     <Box>
       <Typography variant="h5">Upload Image</Typography>
-      <Box>
-        <input type="file" accept="image/*" onChange={onFileChange} />
-        <button onClick={onFileUpload}>Upload!</button>
-      </Box>
+      <TextField margin="dense" variant="outlined" id="title" label="Title:" required onChange={onTitleChange} />
+      <br />
+      <input type="file" accept="image/*" onChange={onFileChange} />
+      <br />
+      <button onClick={onFileUpload}>Upload!</button>
     </Box>
   );
 }

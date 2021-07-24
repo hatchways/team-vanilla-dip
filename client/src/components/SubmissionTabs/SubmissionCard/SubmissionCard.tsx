@@ -4,7 +4,6 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import { Typography } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 
 import useStyles from './useStyles';
 import SubmissionCardProps from '../SumissionCardInterface';
@@ -24,7 +23,7 @@ function SubmissionCard({ imageSrc, title, author }: SubmissionCardProps): JSX.E
         />
         <CardContent className={classes.submissionContent}>
           <Typography gutterBottom variant="h5" component="h2">
-            <Button>{title}</Button>
+            {title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             By @{author}

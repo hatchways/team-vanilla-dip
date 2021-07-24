@@ -5,8 +5,8 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
-import Submission from './pages/Submission/Submission';
-import Submit from './pages/Submit/Submit';
+import ContestPage from './pages/Submission/ContestPage';
+import Submit from './pages/Submission/Submit';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
@@ -29,9 +29,9 @@ function App(): JSX.Element {
                     <Dashboard />
                   </ProtectedRoute>
                   <ProtectedRoute exact path="/contest/:id">
-                    <Submission />
+                    <ContestPage />
                   </ProtectedRoute>
-                  <ProtectedRoute exact path="/submit">
+                  <ProtectedRoute exact path="/contest/:id/submit">
                     <Submit />
                   </ProtectedRoute>
                   <Route path="*">
