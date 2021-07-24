@@ -1,14 +1,16 @@
-import { Formik } from 'formik';
 import { useState } from 'react';
+import { Formik } from 'formik';
 import momentTimezone from 'moment-timezone';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import MomentUtils from '@date-io/moment';
+import * as Yup from 'yup';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import * as Yup from 'yup';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
 import { tatooDesigns as images } from './testdata.js';
+import checkmark from './checkmark.png';
+import createDeadlineDate from './helpers/createDeadlineDate.js';
 import {
   CircularProgress,
   Grid,
@@ -29,21 +31,26 @@ interface MyFormValues {
   title: string;
   description: string;
   prizeAmount: number;
-  date: MaterialUiPickersDate | null | string | undefined;
-  time: MaterialUiPickersDate | null | string | undefined;
+  date: MaterialUiPickersDate | Moment | string | null;
+  time: MaterialUiPickersDate | Moment | string | null;
   timeZone: string;
+  imageFiles: string[];
 }
 
 export const ContestForm: React.FC = () => {
   const classes = useStyles();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
-  const [selectedDate, handleDateChange] = useState<MaterialUiPickersDate>(moment());
-  const [selectedTime, handleTimeChange] = useState<MaterialUiPickersDate>(moment());
+  const [selectedDate, handleDateChange] = useState<MaterialUiPickersDate | Moment>(moment());
+  const [selectedTime, handleTimeChange] = useState<MaterialUiPickersDate | Moment>(moment());
   const [timeZone, setTimeZone] = useState<string | unknown>(moment.tz.guess());
 
   const selectImages = (image: string) => {
-    const newSelectedImages = selectedImages;
-    newSelectedImages.push(image);
+    let newSelectedImages = selectedImages;
+    if (newSelectedImages.includes(image)) {
+      newSelectedImages = newSelectedImages.filter((img) => img !== image);
+    } else {
+      newSelectedImages = [...newSelectedImages, image];
+    }
     setSelectedImages(newSelectedImages);
   };
 
@@ -54,6 +61,7 @@ export const ContestForm: React.FC = () => {
     date: moment(),
     time: moment(),
     timeZone: moment.tz.guess(),
+    imageFiles: [],
   };
   return (
     <Formik
@@ -67,7 +75,16 @@ export const ContestForm: React.FC = () => {
         timeZone: Yup.string().required('Time zone is required'),
       })}
       onSubmit={(values, actions) => {
-        console.log({ values, actions });
+        actions.setSubmitting(true);
+        const deadlineDate = createDeadlineDate(values.date, values.time, values.timeZone);
+        const contestFormData = {
+          title: values.title,
+          description: values.description,
+          prizeAmount: values.prizeAmount,
+          deadlineDate,
+          imageFiles: selectedImages,
+        };
+        console.log(contestFormData);
         actions.setSubmitting(false);
       }}
     >
@@ -214,9 +231,29 @@ export const ContestForm: React.FC = () => {
               <Grid item xs={12}>
                 <Paper elevation={1} style={{ padding: '1em' }}>
                   <ImageList rowHeight={160} cols={4} style={{ maxHeight: 450 }}>
-                    {images.map((img) => (
-                      <ImageListItem key={img} style={{ maxHeight: '17.5em' }} onClick={() => selectImages(img)}>
-                        <img src={img} alt="tatoo design" />
+                    {images.map((imgUrl) => (
+                      <ImageListItem
+                        key={imgUrl}
+                        style={{ maxHeight: '17.5em' }}
+                        onClick={() => {
+                          selectImages(imgUrl);
+                        }}
+                      >
+                        <Grid
+                          container
+                          alignItems="center"
+                          justifyContent="center"
+                          className={selectedImages.includes(imgUrl) ? classes.overlay : classes.noOverlay}
+                        >
+                          <Grid item>
+                            <img src={checkmark} alt="checkmark" />
+                          </Grid>
+                        </Grid>
+                        <img
+                          src={imgUrl}
+                          className={selectedImages.includes(imgUrl) ? classes.selected : classes.image}
+                          alt="tatoo design"
+                        />
                       </ImageListItem>
                     ))}
                   </ImageList>
