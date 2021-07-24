@@ -107,32 +107,3 @@ exports.getContestsByUserId = asyncHandler(async (req, res, next) =>{
         return res.status(500).json({ error });
     }
 })
-
-exports.createSubmission = asyncHandler(async (req, res, next) => {
-    const userID = req.user.id;
-    const contestID = req.params.id;
-    const { imageFiles } = req.body;
-    try {
-        const submission = await Submission.findOneAndUpdate({userID:userID, contestID:contestID},{$addToSet: {imageFiles: { $each: [imageFiles] } } },{new:true});
-        if (!submission){
-            const submission = new Submission({
-                contestID: contestID,
-                userID: userID,
-                imageFiles: imageFiles
-            })
-        }
-        
-        const result = await submission.save();
-        if (!result) {
-            return res.status(400).json({ status: "submission not saved"})
-        }
-        res.status(201).json({
-            status: "submission saved",
-            submission
-        })
-        }
-    catch (error) {
-        return res.status(500).send( {error} );
-    }  
-    
-})
