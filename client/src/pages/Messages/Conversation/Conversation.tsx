@@ -1,6 +1,6 @@
 import useStyles from './useStyles';
 import profilePic from '../../../Images/profile.png';
-import { Typography, Grid, ListItem, Divider, ListItemAvatar, Avatar, ListItemText } from '@material-ui/core';
+import { Typography, Grid, ListItem, Divider, ListItemAvatar, Avatar, ListItemText, Badge } from '@material-ui/core';
 
 export default function Conversation(): JSX.Element {
   const classes = useStyles();
@@ -12,7 +12,9 @@ export default function Conversation(): JSX.Element {
           <Grid item container alignItems="center" justifyContent="flex-start" xs={9}>
             <Grid item xs={2}>
               <ListItemAvatar>
-                <Avatar alt="profile picture" src={profilePic} />
+                <Badge overlap="circular" variant="dot" classes={{ badge: classes.inactiveBadge }}>
+                  <Avatar alt="profile picture" src={profilePic} />
+                </Badge>
               </ListItemAvatar>
             </Grid>
             <Grid item xs={10}>

@@ -4,11 +4,18 @@ const useStyles = makeStyles(() => ({
   messageSnippet: {
     opacity: 0.8,
     fontSize: 12,
-    maxWidth: 275,
+    maxWidth: 250,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    marginTop: '0.5em',
+  },
+  activeBadge: {
+    color: '#44b700',
+    backgroundColor: '#44b700',
+  },
+  inactiveBadge: {
+    color: 'transparent',
+    backgroundColor: 'transparent',
   },
 }));
 
