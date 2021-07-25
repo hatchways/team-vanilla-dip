@@ -8,6 +8,13 @@ const useStyles = makeStyles(() => ({
       borderBottom: '1.2px solid rgba(0, 0, 0, 0.2)',
     },
   },
+  convoBannerTitle: {
+    width: '100%',
+    padding: '3.5em',
+  },
+  convoBanner: {
+    height: 'calc(100vh - 88px)',
+  },
 }));
 
 export default useStyles;
