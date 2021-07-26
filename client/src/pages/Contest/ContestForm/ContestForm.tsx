@@ -27,7 +27,7 @@ import {
 } from '@material-ui/core';
 import { KeyboardDatePicker, KeyboardTimePicker } from '@material-ui/pickers';
 
-interface MyFormValues {
+interface ContestFormValues {
   title: string;
   description: string;
   prizeAmount: number;
@@ -40,8 +40,7 @@ interface MyFormValues {
 export const ContestForm: React.FC = () => {
   const classes = useStyles();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
-  const [selectedDate, handleDateChange] = useState<MaterialUiPickersDate | Moment>(moment());
-  const [selectedTime, handleTimeChange] = useState<MaterialUiPickersDate | Moment>(moment());
+  const [selectedDateTime, handleDateTimeChange] = useState<MaterialUiPickersDate | Moment>(moment());
   const [timeZone, setTimeZone] = useState<string | unknown>(moment.tz.guess());
 
   const selectImages = (image: string) => {
@@ -54,7 +53,7 @@ export const ContestForm: React.FC = () => {
     setSelectedImages(newSelectedImages);
   };
 
-  const initialValues: MyFormValues = {
+  const initialValues: ContestFormValues = {
     title: '',
     description: '',
     prizeAmount: 0,
@@ -77,6 +76,7 @@ export const ContestForm: React.FC = () => {
       onSubmit={(values, actions) => {
         actions.setSubmitting(true);
         const deadlineDate = createDeadlineDate(values.date, values.time, values.timeZone);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const contestFormData = {
           title: values.title,
           description: values.description,
@@ -84,7 +84,6 @@ export const ContestForm: React.FC = () => {
           deadlineDate,
           imageFiles: selectedImages,
         };
-        console.log(contestFormData);
         actions.setSubmitting(false);
       }}
     >
@@ -170,10 +169,10 @@ export const ContestForm: React.FC = () => {
                         id="date"
                         format="MM/DD/yyyy"
                         error={touched.date && Boolean(errors.date)}
-                        value={selectedDate}
+                        value={selectedDateTime}
                         minDate={moment()}
                         onChange={(date) => {
-                          handleDateChange(date);
+                          handleDateTimeChange(date);
                           setFieldValue('date', date);
                         }}
                       />
@@ -187,9 +186,9 @@ export const ContestForm: React.FC = () => {
                         mask="__:__ _M"
                         format="HH:mm a"
                         error={touched.time && Boolean(errors.time)}
-                        value={selectedTime}
+                        value={selectedDateTime}
                         onChange={(time) => {
-                          handleTimeChange(time);
+                          handleDateTimeChange(time);
                           setFieldValue('time', time);
                         }}
                       />
