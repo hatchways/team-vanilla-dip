@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useStyles from './useStyles';
+import { useAuth } from '../../context/useAuthContext';
 import Navbar from '../../components/Navbar/Navbar';
 import Conversation from './Conversation/Conversation';
 import Message from './Message/Message';
@@ -17,12 +18,28 @@ import {
   TextField,
   CircularProgress,
 } from '@material-ui/core';
+import axios from 'axios';
 
 export default function Messages(): JSX.Element {
   const classes = useStyles();
+  const { loggedInUser } = useAuth();
 
   const [newMessage, setNewMessage] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
+  const [conversations, setConversations] = useState([]);
+
+  const getConversations = async () => {
+    try {
+      const res = await axios.get('/chat');
+      setConversations(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getConversations();
+  }, []);
 
   const handleNewMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewMessage(e.target.value);
@@ -56,9 +73,9 @@ export default function Messages(): JSX.Element {
               <Divider />
               <Grid item className={classes.convoListContainer}>
                 <List>
-                  <Conversation />
-                  <Conversation />
-                  <Conversation />
+                  {conversations.map((convo) => {
+                    return <Conversation key={convo['_id']} data={convo} />;
+                  })}
                 </List>
               </Grid>
             </Grid>

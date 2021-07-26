@@ -1,9 +1,16 @@
+import { useAuth } from '../../../context/useAuthContext';
 import useStyles from './useStyles';
 import profilePic from '../../../Images/profile.png';
 import { Typography, Grid, ListItem, Divider, ListItemAvatar, Avatar, ListItemText, Badge } from '@material-ui/core';
 
-export default function Conversation(): JSX.Element {
+export default function Conversation({ data }: any): JSX.Element {
   const classes = useStyles();
+
+  const { loggedInUser } = useAuth();
+  console.log(data);
+
+  const participantId = data?.participants.find((participant: string) => participant !== loggedInUser?.id);
+  console.log(participantId);
 
   return (
     <>
