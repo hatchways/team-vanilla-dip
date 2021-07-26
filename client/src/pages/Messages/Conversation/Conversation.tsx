@@ -11,14 +11,22 @@ export default function Conversation(): JSX.Element {
         <Grid container>
           <Grid item container alignItems="center" justifyContent="flex-start" xs={9}>
             <Grid item xs={2}>
-              <ListItemAvatar>
-                <Badge overlap="circular" variant="dot" classes={{ badge: classes.inactiveBadge }}>
+              <ListItemAvatar style={{ paddingLeft: '0.5em' }}>
+                <Badge
+                  overlap="circular"
+                  variant="dot"
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                  classes={{ badge: classes.inactiveBadge }}
+                >
                   <Avatar alt="profile picture" src={profilePic} />
                 </Badge>
               </ListItemAvatar>
             </Grid>
             <Grid item xs={10}>
-              <ListItemText disableTypography>
+              <ListItemText disableTypography style={{ paddingLeft: '0.5em' }}>
                 <Typography variant="h6" style={{ fontWeight: 700 }}>
                   John Doe
                 </Typography>

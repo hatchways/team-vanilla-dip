@@ -15,6 +15,10 @@ const useStyles = makeStyles(() => ({
   navOffset: {
     height: 'calc(100vh - 88px)',
   },
+  convoListContainer: {
+    height: 'calc(100vh - (88px + 7em + 27px))',
+    overflowY: 'scroll',
+  },
   messagingHeader: {
     backgroundColor: '#eeeeee',
     height: '7.5em',
@@ -26,20 +30,23 @@ const useStyles = makeStyles(() => ({
     marginLeft: '2px',
   },
   chatboxContainer: {
-    height: 'calc(100vh - (88px + 12em + 7.5em))',
+    height: 'calc(100vh - (88px + 12em + 7.5em + 0.5em))',
     backgroundColor: '#fff',
     marginLeft: '2px',
     overflowX: 'scroll',
   },
   sendMessageContainer: {
     height: '12em',
-    backgroundColor: '#eeeeee',
+    backgroundColor: '#fff',
     width: '100%',
     marginLeft: '2px',
   },
   activeBadge: {
     color: '#44b700',
     backgroundColor: '#44b700',
+    width: '10px',
+    height: '10px',
+    borderRadius: '50%',
   },
   inactiveBadge: {
     color: 'transparent',
@@ -48,6 +55,21 @@ const useStyles = makeStyles(() => ({
   detailButton: {
     borderRadius: '50%',
     paddingTop: '0.2em',
+  },
+  submitMessage: {
+    fontSize: 13,
+    minHeight: '3em',
+    paddingLeft: '2em',
+    paddingRight: '2em',
+    fontWeight: 'bold',
+  },
+  textAreaContainer: {
+    paddingLeft: '2.5em',
+    paddingBottom: '1em',
+  },
+  submitButtonContainer: {
+    paddingRight: '3em',
+    paddingBottom: '1em',
   },
 }));
 
