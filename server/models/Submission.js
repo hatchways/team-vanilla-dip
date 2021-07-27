@@ -15,9 +15,13 @@ const submissionSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    imageFiles: {
-        type: [{type: String}]
+    imageFile: {
+        type: String
+    },
+    title: {
+        type: String,
+        required: true,
     }
 }, {timestamps: true});
 
-module.exports = Submission = mongoose.model("submission", submissionSchema)
+module.exports = ContestPage = mongoose.model("submission", submissionSchema)
