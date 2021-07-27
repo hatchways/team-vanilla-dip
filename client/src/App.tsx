@@ -1,11 +1,11 @@
 import { MuiThemeProvider } from '@material-ui/core';
 import { theme } from './themes/theme';
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
-import Submission from './pages/Submission/Submission';
+import Contest from './pages/Contest/Contest';
 import Messages from './pages/Messages/Messages';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
@@ -28,11 +28,11 @@ function App(): JSX.Element {
                   <ProtectedRoute exact path="/messages">
                     <Messages />
                   </ProtectedRoute>
+                  <ProtectedRoute exact path="/contest">
+                    <Contest />
+                  </ProtectedRoute>
                   <ProtectedRoute exact path="/dashboard">
                     <Dashboard />
-                  </ProtectedRoute>
-                  <ProtectedRoute exact path="/contest/:id">
-                    <Submission />
                   </ProtectedRoute>
                   <Route path="*">
                     <Redirect to="/login" />

@@ -6,17 +6,21 @@ const {
     getContestById,
     getContests,
     updateContestById,
-    createSubmission,
     getContestsByUserId
 } = require("../controllers/contest");
 
+const { createSubmission, getSubmission } = require('../controllers/submission')
+
 // CREATE  
-router.route("/create").post(createContest);
-router.route("/:id/submission").post(createSubmission)
+router.route("/create").post(protect, createContest);
+router.route("/:id/submission").post(protect, createSubmission);
+
+
 
 // READ
-router.route("/:id").get(getContestById);
-router.route("/").get(getContests);
+router.route("/:id").get(protect, getContestById);
+router.route("/:id/submission").get(protect, getSubmission);
+router.route("/").get(protect, getContests);
 router.route("/user/:userId").get(protect, getContestsByUserId);
 
 // UPDATE
