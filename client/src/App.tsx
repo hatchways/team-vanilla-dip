@@ -7,6 +7,7 @@ import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Contest from './pages/Contest/Contest';
 import Submission from './pages/Submission/Submission';
+import Messages from './pages/Messages/Messages';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
@@ -25,6 +26,8 @@ function App(): JSX.Element {
                 <Switch>
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/signup" component={Signup} />
+                  <ProtectedRoute exact path="/messages">
+                    <Messages />
                   <ProtectedRoute exact path="/contest">
                     <Contest />
                   </ProtectedRoute>
