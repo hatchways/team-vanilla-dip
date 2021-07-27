@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid';
 import CssBasline from '@material-ui/core/CssBaseline';
 import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -38,6 +35,8 @@ const submissionData = [
 ];
 
 export default function Submission(): JSX.Element {
+  const [submission, setSubmission] = useState(submissionData);
+  const { contestId } = useParams<{ contestId: string }>();
   const classes = useStyles();
   const [submission, setSubmission] = useState(submissionData);
   const { contestId } = useParams<{ contestId: string }>();

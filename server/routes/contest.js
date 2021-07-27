@@ -9,10 +9,7 @@ const {
     getContestsByUserId
 } = require("../controllers/contest");
 
-const { 
-    createSubmission,
-    getSubmission
- } = require("../controllers/submission");
+const { createSubmission, getSubmission } = require('../controllers/submission')
 
 // CREATE  
 router.route("/create").post(protect, createContest);

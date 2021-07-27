@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -20,6 +21,7 @@ const ChatSideBanner = ({ loggedInUser }: Props): JSX.Element => {
   const [newChatUser, setNewChatUser] = useState<User | null>(null);
   const submissionId = '60f3ea7aafec9515544adf23';
   const classes = useStyles();
+  const submissionId = '60f3ea7aafec9515544adf23';
 
   // React.FormEvent<FormControl & FormControlProps>)
   const handleChange = (e: ChangeEvent<HTMLInputElement>, newInputValue: string) => {

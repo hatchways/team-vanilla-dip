@@ -1,7 +1,6 @@
 const Submission = require("../models/Submission");
 const Contest = require("../models/Contest");
 const asyncHandler = require("express-async-handler");
-const mongoose = require('mongoose');
 
 
 
@@ -17,11 +16,8 @@ exports.createSubmission = asyncHandler(async (req, res, next) => {
                 status: "contest not found"
             })  
         }
-        console.log('Running submission')
         let submission = await Submission.findOneAndUpdate({userID:userID, contestID:contestID},{$addToSet: {imageFiles: { $each: imageFiles } } },{new:true});
-        console.log(`Checking for submission: ${submission}`)
         if (!submission){
-            console.log('Submission not found creating a new one')
             submission = new Submission({
                 contestID: contestID,
                 userID: userID,
@@ -29,13 +25,10 @@ exports.createSubmission = asyncHandler(async (req, res, next) => {
             });
         }
 
-        console.log(`Checking if saved ${submission}`)
         const result = await submission.save();
         if (!result) {
-            console.log('Not saved')
             return res.status(400).json({ status: "submission not saved"})
         }
-        console.log('Saved')
         return res.status(201).json({
             status: "submission saved",
             submission
