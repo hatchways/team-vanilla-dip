@@ -17,8 +17,8 @@ interface Props {
 const ChatSideBanner = ({ loggedInUser }: Props): JSX.Element => {
   const [search, setSearch] = useState<string>('test');
   const [newChatUser, setNewChatUser] = useState<User | null>(null);
-  const classes = useStyles();
   const submissionId = '60f3ea7aafec9515544adf23';
+  const classes = useStyles();
 
   // React.FormEvent<FormControl & FormControlProps>)
   const handleChange = (e: ChangeEvent<HTMLInputElement>, newInputValue: string) => {
