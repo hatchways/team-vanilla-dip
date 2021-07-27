@@ -4,7 +4,7 @@ const submissionSchema = new mongoose.Schema({
     contestID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "contest",
-        required: true,
+        required: true
     },
     userID: {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,7 +16,7 @@ const submissionSchema = new mongoose.Schema({
         default: true
     },
     imageFiles: {
-        type: [String]
+        type: [{type: String}]
     }
 }, {timestamps: true});
 
