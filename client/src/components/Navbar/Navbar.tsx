@@ -41,6 +41,16 @@ const Navbar = (): JSX.Element => {
             <Button size="large" component={Link} to={'/notifications'} color="primary" className={classes.button}>
               Notifications
             </Button>
+            <Button
+              size="large"
+              color="secondary"
+              component={Link}
+              to={'/contest'}
+              className={classes.authButton}
+              variant="outlined"
+            >
+              create contest
+            </Button>
           </Box>
         )}
 
@@ -55,12 +65,6 @@ const Navbar = (): JSX.Element => {
               variant="outlined"
             >
               {location.pathname == '/signup' ? 'log in' : 'sign up'}
-            </Button>
-          )}
-
-          {location.pathname == '/createContest' && (
-            <Button size="large" color="primary" className={classes.authButton} variant="outlined">
-              create contest
             </Button>
           )}
         </Box>
