@@ -9,8 +9,6 @@ import AvatarDisplay from '../AvatarDisplay/AvatarDisplay';
 import Search from '../Search/Search';
 import AuthMenu from '../AuthMenu/AuthMenu';
 
-import { Link } from 'react-router-dom';
-
 interface Props {
   loggedInUser: User;
   handleDrawerToggle?: () => void;
@@ -21,7 +19,6 @@ const ChatSideBanner = ({ loggedInUser }: Props): JSX.Element => {
   const [newChatUser, setNewChatUser] = useState<User | null>(null);
   const submissionId = '60f3ea7aafec9515544adf23';
   const classes = useStyles();
-  const submissionId = '60f3ea7aafec9515544adf23';
 
   // React.FormEvent<FormControl & FormControlProps>)
   const handleChange = (e: ChangeEvent<HTMLInputElement>, newInputValue: string) => {
