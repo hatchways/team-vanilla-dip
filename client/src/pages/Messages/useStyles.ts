@@ -22,10 +22,7 @@ const useStyles = makeStyles(() => ({
   messagingHeader: {
     backgroundColor: '#eeeeee',
     height: '7.5em',
-    paddingTop: '2em',
-    paddingLeft: '1em',
-    paddingRight: '1em',
-    paddingBottom: '2em',
+    padding: '2em 1em',
     width: '100%',
     marginLeft: '2px',
   },
