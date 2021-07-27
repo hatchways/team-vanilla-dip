@@ -28,6 +28,7 @@ function App(): JSX.Element {
                   <Route exact path="/signup" component={Signup} />
                   <ProtectedRoute exact path="/messages">
                     <Messages />
+                  </ProtectedRoute>
                   <ProtectedRoute exact path="/contest">
                     <Contest />
                   </ProtectedRoute>
