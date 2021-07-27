@@ -1,6 +1,6 @@
 export interface Submission {
   active: boolean;
-  imageFile: string;
+  imageFiles: string[];
   contestID: string;
   userID: string;
   title: string;

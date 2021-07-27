@@ -56,7 +56,7 @@ function SubmissionTabs({ card }: cardProps): JSX.Element {
             <Grid container spacing={5}>
               {card.map((data, key) => (
                 <Grid item md={3} xs={12} key={key}>
-                  <SubmissionCard imageSrc={data.imageFile} title={data.title} author={data.userID} />
+                  <SubmissionCard imageSrc={data.imageFiles[0]} title={data.title} author={data.userID} />
                 </Grid>
               ))}
             </Grid>
