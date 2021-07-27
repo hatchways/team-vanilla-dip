@@ -14,7 +14,7 @@ import { fetchSubmissionByContestId } from '../../helpers/APICalls/searchContest
 import { Submission } from '../../interface/Submission';
 import { SubmissionParams } from './SubmissionParams';
 
-export default function ContestPage(): JSX.Element {
+export default function SubmissionPage(): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<SubmissionParams>();
   const [submissions, setSubmissions] = useState<Submission[]>([]);

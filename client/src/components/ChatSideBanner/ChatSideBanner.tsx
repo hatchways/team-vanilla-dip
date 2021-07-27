@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -17,6 +18,7 @@ const ChatSideBanner = ({ loggedInUser }: Props): JSX.Element => {
   const [search, setSearch] = useState<string>('test');
   const [newChatUser, setNewChatUser] = useState<User | null>(null);
   const classes = useStyles();
+  const submissionId = '60f3ea7aafec9515544adf23';
 
   // React.FormEvent<FormControl & FormControlProps>)
   const handleChange = (e: ChangeEvent<HTMLInputElement>, newInputValue: string) => {
@@ -29,6 +31,7 @@ const ChatSideBanner = ({ loggedInUser }: Props): JSX.Element => {
   return (
     <Grid className={classes.chatSideBanner}>
       <Box className={classes.userPanel}>
+        <Link to={`/contest/${submissionId}`}>Submission</Link>
         <AvatarDisplay loggedIn user={loggedInUser} />
         <Typography className={classes.userText} variant="h5">
           {loggedInUser.username}

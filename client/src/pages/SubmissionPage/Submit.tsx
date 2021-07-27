@@ -11,7 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { addSubmissionToContest } from '../../helpers/APICalls/searchContest';
 import { SubmissionParams } from './SubmissionParams';
-import { bool } from 'yup';
 import { useSnackBar } from '../../context/useSnackbarContext';
 export default function Submit(): JSX.Element {
   const { loggedInUser } = useAuth();
