@@ -42,9 +42,9 @@ function App(): JSX.Element {
                   <ProtectedRoute exact path="/contest/:id/submit">
                     <Submit />
                   </ProtectedRoute>
-                  <Route path="*">
-                    <Redirect to="/login" />
-                  </Route>
+                  <ProtectedRoute path="*" exact>
+                    <Redirect to="/dashboard" />
+                  </ProtectedRoute>
                 </Switch>
               </ContestProvider>
             </SocketProvider>

@@ -3,7 +3,6 @@ export interface Submission {
   imageFiles: string[];
   contestID: string;
   userID: string;
-  title: string;
 }
 
 export interface SingleSubmissionApiData {
