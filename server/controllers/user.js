@@ -21,3 +21,4 @@ exports.searchUsers = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ users: users });
 });
+

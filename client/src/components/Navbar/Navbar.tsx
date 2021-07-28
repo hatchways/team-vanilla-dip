@@ -32,9 +32,6 @@ const Navbar = (): JSX.Element => {
 
         {loggedInUser && (
           <Box className={classes.navButtons} justifyContent="space-between" alignItems="center">
-            <Button size="large" component={Link} to={'/submit'} color="primary" className={classes.button}>
-              Submit
-            </Button>
             <Button size="large" component={Link} to={'/discover'} color="primary" className={classes.button}>
               Discover
             </Button>

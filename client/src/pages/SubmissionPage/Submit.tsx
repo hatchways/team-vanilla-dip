@@ -31,7 +31,6 @@ export default function Submit(): JSX.Element {
 
 function FileUploader(): JSX.Element {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [title, setTitle] = useState<string>('');
   const [processing, setProcessing] = useState<boolean>(false);
   const { id } = useParams<SubmissionParams>();
   const history = useHistory();
@@ -43,16 +42,13 @@ function FileUploader(): JSX.Element {
       setSelectedFile(event.target.files[0]);
     }
   };
-  const onTitleChange = (text: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTitle(text.target.value);
-  };
   // On file upload (click the upload button)
   const onFileUpload = () => {
-    if (selectedFile && title) {
+    if (selectedFile) {
       setProcessing(true);
       uploadImage({ image: selectedFile }).then((r) => {
         if (r.success) {
-          addSubmissionToContest({ title: title, contestID: id, imageFile: r.success }).then((r) => {
+          addSubmissionToContest({ contestID: id, imageFile: r.success }).then((r) => {
             if (r.submission) {
               history.goBack();
             } else {
@@ -73,7 +69,6 @@ function FileUploader(): JSX.Element {
   return (
     <Box>
       <Typography variant="h5">Upload Image</Typography>
-      <TextField margin="dense" variant="outlined" id="title" label="Title:" required onChange={onTitleChange} />
       <br />
       <input type="file" accept="image/*" onChange={onFileChange} />
       <br />

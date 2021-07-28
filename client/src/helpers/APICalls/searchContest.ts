@@ -31,20 +31,19 @@ export async function fetchSubmissionByContestId({ id }: Props): Promise<ArraySu
 }
 interface CreateSubmission {
   contestID: string;
-  title: string;
   imageFile: string;
 }
 export async function addSubmissionToContest({
   contestID,
-  title,
   imageFile,
 }: CreateSubmission): Promise<SingleSubmissionApiData> {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title, imageFile }),
+    body: JSON.stringify({ imageFile }),
   };
+  console.log(JSON.stringify({ imageFile }));
   return await fetch(`/contest/${contestID}/submission`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({

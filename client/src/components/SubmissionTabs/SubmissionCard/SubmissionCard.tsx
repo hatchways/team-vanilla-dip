@@ -11,13 +11,13 @@ import DoneIcon from '@material-ui/icons/Done';
 import useStyles from './useStyles';
 import SubmissionCardProps from '../SumissionCardInterface';
 
-function SubmissionCard({ imageSrc, title, author }: SubmissionCardProps): JSX.Element {
+function SubmissionCard({ imageSrc, author }: SubmissionCardProps): JSX.Element {
   const classes = useStyles();
 
   return (
     <Card className={classes.submissionCard}>
       <CardActionArea>
-        <CardMedia component="img" alt="Contemplative Reptile" height="300" image={imageSrc} title={title} />
+        <CardMedia component="img" alt="Contemplative Reptile" height="300" image={imageSrc} />
         <Box className={classes.displayOver}>
           <CardMedia
             component="img"
