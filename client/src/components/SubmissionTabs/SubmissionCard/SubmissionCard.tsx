@@ -15,7 +15,7 @@ function SubmissionCard({ imageSrc, author }: SubmissionCardProps): JSX.Element 
 
   return (
     <Card className={classes.submissionCard}>
-      <CardMedia component="img" alt="Contemplative Reptile" height="300" image={imageSrc} title={title} />
+      <CardMedia component="img" alt="Contemplative Reptile" height="300" image={imageSrc} />
       <Box className={classes.displayOver}>
         <CardMedia
           component="img"

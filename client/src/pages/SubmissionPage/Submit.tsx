@@ -8,7 +8,6 @@ import Navbar from '../../components/Navbar/Navbar';
 import { uploadImage } from '../../helpers/APICalls/uploadImage';
 import { useHistory, useParams } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import { addSubmissionToContest } from '../../helpers/APICalls/searchContest';
 import { SubmissionParams } from './SubmissionParams';
 import { useSnackBar } from '../../context/useSnackbarContext';
