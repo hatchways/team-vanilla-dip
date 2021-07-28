@@ -16,13 +16,12 @@ export const ContestProvider: FunctionComponent = ({ children }): JSX.Element =>
     if (loggedInUser) {
       const getAllContestByUserId = async () => {
         const contests = await fetchAllContestByUserId({ userId: loggedInUser.id });
-        console.log(contests);
-        setAllContext(contests.contests);
+        setAllContests(contests.contests);
       };
       getAllContestByUserId();
     }
   }, [loggedInUser]);
-  const [allContests, setAllContext] = useState<Contest[]>();
+  const [allContests, setAllContests] = useState<Contest[]>();
   return <ContestContext.Provider value={{ allContests: allContests || [] }}>{children}</ContestContext.Provider>;
 };
 export function useContests(): IContestContext {

@@ -9,7 +9,11 @@ export interface Notification {
   content?: string;
 }
 
-export interface NotificationApiData {
+export interface SingleNotificationApiData {
   notification?: Notification;
+  status?: string;
+}
+export interface ArrayNotificationApiData {
+  notifications: Notification[];
   status?: string;
 }

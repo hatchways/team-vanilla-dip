@@ -26,3 +26,22 @@ exports.createNotification = asyncHandler(async (req, res, next) => {
     }
 
 })
+exports.getNotifications = asyncHandler(async (req, res, next) => {
+    const userID = req.user.id
+    try {
+        const foundNotification = await Notification.aggregate([
+            { $match: { userID: userID } },
+            { $addFields: {id:"$_id" } },
+        ]);
+        if (!foundNotification) {
+            return res.status(404).json({ status: "Notification not found!!" });
+        }
+        res.status(200).json({
+            status: "Notification found!!",
+            notifications: foundNotification,
+        });
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+
+})

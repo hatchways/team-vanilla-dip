@@ -1,11 +1,11 @@
-import { NotificationApiData } from '../../interface/Notification';
+import { ArrayNotificationApiData, SingleNotificationApiData } from '../../interface/Notification';
 import { FetchOptions } from '../../interface/FetchOptions';
 
-interface Props {
+interface CreateNotificationProps {
   receiver: string;
   content?: string;
 }
-async function createNotification(body: string): Promise<NotificationApiData> {
+async function createNotification(body: string): Promise<SingleNotificationApiData> {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -19,11 +19,29 @@ async function createNotification(body: string): Promise<NotificationApiData> {
     }));
 }
 //When a user submits something, it notifies the contest owner
-export async function createSubmitNotification({ receiver }: Props): Promise<NotificationApiData> {
+export async function createSubmitNotification({
+  receiver,
+}: CreateNotificationProps): Promise<SingleNotificationApiData> {
   return createNotification(JSON.stringify({ receiver, notificationType: 'submit' }));
 }
 //When someone messages to receiver
 //body is the message text
-export async function createMessageNotification({ receiver, content }: Props): Promise<NotificationApiData> {
+export async function createMessageNotification({
+  receiver,
+  content,
+}: CreateNotificationProps): Promise<SingleNotificationApiData> {
   return createNotification(JSON.stringify({ receiver, content, notificationType: 'message' }));
+}
+//When someone messages to receiver
+//body is the message text
+export async function fetchAllNotificationByUserId(): Promise<ArrayNotificationApiData> {
+  const fetchOptions: FetchOptions = {
+    method: 'GET',
+    credentials: 'include',
+  };
+  return await fetch(`/notification`, fetchOptions)
+    .then((res) => res.json())
+    .catch(() => ({
+      error: 'Unable to connect to server. Please try again',
+    }));
 }
