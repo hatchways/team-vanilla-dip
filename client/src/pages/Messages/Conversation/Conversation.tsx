@@ -1,16 +1,37 @@
+import { useEffect } from 'react';
 import { useAuth } from '../../../context/useAuthContext';
+import { ConversationProps } from './interface/Conversation';
+import fetchUser from '../../../helpers/APICalls/getUserById';
 import useStyles from './useStyles';
 import profilePic from '../../../Images/profile.png';
 import { Typography, Grid, ListItem, Divider, ListItemAvatar, Avatar, ListItemText, Badge } from '@material-ui/core';
 
-export default function Conversation({ data }: any): JSX.Element {
+export default function Conversation({ participants }: ConversationProps): JSX.Element {
   const classes = useStyles();
-
   const { loggedInUser } = useAuth();
-  console.log(data);
 
-  const participantId = data?.participants.find((participant: string) => participant !== loggedInUser?.id);
+  const participantId = participants?.find((participant: string) => participant !== loggedInUser?.id);
   console.log(participantId);
+
+  useEffect(() => {
+    let active = true;
+
+    async function getUserInfo() {
+      const response = await fetchUser({
+        id: participantId,
+      });
+
+      if (active && response && response.user) {
+        console.log(response.user);
+      }
+    }
+
+    getUserInfo();
+
+    return () => {
+      active = false;
+    };
+  }, [participantId]);
 
   return (
     <>

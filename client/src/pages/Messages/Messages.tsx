@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import useStyles from './useStyles';
-import { useAuth } from '../../context/useAuthContext';
+//import { useAuth } from '../../context/useAuthContext';
+import fetchConversations from '../../helpers/APICalls/getConversations';
+import { Conversation } from '../../interface/Conversation';
 import Navbar from '../../components/Navbar/Navbar';
-import Conversation from './Conversation/Conversation';
+import ConversationListItem from './Conversation/Conversation';
 import Message from './Message/Message';
 import profilePic from '../../Images/profile.png';
 import {
@@ -18,27 +20,41 @@ import {
   TextField,
   CircularProgress,
 } from '@material-ui/core';
-import axios from 'axios';
 
 export default function Messages(): JSX.Element {
   const classes = useStyles();
-  const { loggedInUser } = useAuth();
+  //const { loggedInUser } = useAuth();
 
   const [newMessage, setNewMessage] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
-  const [conversations, setConversations] = useState([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const getConversations = async () => {
-    try {
-      const res = await axios.get('/chat');
-      setConversations(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+  const saveConvos = (convos: Conversation[]) => {
+    setConversations(convos);
   };
 
   useEffect(() => {
-    getConversations();
+    let active = true;
+
+    async function getAndSaveConvos() {
+      setLoading(true);
+      const response = await fetchConversations();
+
+      console.log(response);
+      console.log(response.conversations);
+
+      if (active && response && response.conversations) {
+        saveConvos(response.conversations);
+      }
+      setLoading(false);
+    }
+
+    getAndSaveConvos();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const handleNewMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +90,8 @@ export default function Messages(): JSX.Element {
               <Grid item className={classes.convoListContainer}>
                 <List>
                   {conversations.map((convo) => {
-                    return <Conversation key={convo['_id']} data={convo} />;
+                    console.log(convo);
+                    return <ConversationListItem key={convo['id']} participants={convo['participants']} />;
                   })}
                 </List>
               </Grid>

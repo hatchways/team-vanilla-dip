@@ -8,3 +8,8 @@ export interface SearchUsersApiData {
   users?: User[];
   error?: { message: string };
 }
+
+export interface SearchUserApiData {
+  user?: User;
+  error?: { message: string };
+}
