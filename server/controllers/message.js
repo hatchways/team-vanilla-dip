@@ -28,7 +28,7 @@ exports.getMessages = asyncHandler(async (req, res) => {
         const allMessages = await Message.find({
             conversationID: convoID,
         });
-        res.status(200).json(allMessages);
+        res.status(200).json({messages: allMessages, lastMessage: allMessages[allMessages.length - 1]});
     } catch(error){
         res.status(500).json(error);
     }
