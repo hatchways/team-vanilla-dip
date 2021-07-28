@@ -6,7 +6,6 @@ const {
     getContestById,
     getContests,
     updateContestById,
-    createSubmission,
     getContestsByUserId,
     getSubmissionByContestId
 } = require("../controllers/contest");

@@ -15,8 +15,8 @@ const submissionSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    imageFile: {
-        type: String
+    imageFiles: {
+        type: [{type: String}]
     },
     title: {
         type: String,
