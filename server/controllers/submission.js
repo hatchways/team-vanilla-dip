@@ -2,29 +2,27 @@ const Submission = require("../models/Submission");
 const Contest = require("../models/Contest");
 const asyncHandler = require("express-async-handler");
 
-
-
 exports.createSubmission = asyncHandler(async (req, res, next) => {
     const userID = req.user.id;
     const contestID = req.params.id;
-    const { imageFiles } = req.body;
-
+    const { imageFile } = req.body;
     try {
         const contest = await Contest.findById({_id: contestID})
+
         if (!contest){
             return res.status(404).json({
                 status: "contest not found"
-            })  
+            })
         }
-        let submission = await Submission.findOneAndUpdate({userID:userID, contestID:contestID},{$addToSet: {imageFiles: { $each: imageFiles } } },{new:true});
+        let submission = await Submission.findOneAndUpdate({userID:userID, contestID:contestID},{$addToSet: {imageFiles: imageFile } },{new:true});
+
         if (!submission){
             submission = new Submission({
                 contestID: contestID,
                 userID: userID,
-                imageFiles: imageFiles 
+                imageFiles: imageFile
             });
         }
-
         const result = await submission.save();
         if (!result) {
             return res.status(400).json({ status: "submission not saved"})
@@ -35,11 +33,12 @@ exports.createSubmission = asyncHandler(async (req, res, next) => {
         })
         }
     catch (error) {
+        console.log(error);
         return res.status(500).json({status: "error",
         error
         })
-    }  
-    
+    }
+
 })
 
 exports.getSubmission = asyncHandler(async (req, res, next) => {
@@ -49,7 +48,7 @@ exports.getSubmission = asyncHandler(async (req, res, next) => {
     if (!contest){
         return res.status(404).json({
             status: "contest not found"
-        })  
+        })
     }
     if (contest.userID === userID){
         const submission = await Submission.find({contestID:contestID})
@@ -63,7 +62,7 @@ exports.getSubmission = asyncHandler(async (req, res, next) => {
             submission: submission
         })
     }
-    
+
     const submission = await Submission.find({contestID: contestID, userID: userID})
     if (!submission) {
         return res.status(404).json({

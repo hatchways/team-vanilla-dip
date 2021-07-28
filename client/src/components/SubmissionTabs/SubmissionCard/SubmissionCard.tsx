@@ -10,7 +10,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import useStyles from './useStyles';
 import SubmissionCardProps from '../SumissionCardInterface';
 
-function SubmissionCard({ imageSrc, title, author }: SubmissionCardProps): JSX.Element {
+function SubmissionCard({ imageSrc, author }: SubmissionCardProps): JSX.Element {
   const classes = useStyles();
 
   return (
