@@ -6,7 +6,7 @@ import useStyles from './useStyles';
 import { ContestForm } from './ContestForm/ContestForm';
 import Navbar from '../../components/Navbar/Navbar';
 
-export default function Login(): JSX.Element {
+export default function Contest(): JSX.Element {
   const classes = useStyles();
   return (
     <Grid container component="main" className={classes.root} justifyContent="center">
