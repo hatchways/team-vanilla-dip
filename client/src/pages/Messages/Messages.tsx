@@ -28,7 +28,6 @@ export default function Messages(): JSX.Element {
   const [newMessage, setNewMessage] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [loading, setLoading] = useState(false);
 
   const saveConvos = (convos: Conversation[]) => {
     setConversations(convos);
@@ -37,18 +36,13 @@ export default function Messages(): JSX.Element {
   useEffect(() => {
     let active = true;
 
-    async function getAndSaveConvos() {
-      setLoading(true);
+    const getAndSaveConvos = async () => {
       const response = await fetchConversations();
-
-      console.log(response);
-      console.log(response.conversations);
 
       if (active && response && response.conversations) {
         saveConvos(response.conversations);
       }
-      setLoading(false);
-    }
+    };
 
     getAndSaveConvos();
 
@@ -91,7 +85,13 @@ export default function Messages(): JSX.Element {
                 <List>
                   {conversations.map((convo) => {
                     console.log(convo);
-                    return <ConversationListItem key={convo['id']} participants={convo['participants']} />;
+                    return (
+                      <ConversationListItem
+                        key={convo._id}
+                        participants={convo.participants}
+                        updatedAt={convo.updatedAt}
+                      />
+                    );
                   })}
                 </List>
               </Grid>

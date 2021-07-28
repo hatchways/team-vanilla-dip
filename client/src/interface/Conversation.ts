@@ -1,6 +1,7 @@
 export interface Conversation {
-  id: string;
+  _id: string;
   participants: string[];
+  updatedAt: string;
 }
 
 export interface Conversations {

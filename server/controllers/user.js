@@ -37,5 +37,5 @@ exports.searchUserById = asyncHandler(async (req, res, next) => {
     throw new Error("User does not exist");
   }
 
-  res.status(200).json(user);
+  res.status(200).json({user: user});
 });
