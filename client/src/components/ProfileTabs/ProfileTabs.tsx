@@ -6,7 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import useStyles from './useStyles';
 import { useContests } from '../../context/useContestContext';
-import { Card, CardContent } from '@material-ui/core';
+import { Card, CardActionArea, CardContent } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -38,18 +39,20 @@ export default function ProfileTabs(): JSX.Element {
       <ContestTabPanel index={0} value={value}>
         {allContests
           .filter((contest) => {
-            return new Date(contest.deadlineDate) <= new Date();
+            return new Date(contest.deadlineDate) > new Date();
           })
           .map((contest) => {
             return (
               <Grid item key={contest.id}>
                 <Card>
-                  <CardContent>
-                    <Typography gutterBottom variant={'h2'} noWrap>
-                      {contest.title}
-                    </Typography>
-                    <Typography gutterBottom>{contest.description}</Typography>
-                  </CardContent>
+                  <CardActionArea component={Link} to={'/contest/' + contest.id}>
+                    <CardContent>
+                      <Typography gutterBottom variant={'h2'} noWrap>
+                        {contest.title}
+                      </Typography>
+                      <Typography gutterBottom>{contest.description}</Typography>
+                    </CardContent>
+                  </CardActionArea>
                 </Card>
               </Grid>
             );
@@ -58,17 +61,21 @@ export default function ProfileTabs(): JSX.Element {
       <ContestTabPanel index={1} value={value}>
         {allContests
           .filter((context) => {
-            return new Date(context.deadlineDate) > new Date();
+            return new Date(context.deadlineDate) <= new Date();
           })
           .map((contest) => {
             return (
               <Grid item key={contest.id}>
-                <CardContent>
-                  <Typography gutterBottom variant={'h2'} noWrap>
-                    {contest.title}
-                  </Typography>
-                  <Typography gutterBottom>{contest.description}</Typography>
-                </CardContent>
+                <Card>
+                  <CardActionArea component={Link} to={'/contest/' + contest.id}>
+                    <CardContent>
+                      <Typography gutterBottom variant={'h2'} noWrap>
+                        {contest.title}
+                      </Typography>
+                      <Typography gutterBottom>{contest.description}</Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
               </Grid>
             );
           })}

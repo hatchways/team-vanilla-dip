@@ -4,7 +4,7 @@ const submissionSchema = new mongoose.Schema({
     contestID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "contest",
-        required: true,
+        required: true
     },
     userID: {
         type: mongoose.Schema.Types.ObjectId,
@@ -17,7 +17,7 @@ const submissionSchema = new mongoose.Schema({
     },
     imageFiles: {
         type: [String]
-    }
+    },
 }, {timestamps: true});
 
-module.exports = Submission = mongoose.model("submission", submissionSchema)
+module.exports = ContestPage = mongoose.model("submission", submissionSchema)

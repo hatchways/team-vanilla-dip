@@ -8,9 +8,6 @@ const connectDB = require("./db");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const jwt = require("jsonwebtoken");
-
-const { addUser, removeUser, getUser } = require('./utils/users');
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
@@ -31,41 +28,8 @@ const io = socketio(server, {
   },
 });
 
-
-io.use(function(socket, next){
-  let token = socket.request.headers.cookie;
-
-  if (token){
-    token = token.split('=')[1]
-    console.log(`Token: ${token}`)
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      user = decoded;
-      next();
-    } catch (err) {
-        return next(new Error("Authentication Error"))
-    }
-  }
-}).on("connection", (socket, next) => {
-  console.log("A user connected");
-  io.emit("Welocme", "Hello to the socket server")
-  
-  socket.on("addUser", (userId) =>{
-    const users = addUser(userId, socket.id);
-    io.emit("getUsers", users);
-  })
-
-
-  socket.on("sendMessage", ({senderId, receiverId,text})=>{
-    const user = getUser(receiverId);
-    io.to(user.socketId).emit('getMessage', {senderId, text, createdAt: new Date().getTime()})
-  })
-  
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
-    const users = removeUser(socket.id);
-    io.emit("getUsers", users);
-  })
+io.on("connection", (socket) => {
+  console.log("connected");
 });
 
 if (process.env.NODE_ENV === "development") {

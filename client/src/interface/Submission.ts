@@ -1,8 +1,16 @@
 export interface Submission {
-  imageFiles: [string];
+  active: boolean;
+  imageFiles: string[];
+  contestID: string;
+  userID: string;
 }
 
-export interface SubmissionApiData {
+export interface SingleSubmissionApiData {
+  submission?: Submission;
+  status: string;
+}
+
+export interface ArraySubmissionApiData {
   submissions?: Submission[];
-  error?: { message: string };
+  status: string;
 }
