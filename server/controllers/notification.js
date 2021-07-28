@@ -3,12 +3,11 @@ const asyncHandler = require("express-async-handler");
 
 exports.createNotification = asyncHandler(async (req, res, next) => {
     const sender = req.user.id;
-    const {receiver, body, notificationType} = req.body;
-    console.log(req.body)
+    const {receiver, content, notificationType} = req.body;
     try {
         const notification = await new Notification({
             sender,
-            body,
+            content,
             notificationType,
             receiver
         }).save();

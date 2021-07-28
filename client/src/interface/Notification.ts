@@ -6,7 +6,7 @@ export interface Notification {
   sender: string;
   receiver: string;
   notificationType: NotificationType;
-  body?: string;
+  content?: string;
 }
 
 export interface NotificationApiData {
