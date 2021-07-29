@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { FormikHelpers } from 'formik';
 import { Moment } from 'moment';
+import { useSnackBar } from '../../context/useSnackbarContext';
 
 import createDeadlineDate from './ContestForm/helpers/createDeadlineDate.js';
 import useStyles from './useStyles';
@@ -16,6 +17,7 @@ import createContest from '../../helpers/APICalls/createContests';
 export default function Login(): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
+  const { updateSnackBarMessage } = useSnackBar();
   const handleSubmit = (
     {
       title,
@@ -50,11 +52,13 @@ export default function Login(): JSX.Element {
       (data) => {
         if (data.error) {
           setSubmitting(false);
+          updateSnackBarMessage(data.error.message);
         } else if (data.success) {
           return history.goBack();
         } else {
           console.error({ data });
           setSubmitting(false);
+          updateSnackBarMessage('An unexpected error occured. Please try again');
         }
       },
     );

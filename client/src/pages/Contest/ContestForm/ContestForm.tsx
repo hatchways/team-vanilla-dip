@@ -79,14 +79,11 @@ export const ContestForm: React.FC<Props> = ({ handleSubmit }) => {
 
   const selectImages = (image: string) => {
     let newSelectedImages = selectedImages;
-    console.log(image);
     if (newSelectedImages.includes(image)) {
       newSelectedImages = newSelectedImages.filter((img) => img !== image);
     } else {
       newSelectedImages = [...newSelectedImages, image];
     }
-    console.log(`SelectedImages ${selectedImages}`);
-    console.log(`NewSelectedImages ${newSelectedImages}`);
     setSelectedImages(newSelectedImages);
     return selectedImages;
   };

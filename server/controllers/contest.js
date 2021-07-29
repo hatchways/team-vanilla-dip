@@ -20,6 +20,7 @@ exports.createContest = asyncHandler(async (req, res, next) => {
         if (!result) {
             return res.status(400).json({ status: "contest not saved!!" });
         }
+        console.log("Saved Contes Successfully")
         res.status(200).json({
             status: "contest saved!!",
             contest,
