@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
 import momentTimezone from 'moment-timezone';
 import moment, { Moment } from 'moment';
@@ -11,6 +12,9 @@ import useStyles from './useStyles';
 import { tatooDesigns as images } from './testdata.js';
 import checkmark from './checkmark.png';
 import createDeadlineDate from './helpers/createDeadlineDate.js';
+
+import createContest from '../../../helpers/APICalls/createContests';
+
 import {
   CircularProgress,
   Grid,
@@ -39,17 +43,21 @@ interface ContestFormValues {
 
 export const ContestForm: React.FC = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [selectedDateTime, handleDateTimeChange] = useState<MaterialUiPickersDate | Moment>(moment());
   const [timeZone, setTimeZone] = useState<string | unknown>(moment.tz.guess());
 
   const selectImages = (image: string) => {
     let newSelectedImages = selectedImages;
+    console.log(image);
     if (newSelectedImages.includes(image)) {
       newSelectedImages = newSelectedImages.filter((img) => img !== image);
     } else {
       newSelectedImages = [...newSelectedImages, image];
     }
+    console.log(`SelectedImages ${selectedImages}`);
+    console.log(`NewSelectedImages ${newSelectedImages}`);
     setSelectedImages(newSelectedImages);
   };
 
@@ -84,6 +92,18 @@ export const ContestForm: React.FC = () => {
           deadlineDate,
           imageFiles: selectedImages,
         };
+        console.log(`Data: ${selectedImages}`);
+        createContest(values.title, values.description, values.prizeAmount, deadlineDate, selectedImages).then(
+          (data) => {
+            if (data.error) {
+              actions.setSubmitting(false);
+            } else if (data.success) {
+              actions.setSubmitting(true);
+              console.log(data.success);
+              history.goBack();
+            }
+          },
+        );
         actions.setSubmitting(false);
       }}
     >

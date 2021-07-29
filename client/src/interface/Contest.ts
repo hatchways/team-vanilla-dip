@@ -8,6 +8,11 @@ export interface Contest {
   id: string;
 }
 
+export interface ContestApiData {
+  error?: { message: string };
+  success?: Contest;
+}
+
 export interface SearchContestApiData {
   contests?: Contest[];
   error?: { message: string };

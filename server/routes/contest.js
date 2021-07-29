@@ -13,7 +13,7 @@ const {
 const { createSubmission } = require('../controllers/submission')
 
 // CREATE  
-router.route("/create").post(createContest);
+router.route("/create").post(protect, createContest);
 router.route("/:id/submission").post(protect,createSubmission)
 
 // READ
