@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import useStyles from './useStyles';
 import fetchConversations from '../../helpers/APICalls/getConversations';
 import { Conversation } from '../../interface/Conversation';
+import { User } from '../../interface/User';
 import Navbar from '../../components/Navbar/Navbar';
+import SearchUsers from '../../components/Search/Search';
 import ConversationListItem from './Conversation/Conversation';
 import MessagingContainer from './Messaging/MessagingContainer';
 
@@ -13,6 +15,17 @@ export default function Messages(): JSX.Element {
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [currentConvo, setCurrentConvo] = useState<Conversation | null>(null);
+  const [search, setSearch] = useState<string>('');
+  const [users, setUsers] = useState<User[]>([]);
+
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>, newInputValue: string) => {
+    setSearch(newInputValue);
+    const selectedUser = users.find((user) => user.username === newInputValue);
+    if (selectedUser) {
+      console.log(selectedUser);
+      setSearch('');
+    }
+  };
 
   const saveConvos = (convos: Conversation[]) => {
     setConversations(convos);
@@ -50,6 +63,9 @@ export default function Messages(): JSX.Element {
                 <Typography variant="h5" style={{ fontWeight: 700 }}>
                   Inbox Messages
                 </Typography>
+              </Grid>
+              <Grid item>
+                <SearchUsers search={search} handleChange={handleSearchChange} options={users} setOptions={setUsers} />
               </Grid>
               <Divider />
               <Grid item className={classes.convoListContainer}>

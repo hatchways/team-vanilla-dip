@@ -21,7 +21,7 @@ exports.createConversation = asyncHandler(async (req, res) => {
 
     try {
         const savedConvo = await newConvo.save();
-        res.status(201).json(savedConvo);
+        res.status(201).json({conversation: savedConvo});
     } catch (error) {
         res.status(500).json(error);
     }

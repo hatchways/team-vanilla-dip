@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
     height: 'calc(100vh - 88px)',
   },
   convoListContainer: {
-    height: 'calc(100vh - (88px + 7em + 27px))',
+    height: 'calc(100vh - (88px + 7em + 27px + 50px))',
     overflowY: 'scroll',
   },
   messagingHeader: {
