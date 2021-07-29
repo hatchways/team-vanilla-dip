@@ -1,6 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import useStyles from './useStyles';
 import fetchConversations from '../../helpers/APICalls/getConversations';
+import createConvo from '../../helpers/APICalls/createNewConvo';
 import { Conversation } from '../../interface/Conversation';
 import { User } from '../../interface/User';
 import Navbar from '../../components/Navbar/Navbar';
@@ -17,12 +18,14 @@ export default function Messages(): JSX.Element {
   const [currentConvo, setCurrentConvo] = useState<Conversation | null>(null);
   const [search, setSearch] = useState<string>('');
   const [users, setUsers] = useState<User[]>([]);
+  const [newParticipant, setNewParticipant] = useState<User | null>(null);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>, newInputValue: string) => {
     setSearch(newInputValue);
     const selectedUser = users.find((user) => user.username === newInputValue);
-    if (selectedUser) {
-      console.log(selectedUser);
+
+    if (selectedUser && selectedUser._id) {
+      setNewParticipant(selectedUser);
       setSearch('');
     }
   };
@@ -48,6 +51,28 @@ export default function Messages(): JSX.Element {
       active = false;
     };
   }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    if (newParticipant?._id) {
+      const createAndPushConvo = async () => {
+        const response = await createConvo(newParticipant._id);
+
+        if (active && response && response.conversation) {
+          setCurrentConvo(response.conversation);
+          const newConvos = [...conversations, response.conversation];
+          saveConvos(newConvos);
+        }
+      };
+
+      createAndPushConvo();
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [newParticipant, conversations]);
 
   return (
     <Grid container className={classes.root} direction="column" alignItems="center">
