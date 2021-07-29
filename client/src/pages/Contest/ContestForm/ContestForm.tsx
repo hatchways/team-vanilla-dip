@@ -88,6 +88,7 @@ export const ContestForm: React.FC<Props> = ({ handleSubmit }) => {
     console.log(`SelectedImages ${selectedImages}`);
     console.log(`NewSelectedImages ${newSelectedImages}`);
     setSelectedImages(newSelectedImages);
+    return selectedImages;
   };
 
   const initialValues: ContestFormValues = {
@@ -261,6 +262,7 @@ export const ContestForm: React.FC<Props> = ({ handleSubmit }) => {
                         style={{ maxHeight: '17.5em' }}
                         onClick={() => {
                           selectImages(imgUrl);
+                          setFieldValue('imageFiles', selectedImages);
                         }}
                       >
                         <Grid
