@@ -2,18 +2,21 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/useAuthContext';
 import { ConversationProps } from './interface/Conversation';
 import { User } from '../../../interface/User';
+import { Message } from '../../../interface/Message';
 import fetchUser from '../../../helpers/APICalls/getUserById';
+import fetchLastMessage from '../../../helpers/APICalls/getMessagesByConvoId';
 import useStyles from './useStyles';
-import profilePic from '../../../Images/profile.png';
+import profilePicAvatar from '../../../Images/user.png';
 import { Typography, Grid, ListItem, Divider, ListItemAvatar, Avatar, ListItemText, Badge } from '@material-ui/core';
 import moment from 'moment';
 
-export default function Conversation({ participants, updatedAt }: ConversationProps): JSX.Element {
+export default function Conversation({ participants, convoID, setConvo }: ConversationProps): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
   const participantId = participants?.find((participant: string) => participant !== loggedInUser?.id);
 
   const [participant, setParticipant] = useState<User | null>(null);
+  const [lastMessage, setLastMessage] = useState<Message | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -36,9 +39,30 @@ export default function Conversation({ participants, updatedAt }: ConversationPr
     };
   }, [participantId]);
 
+  useEffect(() => {
+    let active = true;
+
+    if (convoID) {
+      const getLastMessage = async () => {
+        const response = await fetchLastMessage({
+          convoID,
+        });
+
+        if (active && response && response.lastMessage) {
+          setLastMessage(response.lastMessage);
+        }
+      };
+      getLastMessage();
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [convoID]);
+
   return (
     <>
-      <ListItem alignItems="flex-start" button>
+      <ListItem alignItems="flex-start" button onClick={() => setConvo(convoID)}>
         <Grid container>
           <Grid item container alignItems="center" justifyContent="flex-start" xs={9}>
             <Grid item xs={2}>
@@ -52,7 +76,7 @@ export default function Conversation({ participants, updatedAt }: ConversationPr
                   }}
                   classes={{ badge: classes.inactiveBadge }}
                 >
-                  <Avatar alt="profile picture" src={profilePic} />
+                  <Avatar alt="profile picture" src={profilePicAvatar} />
                 </Badge>
               </ListItemAvatar>
             </Grid>
@@ -62,8 +86,7 @@ export default function Conversation({ participants, updatedAt }: ConversationPr
                   {participant?.username}
                 </Typography>
                 <Typography variant="body1" className={classes.messageSnippet}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                  dolore magna aliqua.
+                  {lastMessage ? lastMessage.message : null}
                 </Typography>
               </ListItemText>
             </Grid>
@@ -72,7 +95,7 @@ export default function Conversation({ participants, updatedAt }: ConversationPr
             <Grid item>
               <ListItemText disableTypography>
                 <Typography variant="body1" style={{ padding: '1em' }}>
-                  {moment(updatedAt).calendar()}
+                  {lastMessage ? moment(lastMessage.updatedAt).fromNow() : null}
                 </Typography>
               </ListItemText>
             </Grid>

@@ -2,7 +2,11 @@ import useStyles from './useStyles';
 import profilePic from '../../../Images/profile.png';
 import { Typography, Grid, Avatar, Paper } from '@material-ui/core';
 
-export default function Message(): JSX.Element {
+interface Props {
+  convoID: string | null;
+}
+
+export default function Message({ convoID }: Props): JSX.Element {
   const classes = useStyles();
 
   return (

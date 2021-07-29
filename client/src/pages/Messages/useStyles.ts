@@ -68,6 +68,10 @@ const useStyles = makeStyles(() => ({
     paddingRight: '3em',
     paddingBottom: '1em',
   },
+  startConvoTextContainer: {
+    padding: '5em',
+    marginTop: '10em',
+  },
 }));
 
 export default useStyles;

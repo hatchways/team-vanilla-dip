@@ -1,5 +1,7 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export interface ConversationProps {
-  key: string;
+  convoID: string;
   participants: string[];
-  updatedAt: string;
+  setConvo: Dispatch<SetStateAction<string | null>>;
 }
