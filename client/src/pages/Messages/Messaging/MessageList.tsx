@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import useStyles from './useStyles';
 import profileAvatar from '../../../Images/user.png';
 import { User } from '../../../interface/User';
@@ -14,11 +15,24 @@ export default function MessageList({ messages }: Props): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   return (
     <>
       {messages.map((message) =>
         message.senderID === loggedInUser?.id ? (
-          <Grid key={message._id} item container className={classes.userMessageContainer} justifyContent="flex-end">
+          <Grid
+            ref={scrollRef}
+            key={message._id}
+            item
+            container
+            className={classes.userMessageContainer}
+            justifyContent="flex-end"
+          >
             <Grid item container justifyContent="flex-end" xs={5}>
               <Grid item>
                 <Paper elevation={2} className={classes.user}>
@@ -28,7 +42,7 @@ export default function MessageList({ messages }: Props): JSX.Element {
             </Grid>
           </Grid>
         ) : (
-          <Grid key={message._id} item container className={classes.messageContainer}>
+          <Grid ref={scrollRef} key={message._id} item container className={classes.messageContainer}>
             <Grid item container justifyContent="center" xs={1}>
               <Grid item>
                 <Avatar alt="profile picture" src={profileAvatar} />
