@@ -10,10 +10,10 @@ import profilePicAvatar from '../../../Images/user.png';
 import { Typography, Grid, ListItem, Divider, ListItemAvatar, Avatar, ListItemText, Badge } from '@material-ui/core';
 import moment from 'moment';
 
-export default function Conversation({ participants, convoID, setConvo }: ConversationProps): JSX.Element {
+export default function Conversation({ convo, setConvo }: ConversationProps): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
-  const participantId = participants?.find((participant: string) => participant !== loggedInUser?.id);
+  const participantId = convo.participants?.find((participant: string) => participant !== loggedInUser?.id);
 
   const [participant, setParticipant] = useState<User | null>(null);
   const [lastMessage, setLastMessage] = useState<Message | null>(null);
@@ -42,10 +42,10 @@ export default function Conversation({ participants, convoID, setConvo }: Conver
   useEffect(() => {
     let active = true;
 
-    if (convoID) {
+    if (convo._id) {
       const getLastMessage = async () => {
         const response = await fetchLastMessage({
-          convoID,
+          convoID: convo._id,
         });
 
         if (active && response && response.lastMessage) {
@@ -58,13 +58,13 @@ export default function Conversation({ participants, convoID, setConvo }: Conver
     return () => {
       active = false;
     };
-  }, [convoID]);
+  }, [convo]);
 
   return (
     <>
-      <ListItem alignItems="flex-start" button onClick={() => setConvo(convoID)}>
+      <ListItem alignItems="flex-start" button onClick={() => setConvo(convo)}>
         <Grid container>
-          <Grid item container alignItems="center" justifyContent="flex-start" xs={9}>
+          <Grid item container alignItems="center" justifyContent="flex-start" xs={8}>
             <Grid item xs={2}>
               <ListItemAvatar style={{ paddingLeft: '0.5em' }}>
                 <Badge
@@ -91,12 +91,10 @@ export default function Conversation({ participants, convoID, setConvo }: Conver
               </ListItemText>
             </Grid>
           </Grid>
-          <Grid item container alignItems="center" justifyContent="flex-end" xs={3}>
+          <Grid item container alignItems="center" justifyContent="flex-end" xs={4}>
             <Grid item>
               <ListItemText disableTypography>
-                <Typography variant="body1" style={{ padding: '1em' }}>
-                  {lastMessage ? moment(lastMessage.updatedAt).fromNow() : null}
-                </Typography>
+                <Typography variant="body1">{lastMessage ? moment(lastMessage.updatedAt).fromNow() : null}</Typography>
               </ListItemText>
             </Grid>
           </Grid>
