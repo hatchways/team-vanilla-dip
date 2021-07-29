@@ -5,6 +5,7 @@ export interface Contest {
   deadlineDate: string;
   userID: string;
   dateCreated: string;
+  imageFiles: string[];
   id: string;
 }
 

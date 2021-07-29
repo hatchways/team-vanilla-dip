@@ -54,7 +54,7 @@ export default function Login(): JSX.Element {
           setSubmitting(false);
           updateSnackBarMessage(data.error.message);
         } else if (data.success) {
-          return history.goBack();
+          history.push('/dashboard');
         } else {
           console.error({ data });
           setSubmitting(false);
