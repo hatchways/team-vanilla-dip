@@ -1,14 +1,17 @@
 const colors = require("colors");
 const path = require("path");
 const http = require("http");
+const jwt = require("jsonwebtoken");
 const express = require("express");
 const socketio = require("socket.io");
 const { notFound, errorHandler } = require("./middleware/error");
 const connectDB = require("./db");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
+const ioCookieParser = require("socket.io-cookie-parser");
 const logger = require("morgan");
 
+const { addUser, removeUser, getUser } = require('./utils/users');
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const contestRouter = require("./routes/contest");
@@ -28,8 +31,42 @@ const io = socketio(server, {
   },
 });
 
-io.on("connection", (socket) => {
-  console.log("connected");
+
+io.use(ioCookieParser());
+io.use(function(socket, next){
+  let token = socket.request.cookies['token'];
+  if (token){
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      user = decoded;
+      next();
+    } catch (err) {
+      return next(new Error("Authentication Error"))
+    }
+  }
+  else{
+    return next(new Error("Authentication Error"))
+  }
+}).on("connection", (socket, next) => {
+  console.log('New user connected');
+  io.emit("Welocme", "Hello to the socket server")
+  
+  socket.on("addUser", (userId) =>{
+    const users = addUser(userId, socket.id);
+    io.emit("getUsers", users);
+  })
+
+
+  socket.on("sendMessage", ({senderId, receiverId,text})=>{
+    const user = getUser(receiverId);
+    io.to(user.socketId).emit('getMessage', {senderId, text, createdAt: new Date().getTime()})
+  })
+  
+  socket.on('disconnect', () => {
+    console.log('User has disconnected');
+    const users = removeUser(socket.id);
+    io.emit("getUsers", users);
+  })
 });
 
 if (process.env.NODE_ENV === "development") {
