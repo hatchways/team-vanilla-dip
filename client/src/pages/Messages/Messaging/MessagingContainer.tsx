@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import useStyles from '../useStyles';
 import { useAuth } from '../../../context/useAuthContext';
 import { User } from '../../../interface/User';
+import { Message } from '../../../interface/Message';
 import MessageList from './MessageList';
 import fetchUser from '../../../helpers/APICalls/getUserById';
+import fetchLastMessage from '../../../helpers/APICalls/getMessagesByConvoId';
+import pushNewMessage from '../../../helpers/APICalls/createNewMessage';
 import { Conversation } from '../../../interface/Conversation';
-import profilePic from '../../../Images/profile.png';
+import profileAvatar from '../../../Images/user.png';
 import { Typography, Grid, Divider, Avatar, Badge, Button, TextField, CircularProgress } from '@material-ui/core';
 
 interface Props {
-  convo: Conversation | null;
+  convo: Conversation;
 }
 
 export default function MessagingContainer({ convo }: Props): JSX.Element {
@@ -19,6 +22,7 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
   const [newMessage, setNewMessage] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
   const [participant, setParticipant] = useState<User | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const participantId = convo?.participants.find((participant: string) => participant !== loggedInUser?.id);
 
@@ -43,18 +47,44 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
     };
   }, [participantId]);
 
+  useEffect(() => {
+    let active = true;
+
+    if (convo?._id) {
+      const getMessages = async () => {
+        const response = await fetchLastMessage({
+          convoID: convo._id,
+        });
+
+        if (active && response && response.messages) {
+          setMessages(response.messages);
+        }
+      };
+      getMessages();
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [convo]);
+
   const handleNewMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewMessage(e.target.value);
   };
 
-  const handleNewMessageSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleNewMessageSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     setNewMessage('');
-    setTimeout(() => {
-      console.log(newMessage);
+
+    const response = await pushNewMessage(convo._id, newMessage);
+
+    if (response && response.message) {
+      const newMessages: Message[] = [...messages, response.message];
+      setMessages(newMessages);
+
       setSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -71,7 +101,7 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
               }}
               classes={{ badge: classes.activeBadge }}
             >
-              <Avatar alt="profile picture" src={profilePic} />
+              <Avatar alt="profile picture" src={profileAvatar} />
             </Badge>
           </Grid>
         </Grid>
@@ -89,7 +119,7 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
         </Grid>
       </Grid>
       <Grid item container alignItems="flex-end" justifyContent="flex-end" className={classes.chatboxContainer}>
-        <MessageList convo={convo} />
+        <MessageList messages={messages} />
       </Grid>
       <form onSubmit={handleNewMessageSubmit} style={{ width: '100%' }}>
         <Divider />

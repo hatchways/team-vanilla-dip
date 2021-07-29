@@ -1,11 +1,11 @@
 export interface Message {
-  _id: string;
+  _id?: string;
   conversationID: string;
   senderID: string;
   message: string;
-  read: boolean;
-  updatedAt: string;
-  createdAt: string;
+  read?: boolean;
+  updatedAt?: string;
+  createdAt?: string;
 }
 
 export interface Messages {
