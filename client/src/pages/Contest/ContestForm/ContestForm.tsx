@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Formik } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 import momentTimezone from 'moment-timezone';
 import moment, { Moment } from 'moment';
 import MomentUtils from '@date-io/moment';
@@ -11,9 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
 import { tatooDesigns as images } from './testdata.js';
 import checkmark from './checkmark.png';
-import createDeadlineDate from './helpers/createDeadlineDate.js';
-
-import createContest from '../../../helpers/APICalls/createContests';
 
 import {
   CircularProgress,
@@ -41,9 +37,42 @@ interface ContestFormValues {
   imageFiles: string[];
 }
 
-export const ContestForm: React.FC = () => {
+interface Props {
+  handleSubmit: (
+    {
+      title,
+      description,
+      prizeAmount,
+      date,
+      time,
+      timeZone,
+      imageFiles,
+    }: {
+      title: string;
+      description: string;
+      prizeAmount: number;
+      date: MaterialUiPickersDate | Moment | string | null;
+      time: MaterialUiPickersDate | Moment | string | null;
+      timeZone: string;
+      imageFiles: string[];
+    },
+    {
+      setStatus,
+      setSubmitting,
+    }: FormikHelpers<{
+      title: string;
+      description: string;
+      prizeAmount: number;
+      date: MaterialUiPickersDate | Moment | string | null;
+      time: MaterialUiPickersDate | Moment | string | null;
+      timeZone: string;
+      imageFiles: string[];
+    }>,
+  ) => void;
+}
+
+export const ContestForm: React.FC<Props> = ({ handleSubmit }) => {
   const classes = useStyles();
-  const history = useHistory();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [selectedDateTime, handleDateTimeChange] = useState<MaterialUiPickersDate | Moment>(moment());
   const [timeZone, setTimeZone] = useState<string | unknown>(moment.tz.guess());
@@ -81,31 +110,7 @@ export const ContestForm: React.FC = () => {
         time: Yup.date().required('Time is required'),
         timeZone: Yup.string().required('Time zone is required'),
       })}
-      onSubmit={(values, actions) => {
-        actions.setSubmitting(true);
-        const deadlineDate = createDeadlineDate(values.date, values.time, values.timeZone);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const contestFormData = {
-          title: values.title,
-          description: values.description,
-          prizeAmount: values.prizeAmount,
-          deadlineDate,
-          imageFiles: selectedImages,
-        };
-        console.log(`Data: ${selectedImages}`);
-        createContest(values.title, values.description, values.prizeAmount, deadlineDate, selectedImages).then(
-          (data) => {
-            if (data.error) {
-              actions.setSubmitting(false);
-            } else if (data.success) {
-              actions.setSubmitting(true);
-              console.log(data.success);
-              history.goBack();
-            }
-          },
-        );
-        actions.setSubmitting(false);
-      }}
+      onSubmit={handleSubmit}
     >
       {({ handleSubmit, handleChange, values, touched, errors, isSubmitting, setFieldValue }) => (
         <form onSubmit={handleSubmit} className={classes.form} noValidate>

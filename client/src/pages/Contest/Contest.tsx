@@ -1,13 +1,65 @@
+import { useHistory } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { FormikHelpers } from 'formik';
+import { Moment } from 'moment';
+
+import createDeadlineDate from './ContestForm/helpers/createDeadlineDate.js';
 import useStyles from './useStyles';
 import { ContestForm } from './ContestForm/ContestForm';
 import Navbar from '../../components/Navbar/Navbar';
+import createContest from '../../helpers/APICalls/createContests';
 
 export default function Login(): JSX.Element {
   const classes = useStyles();
+  const history = useHistory();
+  const handleSubmit = (
+    {
+      title,
+      description,
+      prizeAmount,
+      date,
+      time,
+      timeZone,
+      imageFiles,
+    }: {
+      title: string;
+      description: string;
+      prizeAmount: number;
+      date: MaterialUiPickersDate | Moment | string | null;
+      time: MaterialUiPickersDate | Moment | string | null;
+      timeZone: string;
+      imageFiles: string[];
+    },
+    {
+      setSubmitting,
+    }: FormikHelpers<{
+      title: string;
+      description: string;
+      prizeAmount: number;
+      date: MaterialUiPickersDate | Moment | string | null;
+      time: MaterialUiPickersDate | Moment | string | null;
+      timeZone: string;
+      imageFiles: string[];
+    }>,
+  ) => {
+    createContest(title, description, prizeAmount, createDeadlineDate(date, time, timeZone), imageFiles).then(
+      (data) => {
+        if (data.error) {
+          setSubmitting(false);
+        } else if (data.success) {
+          return history.goBack();
+        } else {
+          console.error({ data });
+          setSubmitting(false);
+        }
+      },
+    );
+  };
+
   return (
     <Grid container component="main" className={classes.root} justifyContent="center">
       <CssBaseline />
@@ -20,7 +72,7 @@ export default function Login(): JSX.Element {
         </Grid>
         <Grid item className={classes.contestFormContainer}>
           <Paper elevation={3} className={classes.contestFormWrapper} square>
-            <ContestForm />
+            <ContestForm handleSubmit={handleSubmit} />
           </Paper>
         </Grid>
       </Grid>

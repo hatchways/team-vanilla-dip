@@ -5,10 +5,8 @@ const mongoose = require('mongoose');
 
 // Given parameters passed in, create a contest
 exports.createContest = asyncHandler(async (req, res, next) => {
-    console.log('Gotten contest')
     const userID = req.user.id
     const { title, description, prizeAmount, deadlineDate, imageFiles } = req.body;
-    console.log(`userID: ${userID}, Title: ${title}, Description: ${description}, prizeAmount: ${prizeAmount}, deadlineDate: ${deadlineDate}, imageFiles: ${imageFiles}`)
     const contest = new Contest({
         title,
         description,
@@ -20,16 +18,13 @@ exports.createContest = asyncHandler(async (req, res, next) => {
     try {
         const result = await contest.save();
         if (!result) {
-            console.log('Not saved')
             return res.status(400).json({ status: "contest not saved!!" });
         }
-        console.log('Saved')
         res.status(200).json({
             status: "contest saved!!",
             contest,
         });
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ error });
     }
 })
