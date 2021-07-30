@@ -4,6 +4,8 @@ import fetchConversations from '../../helpers/APICalls/getConversations';
 import createConvo from '../../helpers/APICalls/createNewConvo';
 import { Conversation } from '../../interface/Conversation';
 import { User } from '../../interface/User';
+import { useSocket } from '../../context/useSocketContext';
+import { useAuth } from '../../context/useAuthContext';
 import Navbar from '../../components/Navbar/Navbar';
 import SearchUsers from '../../components/Search/Search';
 import ConversationListItem from './Conversation/Conversation';
@@ -13,6 +15,8 @@ import { Typography, Grid, CssBaseline, Divider, Paper, List } from '@material-u
 
 export default function Messages(): JSX.Element {
   const classes = useStyles();
+  const { socket } = useSocket();
+  const { loggedInUser } = useAuth();
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [currentConvo, setCurrentConvo] = useState<Conversation | null>(null);
@@ -33,6 +37,15 @@ export default function Messages(): JSX.Element {
   const saveConvos = (convos: Conversation[]) => {
     setConversations(convos);
   };
+
+  useEffect(() => {
+    if (socket) {
+      socket.emit('addUser', loggedInUser?.id);
+      // socket.on('getUsers', (users) => {
+      //   console.log(users);
+      // });
+    }
+  }, [socket, loggedInUser]);
 
   useEffect(() => {
     let active = true;

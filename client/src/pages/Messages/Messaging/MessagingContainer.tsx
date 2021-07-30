@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useStyles from '../useStyles';
 import { useAuth } from '../../../context/useAuthContext';
+import { useSocket } from '../../../context/useSocketContext';
 import { User } from '../../../interface/User';
 import { Message } from '../../../interface/Message';
 import MessageList from './MessageList';
@@ -18,13 +19,29 @@ interface Props {
 export default function MessagingContainer({ convo }: Props): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
+  const { socket } = useSocket();
 
   const [newMessage, setNewMessage] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
   const [participant, setParticipant] = useState<User | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [arrivalMessage, setArrivalMessage] = useState<Message | null>(null);
 
   const participantId = convo?.participants.find((participant: string) => participant !== loggedInUser?.id);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('getMessage', (message) => {
+        setArrivalMessage(message);
+      });
+    }
+  }, [socket]);
+
+  useEffect(() => {
+    if (arrivalMessage && convo.participants.includes(arrivalMessage.senderID)) {
+      setMessages((prev) => [...prev, arrivalMessage]);
+    }
+  }, [arrivalMessage, convo]);
 
   useEffect(() => {
     let active = true;
@@ -79,8 +96,14 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
 
     const response = await pushNewMessage(convo._id, newMessage);
 
-    if (response && response.message) {
+    if (response && response.message && socket) {
       const newMessages: Message[] = [...messages, response.message];
+      const emitMessage = {
+        receiverId: participantId,
+        ...response.message,
+      };
+
+      socket.emit('sendMessage', emitMessage);
       setMessages(newMessages);
 
       setSubmitting(false);
