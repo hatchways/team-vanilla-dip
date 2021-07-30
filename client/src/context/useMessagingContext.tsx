@@ -1,22 +1,13 @@
 import { useState, useContext, createContext, FunctionComponent, useEffect } from 'react';
-import { User } from '../interface/User';
-import { Message } from '../interface/Message';
-import { Conversation } from '../interface/Conversation';
+import { MessagingData } from '../interface/Message';
 import { useAuth } from './useAuthContext';
 import fetchConversations from '../helpers/APICalls/getConversations';
 import fetchUser from '../helpers/APICalls/getUserById';
 import fetchMessages from '../helpers/APICalls/getMessagesByConvoId';
 
-interface IMessagingData {
-  conversation: Conversation;
-  participant?: User;
-  messages?: Message[];
-  lastMessage?: Message;
-}
-
 interface IMessagingContext {
-  conversations: IMessagingData[] | [];
-  updateConversations: (convo: IMessagingData) => void;
+  conversations: MessagingData[] | [];
+  updateConversations: (convo: MessagingData) => void;
 }
 
 export const MessagingContext = createContext<IMessagingContext>({
@@ -25,11 +16,11 @@ export const MessagingContext = createContext<IMessagingContext>({
 });
 
 export const MessagesProvider: FunctionComponent = ({ children }): JSX.Element => {
-  const [conversations, setConversations] = useState<IMessagingData[] | []>([]);
+  const [conversations, setConversations] = useState<MessagingData[] | []>([]);
 
   const { loggedInUser } = useAuth();
 
-  const updateConversations = (convo: IMessagingData) => {
+  const updateConversations = (convo: MessagingData) => {
     setConversations((prev) => [...prev, convo]);
   };
 
@@ -41,7 +32,7 @@ export const MessagesProvider: FunctionComponent = ({ children }): JSX.Element =
 
       if (active && response && response.conversations) {
         const messagingData = response.conversations.map((convo) => {
-          let messageDataObj: IMessagingData = { conversation: convo };
+          let messageDataObj: MessagingData = { conversation: convo };
           const participantId = convo.participants?.find((participant: string) => participant !== loggedInUser?.id);
 
           const getParticipant = async (participantId: string) => {

@@ -1,3 +1,6 @@
+import { User } from './User';
+import { Conversation } from './Conversation';
+
 export interface Message {
   _id?: string;
   conversationID: string;
@@ -17,4 +20,11 @@ export interface Messages {
 export interface NewMessage {
   message?: Message;
   error?: { message: string };
+}
+
+export interface MessagingData {
+  conversation: Conversation;
+  participant?: User;
+  messages?: Message[];
+  lastMessage?: Message;
 }
