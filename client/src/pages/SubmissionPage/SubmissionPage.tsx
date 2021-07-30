@@ -1,64 +1,50 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import CssBasline from '@material-ui/core/CssBaseline';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-
+import { useHistory, useParams, Link } from 'react-router-dom';
 import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
 import SubmissionTabs from '../../components/SubmissionTabs/SubmissionTabs';
+import { fetchSubmissionByContestId } from '../../helpers/APICalls/searchContest';
+import { Submission } from '../../interface/Submission';
+import { SubmissionParams } from './SubmissionParams';
 
-import firstImage from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
-import secondImage from '../../Images/775db5e79c5294846949f1f55059b53317f51e30.png';
-import profile from '../../Images/profile.png';
-import './Submission.css';
-
-const submissionData = [
-  {
-    imageSrc: profile,
-    title: 'Lizard',
-    author: 'jesse',
-  },
-  {
-    imageSrc: firstImage,
-    title: 'Sheep',
-    author: 'anthony',
-  },
-  {
-    imageSrc: secondImage,
-    title: 'Monkeys',
-    author: 'denise',
-  },
-];
-
-export default function Submission(): JSX.Element {
-  const [submission, setSubmission] = useState(submissionData);
-  const { contestId } = useParams<{ contestId: string }>();
+export default function SubmissionPage(): JSX.Element {
   const classes = useStyles();
+  const { id } = useParams<SubmissionParams>();
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const history = useHistory();
+  useEffect(() => {
+    const ac = new AbortController();
+    fetchSubmissionByContestId({ id: id }).then((res) => {
+      if (res.submissions) {
+        setSubmissions(res.submissions as Submission[]);
+      }
+    });
+    return ac.abort();
+  }, [id]);
 
   return (
     <Grid container component="main" className={classes.root}>
-      <CssBasline />
+      <CssBaseline />
       <Box width="100%">
         <Navbar />
         <Box p={3} m={5}>
           <Grid container className={classes.returnPanel}>
             <ArrowBackIosIcon style={{ fontSize: 10 }} />
-            <Link
+            <Button
               className={classes.return}
-              component="button"
-              variant="body2"
               onClick={() => {
-                alert('Returning');
+                history.goBack();
               }}
             >
               Back to contests list
-            </Link>
+            </Button>
           </Grid>
           <Grid container className={classes.gridContainer}>
             <Grid item>
@@ -76,12 +62,12 @@ export default function Submission(): JSX.Element {
               </Box>
             </Grid>
             <Grid item>
-              <Button color="primary" className={classes.submitBtn}>
+              <Button color="primary" component={Link} className={classes.submitBtn} to={`/contest/${id}/submit`}>
                 Submit Design
               </Button>
             </Grid>
           </Grid>
-          <SubmissionTabs card={submission} />
+          <SubmissionTabs card={submissions} />
         </Box>
       </Box>
     </Grid>

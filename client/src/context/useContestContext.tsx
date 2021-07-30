@@ -15,8 +15,8 @@ export const ContestProvider: FunctionComponent = ({ children }): JSX.Element =>
   useEffect(() => {
     if (loggedInUser) {
       const getAllContestByUserId = async () => {
-        const contests = await fetchAllContestByUserId({ userId: loggedInUser.id });
-        setAllContests(contests.contests);
+        const contests = await fetchAllContestByUserId({ id: loggedInUser.id });
+        setAllContext(contests.contests);
       };
       getAllContestByUserId();
     }

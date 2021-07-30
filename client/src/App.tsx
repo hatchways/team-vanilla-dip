@@ -5,8 +5,9 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
+import ContestPage from './pages/SubmissionPage/SubmissionPage';
+import Submit from './pages/SubmissionPage/Submit';
 import Contest from './pages/Contest/Contest';
-import Submission from './pages/Submission/Submission';
 import Messages from './pages/Messages/Messages';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
@@ -39,13 +40,17 @@ function App(): JSX.Element {
                       <Dashboard />
                     </ProtectedRoute>
                     <ProtectedRoute exact path="/contest/:id">
-                      <Submission />
+                      <ContestPage />
                     </ProtectedRoute>
-                    <Route path="*">
-                      <Redirect to="/login" />
-                    </Route>
+                    <ProtectedRoute exact path="/contest/:id/submit">
+                      <Submit />
+                    </ProtectedRoute>
+                    <ProtectedRoute path="*" exact>
+                      <Redirect to="/dashboard" />
+                    </ProtectedRoute>
                   </Switch>
                 </NotificationProvider>
+
               </ContestProvider>
             </SocketProvider>
           </AuthProvider>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Formik } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 import momentTimezone from 'moment-timezone';
 import moment, { Moment } from 'moment';
 import MomentUtils from '@date-io/moment';
@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
 import { tatooDesigns as images } from './testdata.js';
 import checkmark from './checkmark.png';
-import createDeadlineDate from './helpers/createDeadlineDate.js';
+
 import {
   CircularProgress,
   Grid,
@@ -37,7 +37,41 @@ interface ContestFormValues {
   imageFiles: string[];
 }
 
-export const ContestForm: React.FC = () => {
+interface Props {
+  handleSubmit: (
+    {
+      title,
+      description,
+      prizeAmount,
+      date,
+      time,
+      timeZone,
+      imageFiles,
+    }: {
+      title: string;
+      description: string;
+      prizeAmount: number;
+      date: MaterialUiPickersDate | Moment | string | null;
+      time: MaterialUiPickersDate | Moment | string | null;
+      timeZone: string;
+      imageFiles: string[];
+    },
+    {
+      setStatus,
+      setSubmitting,
+    }: FormikHelpers<{
+      title: string;
+      description: string;
+      prizeAmount: number;
+      date: MaterialUiPickersDate | Moment | string | null;
+      time: MaterialUiPickersDate | Moment | string | null;
+      timeZone: string;
+      imageFiles: string[];
+    }>,
+  ) => void;
+}
+
+export const ContestForm: React.FC<Props> = ({ handleSubmit }) => {
   const classes = useStyles();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [selectedDateTime, handleDateTimeChange] = useState<MaterialUiPickersDate | Moment>(moment());
@@ -51,6 +85,7 @@ export const ContestForm: React.FC = () => {
       newSelectedImages = [...newSelectedImages, image];
     }
     setSelectedImages(newSelectedImages);
+    return selectedImages;
   };
 
   const initialValues: ContestFormValues = {
@@ -73,19 +108,7 @@ export const ContestForm: React.FC = () => {
         time: Yup.date().required('Time is required'),
         timeZone: Yup.string().required('Time zone is required'),
       })}
-      onSubmit={(values, actions) => {
-        actions.setSubmitting(true);
-        const deadlineDate = createDeadlineDate(values.date, values.time, values.timeZone);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const contestFormData = {
-          title: values.title,
-          description: values.description,
-          prizeAmount: values.prizeAmount,
-          deadlineDate,
-          imageFiles: selectedImages,
-        };
-        actions.setSubmitting(false);
-      }}
+      onSubmit={handleSubmit}
     >
       {({ handleSubmit, handleChange, values, touched, errors, isSubmitting, setFieldValue }) => (
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
@@ -236,6 +259,7 @@ export const ContestForm: React.FC = () => {
                         style={{ maxHeight: '17.5em' }}
                         onClick={() => {
                           selectImages(imgUrl);
+                          setFieldValue('imageFiles', selectedImages);
                         }}
                       >
                         <Grid
