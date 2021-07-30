@@ -5,7 +5,7 @@ interface Props {
   convoID: string;
 }
 
-export default async function searchUsers({ convoID }: Props): Promise<Messages> {
+export default async function getMessagesByConvo({ convoID }: Props): Promise<Messages> {
   const fetchOptions: FetchOptions = {
     method: 'GET',
     credentials: 'include',
