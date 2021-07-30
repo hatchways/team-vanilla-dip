@@ -2,7 +2,7 @@ import { FetchOptions } from '../../interface/FetchOptions';
 import { SearchUserApiData } from '../../interface/User';
 
 interface Props {
-  id: string | undefined;
+  id: string;
 }
 
 export default async function searchUsers({ id }: Props): Promise<SearchUserApiData> {
