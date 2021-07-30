@@ -22,3 +22,20 @@ exports.searchUsers = asyncHandler(async (req, res, next) => {
   res.status(200).json({ users: users });
 });
 
+
+//search user by ID
+exports.searchUserById = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  let user;
+  if (id) {
+    user = await User.findById(id);
+  }
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User does not exist");
+  }
+
+  res.status(200).json({user: user});
+});

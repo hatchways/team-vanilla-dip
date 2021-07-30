@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
     height: 'calc(100vh - 88px)',
   },
   convoListContainer: {
-    height: 'calc(100vh - (88px + 7em + 27px))',
+    height: 'calc(100vh - (88px + 7em + 27px + 50px))',
     overflowY: 'scroll',
   },
   messagingHeader: {
@@ -67,6 +67,10 @@ const useStyles = makeStyles(() => ({
   submitButtonContainer: {
     paddingRight: '3em',
     paddingBottom: '1em',
+  },
+  startConvoTextContainer: {
+    padding: '5em',
+    marginTop: '10em',
   },
 }));
 
