@@ -5,7 +5,7 @@ interface Props {
   id: string;
 }
 
-export default async function searchUsers({ id }: Props): Promise<SearchUserApiData> {
+export default async function getUser({ id }: Props): Promise<SearchUserApiData> {
   const fetchOptions: FetchOptions = {
     method: 'GET',
     credentials: 'include',
