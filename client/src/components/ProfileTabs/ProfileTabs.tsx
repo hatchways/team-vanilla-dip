@@ -2,12 +2,12 @@ import React from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import { Paper } from '@material-ui/core';
+
+import CardPanel from './CardPanel/CardPanel';
 import useStyles from './useStyles';
 import { useContests } from '../../context/useContestContext';
-import { Card, CardActionArea, CardContent } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -23,63 +23,69 @@ function ContestTabPanel(props: TabPanelProps) {
     </div>
   );
 }
+
 export default function ProfileTabs(): JSX.Element {
   const [value, setValue] = React.useState(0);
   const { allContests } = useContests();
   const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
     setValue(newValue);
   };
+
   const classes = useStyles();
+
   return (
-    <Grid>
-      <Tabs value={value} onChange={handleChange} indicatorColor={'primary'} className={classes.tabRoot}>
+    <Grid className={classes.profile_container}>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        indicatorColor={'primary'}
+        className={classes.tabRoot}
+        variant="fullWidth"
+        aria-label="simple tabs"
+      >
         <Tab label="In Progress" className={classes.tabLabel} />
         <Tab label="completed" className={classes.tabLabel} />
       </Tabs>
-      <ContestTabPanel index={0} value={value}>
-        {allContests
-          .filter((contest) => {
-            return new Date(contest.deadlineDate) > new Date();
-          })
-          .map((contest) => {
-            return (
-              <Grid item key={contest.id}>
-                <Card>
-                  <CardActionArea component={Link} to={'/contest/' + contest.id}>
-                    <CardContent>
-                      <Typography gutterBottom variant={'h2'} noWrap>
-                        {contest.title}
-                      </Typography>
-                      <Typography gutterBottom>{contest.description}</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-            );
-          })}
-      </ContestTabPanel>
-      <ContestTabPanel index={1} value={value}>
-        {allContests
-          .filter((context) => {
-            return new Date(context.deadlineDate) <= new Date();
-          })
-          .map((contest) => {
-            return (
-              <Grid item key={contest.id}>
-                <Card>
-                  <CardActionArea component={Link} to={'/contest/' + contest.id}>
-                    <CardContent>
-                      <Typography gutterBottom variant={'h2'} noWrap>
-                        {contest.title}
-                      </Typography>
-                      <Typography gutterBottom>{contest.description}</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-            );
-          })}
-      </ContestTabPanel>
+      <Paper elevation={1}>
+        <Box p={3}>
+          <ContestTabPanel index={0} value={value}>
+            <Grid container spacing={5}>
+              {allContests
+                .filter((contest) => {
+                  return new Date(contest.deadlineDate) > new Date();
+                })
+                .map((contest, key) => (
+                  <Grid item md={12} key={key}>
+                    <CardPanel
+                      id={contest.id}
+                      imageFiles={contest.imageFiles}
+                      title={contest.title}
+                      description={contest.description}
+                      prizeAmount={contest.prizeAmount}
+                    />
+                  </Grid>
+                ))}
+            </Grid>
+          </ContestTabPanel>
+          <ContestTabPanel index={1} value={value}>
+            {allContests
+              .filter((context) => {
+                return new Date(context.deadlineDate) <= new Date();
+              })
+              .map((contest, key) => (
+                <Grid item md={12} key={key}>
+                  <CardPanel
+                    id={contest.id}
+                    imageFiles={contest.imageFiles}
+                    title={contest.title}
+                    description={contest.description}
+                    prizeAmount={contest.prizeAmount}
+                  />
+                </Grid>
+              ))}
+          </ContestTabPanel>
+        </Box>
+      </Paper>
     </Grid>
   );
 }

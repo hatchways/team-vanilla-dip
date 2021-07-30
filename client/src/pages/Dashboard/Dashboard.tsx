@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import { Box, Typography, Button } from '@material-ui/core';
 import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
-import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
+// import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
 import ProfileTabs from '../../components/ProfileTabs/ProfileTabs';
 
 export default function Dashboard(): JSX.Element {
@@ -30,7 +30,7 @@ export default function Dashboard(): JSX.Element {
       <CssBaseline />
       <Box width="100%" className={classes.drawerWrapper}>
         <Navbar />
-        <ChatSideBanner loggedInUser={loggedInUser} />
+        {/* <ChatSideBanner loggedInUser={loggedInUser} /> */}
         <AvatarDisplay
           style={{
             height: '100px',
