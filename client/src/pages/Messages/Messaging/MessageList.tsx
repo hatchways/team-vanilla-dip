@@ -8,7 +8,7 @@ import { Typography, Grid, Avatar, Paper } from '@material-ui/core';
 
 interface Props {
   messages: Message[] | [];
-  participant?: User | null | undefined;
+  participant?: User | null;
 }
 
 export default function MessageList({ messages }: Props): JSX.Element {

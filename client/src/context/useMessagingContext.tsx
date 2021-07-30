@@ -24,6 +24,26 @@ export const MessagesProvider: FunctionComponent = ({ children }): JSX.Element =
     setConversations((prev) => [...prev, convo]);
   };
 
+  const getParticipant = async (participantId: string) => {
+    const response = await fetchUser({
+      id: participantId,
+    });
+
+    if (response && response.user) {
+      return response.user;
+    }
+  };
+
+  const getMessagesData = async (convoID: string) => {
+    const response = await fetchMessages({
+      convoID,
+    });
+
+    if (response && response.lastMessage && response.messages) {
+      return { messages: response.messages, lastMessage: response.lastMessage };
+    }
+  };
+
   useEffect(() => {
     let active = true;
 
@@ -31,41 +51,33 @@ export const MessagesProvider: FunctionComponent = ({ children }): JSX.Element =
       const response = await fetchConversations();
 
       if (active && response && response.conversations) {
-        const messagingData = response.conversations.map((convo) => {
-          let messageDataObj: MessagingData = { conversation: convo };
+        const messagingDataPromises = response.conversations.map(async (convo) => {
           const participantId = convo.participants?.find((participant: string) => participant !== loggedInUser?.id);
 
-          const getParticipant = async (participantId: string) => {
-            const response = await fetchUser({
-              id: participantId,
-            });
-
-            if (active && response && response.user) {
-              messageDataObj = { ...messageDataObj, participant: response.user };
-            }
-          };
-
-          const getMessagesData = async (convoID: string) => {
-            const response = await fetchMessages({
-              convoID,
-            });
-
-            if (active && response && response.lastMessage && response.messages) {
-              messageDataObj = { ...messageDataObj, messages: response.messages, lastMessage: response.lastMessage };
-            }
+          let messageDataObj: MessagingData = {
+            conversation: convo,
+            participant: null,
+            messages: [],
+            lastMessage: null,
           };
 
           if (participantId && convo) {
-            getParticipant(participantId);
-            getMessagesData(convo._id);
+            const participant = await getParticipant(participantId);
+            const messagesData = await getMessagesData(convo._id);
+            if (participant && messagesData?.messages && messagesData?.lastMessage) {
+              messageDataObj = {
+                ...messageDataObj,
+                participant,
+                messages: messagesData.messages,
+                lastMessage: messagesData.lastMessage,
+              };
+              return messageDataObj;
+            }
           }
-
           return messageDataObj;
         });
-
-        if (messagingData) {
-          setConversations(messagingData);
-        }
+        const messagingData = await Promise.all(messagingDataPromises);
+        setConversations(messagingData);
       }
     };
 

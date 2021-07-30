@@ -1,21 +1,20 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import useStyles from './useStyles';
-import fetchConversations from '../../helpers/APICalls/getConversations';
+import { useMessages } from '../../context/useMessagingContext';
 import createConvo from '../../helpers/APICalls/createNewConvo';
-import { Conversation } from '../../interface/Conversation';
 import { User } from '../../interface/User';
+import { MessagingData } from '../../interface/Message';
 import Navbar from '../../components/Navbar/Navbar';
 import SearchUsers from '../../components/Search/Search';
 import ConversationListItem from './Conversation/Conversation';
 import MessagingContainer from './Messaging/MessagingContainer';
-
 import { Typography, Grid, CssBaseline, Divider, Paper, List } from '@material-ui/core';
 
 export default function Messages(): JSX.Element {
   const classes = useStyles();
 
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [currentConvo, setCurrentConvo] = useState<Conversation | null>(null);
+  const { conversations, updateConversations } = useMessages();
+  const [currentConvo, setCurrentConvo] = useState<MessagingData | null>(null);
   const [search, setSearch] = useState<string>('');
   const [users, setUsers] = useState<User[]>([]);
   const [newParticipant, setNewParticipant] = useState<User | null>(null);
@@ -30,40 +29,22 @@ export default function Messages(): JSX.Element {
     }
   };
 
-  const saveConvos = (convos: Conversation[]) => {
-    setConversations(convos);
-  };
-
   useEffect(() => {
     let active = true;
 
-    const getAndSaveConvos = async () => {
-      const response = await fetchConversations();
-
-      if (active && response && response.conversations) {
-        saveConvos(response.conversations);
-      }
-    };
-
-    getAndSaveConvos();
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    let active = true;
-
-    if (newParticipant?._id) {
+    if (newParticipant) {
       const createAndPushConvo = async () => {
         const response = await createConvo(newParticipant._id);
 
         if (active && response && response.conversation) {
-          setCurrentConvo(response.conversation);
-          //build new convo object
-          const newConvos = [...conversations, response.conversation];
-          saveConvos(newConvos);
+          const convoDataObj: MessagingData = {
+            conversation: response.conversation,
+            participant: newParticipant,
+            messages: [],
+            lastMessage: null,
+          };
+          setCurrentConvo(convoDataObj);
+          updateConversations(convoDataObj);
         }
       };
 
@@ -73,7 +54,7 @@ export default function Messages(): JSX.Element {
     return () => {
       active = false;
     };
-  }, [newParticipant, conversations]);
+  }, [newParticipant, updateConversations]);
 
   return (
     <Grid container className={classes.root} direction="column" alignItems="center">
@@ -97,7 +78,9 @@ export default function Messages(): JSX.Element {
               <Grid item className={classes.convoListContainer}>
                 <List>
                   {conversations.map((convo) => {
-                    return <ConversationListItem key={convo._id} convo={convo} setConvo={setCurrentConvo} />;
+                    return (
+                      <ConversationListItem key={convo.conversation._id} convo={convo} setConvo={setCurrentConvo} />
+                    );
                   })}
                 </List>
               </Grid>

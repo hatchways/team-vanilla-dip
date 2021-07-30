@@ -24,7 +24,7 @@ export interface NewMessage {
 
 export interface MessagingData {
   conversation: Conversation;
-  participant?: User;
-  messages?: Message[];
-  lastMessage?: Message;
+  participant: User | null;
+  messages: Message[] | [];
+  lastMessage: Message | null;
 }
