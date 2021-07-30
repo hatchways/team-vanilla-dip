@@ -61,6 +61,7 @@ export default function Messages(): JSX.Element {
 
         if (active && response && response.conversation) {
           setCurrentConvo(response.conversation);
+          //build new convo object
           const newConvos = [...conversations, response.conversation];
           saveConvos(newConvos);
         }
