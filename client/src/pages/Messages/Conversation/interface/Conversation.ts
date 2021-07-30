@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Conversation } from '../../../../interface/Conversation';
+import { MessagingData } from '../../../../interface/Message';
 
 export interface ConversationProps {
-  convo: Conversation;
-  setConvo: Dispatch<SetStateAction<Conversation | null>>;
+  convo: MessagingData;
+  setConvo: Dispatch<SetStateAction<MessagingData | null>>;
 }

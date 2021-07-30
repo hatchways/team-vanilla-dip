@@ -1,33 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import useStyles from '../useStyles';
-import { useAuth } from '../../../context/useAuthContext';
 import { useSocket } from '../../../context/useSocketContext';
-import { User } from '../../../interface/User';
-import { Message } from '../../../interface/Message';
 import MessageList from './MessageList';
-import fetchUser from '../../../helpers/APICalls/getUserById';
-import fetchLastMessage from '../../../helpers/APICalls/getMessagesByConvoId';
 import pushNewMessage from '../../../helpers/APICalls/createNewMessage';
-import { Conversation } from '../../../interface/Conversation';
+import { MessagingData, Message } from '../../../interface/Message';
 import profileAvatar from '../../../Images/user.png';
 import { Typography, Grid, Divider, Avatar, Badge, Button, TextField, CircularProgress } from '@material-ui/core';
 
 interface Props {
-  convo: Conversation;
+  convo: MessagingData;
 }
 
 export default function MessagingContainer({ convo }: Props): JSX.Element {
   const classes = useStyles();
-  const { loggedInUser } = useAuth();
-  const { socket } = useSocket();
-
   const [newMessage, setNewMessage] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
-  const [participant, setParticipant] = useState<User | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[] | []>(convo.messages);
   const [arrivalMessage, setArrivalMessage] = useState<Message | null>(null);
 
-  const participantId = convo?.participants.find((participant: string) => participant !== loggedInUser?.id);
+  const { socket } = useSocket();
 
   useEffect(() => {
     if (socket) {
@@ -38,52 +29,10 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
   }, [socket]);
 
   useEffect(() => {
-    if (arrivalMessage && convo.participants.includes(arrivalMessage.senderID)) {
+    if (arrivalMessage && convo.conversation.participants.includes(arrivalMessage.senderID)) {
       setMessages((prev) => [...prev, arrivalMessage]);
     }
   }, [arrivalMessage, convo]);
-
-  useEffect(() => {
-    let active = true;
-
-    if (participantId) {
-      const getParticipantInfo = async () => {
-        const response = await fetchUser({
-          id: participantId,
-        });
-
-        if (active && response && response.user) {
-          setParticipant(response.user);
-        }
-      };
-      getParticipantInfo();
-    }
-
-    return () => {
-      active = false;
-    };
-  }, [participantId]);
-
-  useEffect(() => {
-    let active = true;
-
-    if (convo?._id) {
-      const getMessages = async () => {
-        const response = await fetchLastMessage({
-          convoID: convo._id,
-        });
-
-        if (active && response && response.messages) {
-          setMessages(response.messages);
-        }
-      };
-      getMessages();
-    }
-
-    return () => {
-      active = false;
-    };
-  }, [convo]);
 
   const handleNewMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewMessage(e.target.value);
@@ -94,17 +43,17 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
     setSubmitting(true);
     setNewMessage('');
 
-    const response = await pushNewMessage(convo._id, newMessage);
+    const response = await pushNewMessage(convo.conversation._id, newMessage);
 
     if (response && response.message && socket) {
-      const newMessages: Message[] = [...messages, response.message];
+      const updatedMessages: Message[] = [...messages, response.message];
       const emitMessage = {
-        receiverId: participantId,
+        receiverId: convo.participant?._id,
         ...response.message,
       };
-
       socket.emit('sendMessage', emitMessage);
-      setMessages(newMessages);
+
+      setMessages(updatedMessages);
 
       setSubmitting(false);
     }
@@ -130,7 +79,7 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
         </Grid>
         <Grid item xs={9}>
           <Typography variant="h6" style={{ fontWeight: 700 }}>
-            {participant?.username}
+            {convo.participant?.username}
           </Typography>
         </Grid>
         <Grid item xs={2}>
@@ -142,7 +91,7 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
         </Grid>
       </Grid>
       <Grid item container alignItems="flex-end" justifyContent="flex-end" className={classes.chatboxContainer}>
-        <MessageList messages={messages} />
+        <MessageList messages={messages} participant={convo.participant} />
       </Grid>
       <form onSubmit={handleNewMessageSubmit} style={{ width: '100%' }}>
         <Divider />
