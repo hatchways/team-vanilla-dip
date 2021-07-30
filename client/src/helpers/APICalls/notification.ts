@@ -5,6 +5,9 @@ interface CreateNotificationProps {
   receiver: string;
   content?: string;
 }
+interface Props {
+  id: string;
+}
 async function createNotification(body: string): Promise<SingleNotificationApiData> {
   const fetchOptions: FetchOptions = {
     method: 'POST',
@@ -40,6 +43,18 @@ export async function fetchAllNotificationByUserId(): Promise<ArrayNotificationA
     credentials: 'include',
   };
   return await fetch(`/notification`, fetchOptions)
+    .then((res) => res.json())
+    .catch(() => ({
+      error: 'Unable to connect to server. Please try again',
+    }));
+}
+
+export async function markNotificationRead({ id }: Props): Promise<SingleNotificationApiData> {
+  const fetchOptions: FetchOptions = {
+    method: 'PATCH',
+    credentials: 'include',
+  };
+  return await fetch(`/notification/${id}`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: 'Unable to connect to server. Please try again',

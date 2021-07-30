@@ -1,5 +1,6 @@
 const Notification = require("../models/Notification");
 const asyncHandler = require("express-async-handler");
+const mongoose = require('mongoose');
 
 exports.createNotification = asyncHandler(async (req, res, next) => {
     const sender = req.user.id;
@@ -27,10 +28,10 @@ exports.createNotification = asyncHandler(async (req, res, next) => {
 
 })
 exports.getNotifications = asyncHandler(async (req, res, next) => {
-    const userID = req.user.id
+    const userID = mongoose.Types.ObjectId(req.user.id)
     try {
         const foundNotification = await Notification.aggregate([
-            { $match: { userID: userID } },
+            { $match: { receiver: userID, read: false } },
             { $addFields: {id:"$_id" } },
         ]);
         if (!foundNotification) {
@@ -43,5 +44,24 @@ exports.getNotifications = asyncHandler(async (req, res, next) => {
     } catch (error) {
         return res.status(500).json({ error });
     }
-
+})
+exports.readNotification = asyncHandler(async (req, res, next) => {
+    const notificationID = req.params.id;
+    try {
+        const updatedNotification = await Notification.findByIdAndUpdate(notificationID, {
+            read: true
+        });
+        if (!updatedNotification) {
+            return res
+                .status(404)
+                .json({ status: "notification doesn't exist in records!!" });
+        }
+        // updating contest
+        res.status(200).json({
+            status: "notification updated!!",
+            notification: updatedNotification,
+        });
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
 })

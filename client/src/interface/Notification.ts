@@ -7,6 +7,8 @@ export interface Notification {
   receiver: string;
   notificationType: NotificationType;
   content?: string;
+  read: boolean;
+  id: string;
 }
 
 export interface SingleNotificationApiData {

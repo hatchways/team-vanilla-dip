@@ -14,6 +14,8 @@ import { SnackBarProvider } from './context/useSnackbarContext';
 
 import './App.css';
 import { ContestProvider } from './context/useContestContext';
+import { NotificationProvider } from './context/useNotificationContext';
+import NotificationBubble from './components/NotificationBubble/NotificationBubble';
 
 function App(): JSX.Element {
   return (
@@ -23,25 +25,27 @@ function App(): JSX.Element {
           <AuthProvider>
             <SocketProvider>
               <ContestProvider>
-                <Switch>
-                  <Route exact path="/login" component={Login} />
-                  <Route exact path="/signup" component={Signup} />
-                  <ProtectedRoute exact path="/messages">
-                    <Messages />
-                  </ProtectedRoute>
-                  <ProtectedRoute exact path="/contest">
-                    <Contest />
-                  </ProtectedRoute>
-                  <ProtectedRoute exact path="/dashboard">
-                    <Dashboard />
-                  </ProtectedRoute>
-                  <ProtectedRoute exact path="/contest/:id">
-                    <Submission />
-                  </ProtectedRoute>
-                  <Route path="*">
-                    <Redirect to="/login" />
-                  </Route>
-                </Switch>
+                <NotificationProvider>
+                  <Switch>
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/signup" component={Signup} />
+                    <ProtectedRoute exact path="/messages">
+                      <Messages />
+                    </ProtectedRoute>
+                    <ProtectedRoute exact path="/contest">
+                      <Contest />
+                    </ProtectedRoute>
+                    <ProtectedRoute exact path="/dashboard">
+                      <Dashboard />
+                    </ProtectedRoute>
+                    <ProtectedRoute exact path="/contest/:id">
+                      <Submission />
+                    </ProtectedRoute>
+                    <Route path="*">
+                      <Redirect to="/login" />
+                    </Route>
+                  </Switch>
+                </NotificationProvider>
               </ContestProvider>
             </SocketProvider>
           </AuthProvider>
