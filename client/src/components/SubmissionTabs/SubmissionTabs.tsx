@@ -32,6 +32,21 @@ function SubmissionTabs({ card }: cardProps): JSX.Element {
   const [value, setValue] = React.useState(0);
   const classes = useStyles();
 
+  const countImages = () => {
+    let count = 0;
+    card.map((data) => {
+      if (data.imageFiles.length > 1) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        data.imageFiles.map((image) => {
+          count++;
+        });
+      } else {
+        count++;
+      }
+    });
+    return `Designs (${count})`;
+  };
+
   const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
     setValue(newValue);
   };
@@ -46,18 +61,26 @@ function SubmissionTabs({ card }: cardProps): JSX.Element {
         variant="fullWidth"
         onChange={handleChange}
       >
-        <Tab label="Designs (30)" />
+        <Tab label={countImages()} />
         <Tab label="Brief" />
       </Tabs>
       <Paper elevation={1}>
         <Box p={3}>
           <SubmissionTabPanel value={value} index={0}>
             <Grid container spacing={5}>
-              {card.map((data, key) => (
-                <Grid item md={3} xs={12} key={key}>
-                  <SubmissionCard imageSrc={data.imageFiles[0]} author={data.userID} />
-                </Grid>
-              ))}
+              {card.map((data, key) =>
+                data.imageFiles.length > 1 ? (
+                  data.imageFiles.map((image) => (
+                    <Grid item md={3} xs={12} key={key}>
+                      <SubmissionCard imageSrc={image} author={data.userID.username} />
+                    </Grid>
+                  ))
+                ) : (
+                  <Grid item md={3} xs={12} key={key}>
+                    <SubmissionCard imageSrc={data.imageFiles[0]} author={data.userID.username} />
+                  </Grid>
+                ),
+              )}
             </Grid>
           </SubmissionTabPanel>
           <SubmissionTabPanel value={value} index={1}>

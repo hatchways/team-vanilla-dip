@@ -137,7 +137,7 @@ exports.createSubmission = asyncHandler(async (req, res, next) => {
 exports.getSubmissionByContestId = asyncHandler(async (req, res, next) => {
     const contestId = req.params.id;
     try {
-        const foundSubmission = await Submission.find({ contestID: contestId });
+        const foundSubmission = await Submission.find({ contestID: contestId }).populate('userID');
         if (!foundSubmission) {
             return res.status(404).json({ status: "contest not found!!" });
         }
