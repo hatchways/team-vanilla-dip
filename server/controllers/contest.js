@@ -65,7 +65,7 @@ exports.getContestById = asyncHandler(async (req, res, next) => {
     }
     res.status(200).json({
     status: "contest found!!",
-    contest: foundContest,
+    success: foundContest,
     });
   } catch (error) {
     return res.status(500).json({ error });

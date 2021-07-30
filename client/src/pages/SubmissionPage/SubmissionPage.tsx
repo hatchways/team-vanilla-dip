@@ -26,8 +26,8 @@ export default function SubmissionPage(): JSX.Element {
   useEffect(() => {
     const ac = new AbortController();
     fetchContestById({ id: id }).then((res) => {
-      if (res.contest) {
-        setContest(res.contest as Contest);
+      if (res.success) {
+        setContest(res.success as Contest);
       }
     });
     return ac.abort();
@@ -43,6 +43,7 @@ export default function SubmissionPage(): JSX.Element {
     return ac.abort();
   }, [id]);
 
+  console.log(contest);
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />

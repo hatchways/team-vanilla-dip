@@ -11,8 +11,8 @@ export interface Contest {
 }
 
 export interface ContestApiData {
-  contest?: Contest;
   error?: { message: string };
+  success?: Contest;
 }
 
 export interface SearchContestApiData {
