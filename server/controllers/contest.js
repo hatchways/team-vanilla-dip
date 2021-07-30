@@ -59,7 +59,7 @@ exports.updateContestById = asyncHandler(async (req, res, next) => {
 exports.getContestById = asyncHandler(async (req, res, next) => {
   const contestID = req.params.id;
   try {
-    const foundContest = await Contest.findById({ _id: contestID });
+    const foundContest = await Contest.findById({ _id: contestID }).populate('userID');
     if (!foundContest) {
     return res.status(404).json({ status: "contest not found!!" });
     }
