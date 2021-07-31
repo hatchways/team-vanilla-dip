@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     height: 'calc(100vh - 88px)',
     ['@media (max-width: 768px)']: {
@@ -18,6 +18,24 @@ const useStyles = makeStyles(() => ({
       color: '#000',
     },
   },
+  alignCenter: {
+    alignItems: 'center',
+  },
+  ml20: {
+    marginLeft: '20px',
+  },
+  large: {
+    height: theme.spacing(20),
+    width: theme.spacing(20),
+  },
+  imageContainer: {
+    position: 'relative',
+  },
+  cameraImage: {
+    position: 'absolute',
+    bottom: '0px',
+    right: '0px',
+  },
   paperTab: {
     padding: '50px 10px',
     '& .MuiTab-wrapper': {
@@ -26,6 +44,12 @@ const useStyles = makeStyles(() => ({
   },
   displayPanel: {
     flexGrow: 1,
+  },
+  fileInputLabel: {
+    cursor: 'pointer',
+  },
+  fileInput: {
+    display: 'none',
   },
 }));
 
