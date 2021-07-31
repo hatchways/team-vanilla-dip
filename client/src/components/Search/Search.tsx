@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useEffect, SyntheticEvent } from 'react';
+import { ChangeEvent, useState, useEffect, SyntheticEvent, Dispatch, SetStateAction, useCallback } from 'react';
 import useStyles from './useStyles';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
@@ -10,43 +10,47 @@ import { searchUsers } from '../../helpers/APICalls/searchUsers';
 interface Props {
   search: string;
   handleChange: (event: ChangeEvent<HTMLInputElement>, newInputValue: string) => void;
+  options: User[] | [];
+  setOptions: Dispatch<SetStateAction<User[] | []>>;
 }
-const Search = ({ search, handleChange }: Props): JSX.Element => {
+const Search = ({ search, handleChange, options, setOptions }: Props): JSX.Element => {
   const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   // limit our call to the api with a debounced value at max of 1 per 0.5 seconds
   const [debouncedSearch] = useDebounce(search, 500);
 
   const classes = useStyles();
 
-  const saveOptions = (users: User[]) => {
-    setOptions(users);
-  };
+  const saveOptions = useCallback(
+    (users: User[]) => {
+      setOptions(users);
+    },
+    [setOptions],
+  );
 
   useEffect(() => {
     let active = true;
+    if (debouncedSearch) {
+      async function searchAndSaveUsers() {
+        // send request to backend API to get users limited to 20.
+        setLoading(true);
+        const response = await searchUsers({
+          search: debouncedSearch,
+        });
 
-    async function searchAndSaveUsers() {
-      // send request to backend API to get users limited to 20.
-      setLoading(true);
-      const response = await searchUsers({
-        search: debouncedSearch,
-      });
-
-      if (active && response && response.users) {
-        console.log(response);
-        saveOptions(response.users);
+        if (active && response && response.users) {
+          saveOptions(response.users);
+        }
+        setLoading(false);
       }
-      setLoading(false);
-    }
 
-    searchAndSaveUsers();
+      searchAndSaveUsers();
+    }
 
     return () => {
       active = false;
     };
-  }, [debouncedSearch]);
+  }, [debouncedSearch, saveOptions]);
 
   // creates a combobox search which is dynamically updated with call's to the API
   return (
@@ -78,7 +82,7 @@ const Search = ({ search, handleChange }: Props): JSX.Element => {
           <div className={classes.search}>
             <InputBase
               {...params.inputProps}
-              placeholder="Search"
+              placeholder="Search Users"
               classes={{
                 root: classes.searchRoot,
                 input: classes.searchInput,

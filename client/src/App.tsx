@@ -9,6 +9,7 @@ import ContestPage from './pages/SubmissionPage/SubmissionPage';
 import Submit from './pages/SubmissionPage/Submit';
 import Contest from './pages/Contest/Contest';
 import Messages from './pages/Messages/Messages';
+import { MessagesProvider } from './context/useMessagingContext';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
@@ -28,7 +29,9 @@ function App(): JSX.Element {
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/signup" component={Signup} />
                   <ProtectedRoute exact path="/messages">
-                    <Messages />
+                    <MessagesProvider>
+                      <Messages />
+                    </MessagesProvider>
                   </ProtectedRoute>
                   <ProtectedRoute exact path="/contest">
                     <Contest />

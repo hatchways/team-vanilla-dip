@@ -22,6 +22,10 @@ const contestSchema = new mongoose.Schema({
     ref: "user",
     required: true,
   },
+  imageFiles: {
+    type: [String],
+    required: true,
+  },
   dateCreated: {
     type: Date,
     default: Date.now,

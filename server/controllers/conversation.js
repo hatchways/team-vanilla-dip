@@ -21,7 +21,7 @@ exports.createConversation = asyncHandler(async (req, res) => {
 
     try {
         const savedConvo = await newConvo.save();
-        res.status(201).json(savedConvo);
+        res.status(201).json({conversation: savedConvo});
     } catch (error) {
         res.status(500).json(error);
     }
@@ -36,7 +36,7 @@ exports.getConversations = asyncHandler(async (req, res) => {
         const allConvos = await Conversation.find({
             participants: { $in: [userID]}, 
         })
-        res.status(200).json(allConvos);
+        res.status(200).json({conversations: allConvos});
     } catch (error) {
         res.status(500).json(error);
     }
