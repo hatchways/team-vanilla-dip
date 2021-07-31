@@ -18,6 +18,7 @@ interface TabPanelProps {
   index: number;
   value: number;
 }
+
 function SubmissionTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
@@ -35,14 +36,7 @@ function SubmissionTabs({ card }: cardProps): JSX.Element {
   const countImages = () => {
     let count = 0;
     card.map((data) => {
-      if (data.imageFiles.length > 1) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        data.imageFiles.map((image) => {
-          count++;
-        });
-      } else {
-        count++;
-      }
+      count += data.imageFiles.length;
     });
     return `Designs (${count})`;
   };
@@ -68,15 +62,15 @@ function SubmissionTabs({ card }: cardProps): JSX.Element {
         <Box p={3}>
           <SubmissionTabPanel value={value} index={0}>
             <Grid container spacing={5}>
-              {card.map((data, key) =>
+              {card.map((data) =>
                 data.imageFiles.length > 1 ? (
                   data.imageFiles.map((image) => (
-                    <Grid item md={3} xs={12} key={key}>
+                    <Grid item md={3} xs={12} key={data.contestID + image}>
                       <SubmissionCard imageSrc={image} author={data.userID.username} />
                     </Grid>
                   ))
                 ) : (
-                  <Grid item md={3} xs={12} key={key}>
+                  <Grid item md={3} xs={12} key={data.contestID + data.imageFiles[0]}>
                     <SubmissionCard imageSrc={data.imageFiles[0]} author={data.userID.username} />
                   </Grid>
                 ),

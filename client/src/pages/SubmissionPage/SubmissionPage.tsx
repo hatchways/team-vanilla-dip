@@ -43,7 +43,6 @@ export default function SubmissionPage(): JSX.Element {
     return ac.abort();
   }, [id]);
 
-  console.log(contest);
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
