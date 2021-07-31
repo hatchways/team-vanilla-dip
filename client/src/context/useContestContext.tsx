@@ -3,11 +3,11 @@ import { Contest } from '../interface/Contest';
 import { useAuth } from './useAuthContext';
 import { fetchAllContestByUserId } from '../helpers/APICalls/searchContest';
 interface IContestContext {
-  readonly allContests: Contest[];
+  readonly allContestsByUser: Contest[];
 }
 
 export const ContestContext = createContext<IContestContext>({
-  allContests: [],
+  allContestsByUser: [],
 });
 export const ContestProvider: FunctionComponent = ({ children }): JSX.Element => {
   const { loggedInUser } = useAuth();
@@ -16,13 +16,15 @@ export const ContestProvider: FunctionComponent = ({ children }): JSX.Element =>
     if (loggedInUser) {
       const getAllContestByUserId = async () => {
         const contests = await fetchAllContestByUserId({ id: loggedInUser.id });
-        setAllContext(contests.contests);
+        setAllContextByUser(contests.contests);
       };
       getAllContestByUserId();
     }
   }, [loggedInUser]);
-  const [allContests, setAllContext] = useState<Contest[]>();
-  return <ContestContext.Provider value={{ allContests: allContests || [] }}>{children}</ContestContext.Provider>;
+  const [allContestsByUser, setAllContextByUser] = useState<Contest[]>();
+  return (
+    <ContestContext.Provider value={{ allContestsByUser: allContestsByUser || [] }}>{children}</ContestContext.Provider>
+  );
 };
 export function useContests(): IContestContext {
   return useContext(ContestContext);

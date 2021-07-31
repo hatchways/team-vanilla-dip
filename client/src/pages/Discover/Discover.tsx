@@ -1,11 +1,8 @@
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import React, { useState, useEffect } from 'react';
 import designerBanner from '../Discover/images/tatto-designer-banner.jpg';
-
 import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
-import { Typography } from '@material-ui/core';
+import { Typography, Grid, CssBaseline } from '@material-ui/core';
 
 export default function Discover(): JSX.Element {
   const classes = useStyles();
@@ -29,7 +26,7 @@ export default function Discover(): JSX.Element {
           <Grid item className={classes.activeContestHeading}>
             <Typography variant="h4">Active Contests</Typography>
           </Grid>
-          <Grid item container spacing={5}>
+          <Grid item container spacing={4}>
             <Grid item lg={4} md={6} sm={6} xs={12}></Grid>
           </Grid>
         </Grid>
