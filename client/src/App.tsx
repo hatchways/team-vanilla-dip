@@ -17,6 +17,7 @@ import { SnackBarProvider } from './context/useSnackbarContext';
 
 import './App.css';
 import { ContestProvider } from './context/useContestContext';
+import Discover from './pages/Discover/Discover';
 
 function App(): JSX.Element {
   return (
@@ -29,6 +30,7 @@ function App(): JSX.Element {
                 <Switch>
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/signup" component={Signup} />
+                  <Route exact path="/discover" component={Discover} />
                   <ProtectedRoute exact path="/messages">
                     <MessagesProvider>
                       <Messages />
