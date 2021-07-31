@@ -1,15 +1,17 @@
+import { ConversationProps } from './interface/Conversation';
 import useStyles from './useStyles';
-import profilePic from '../../../Images/profile.png';
+import profilePicAvatar from '../../../Images/user.png';
 import { Typography, Grid, ListItem, Divider, ListItemAvatar, Avatar, ListItemText, Badge } from '@material-ui/core';
+import moment from 'moment';
 
-export default function Conversation(): JSX.Element {
+export default function Conversation({ convo, setConvo }: ConversationProps): JSX.Element {
   const classes = useStyles();
 
   return (
     <>
-      <ListItem alignItems="flex-start" button>
+      <ListItem alignItems="flex-start" button onClick={() => setConvo(convo)}>
         <Grid container>
-          <Grid item container alignItems="center" justifyContent="flex-start" xs={9}>
+          <Grid item container alignItems="center" justifyContent="flex-start" xs={8}>
             <Grid item xs={2}>
               <ListItemAvatar style={{ paddingLeft: '0.5em' }}>
                 <Badge
@@ -21,27 +23,26 @@ export default function Conversation(): JSX.Element {
                   }}
                   classes={{ badge: classes.inactiveBadge }}
                 >
-                  <Avatar alt="profile picture" src={profilePic} />
+                  <Avatar alt="profile picture" src={profilePicAvatar} />
                 </Badge>
               </ListItemAvatar>
             </Grid>
             <Grid item xs={10}>
               <ListItemText disableTypography style={{ paddingLeft: '0.5em' }}>
                 <Typography variant="h6" style={{ fontWeight: 700 }}>
-                  John Doe
+                  {convo.participant?.username}
                 </Typography>
                 <Typography variant="body1" className={classes.messageSnippet}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                  dolore magna aliqua.
+                  {convo.lastMessage ? convo.lastMessage.message : `No Message Histroy`}
                 </Typography>
               </ListItemText>
             </Grid>
           </Grid>
-          <Grid item container alignItems="center" justifyContent="flex-end" xs={3}>
+          <Grid item container alignItems="center" justifyContent="flex-end" xs={4}>
             <Grid item>
               <ListItemText disableTypography>
-                <Typography variant="body1" style={{ padding: '1em' }}>
-                  Yesterday
+                <Typography variant="body1">
+                  {convo.lastMessage ? moment(convo.lastMessage.updatedAt).fromNow() : null}
                 </Typography>
               </ListItemText>
             </Grid>
