@@ -21,6 +21,18 @@ export const MessagesProvider: FunctionComponent = ({ children }): JSX.Element =
   const { loggedInUser } = useAuth();
 
   const updateConversations = (convo: MessagingData) => {
+    const existingConvo = conversations.filter(
+      (conversation) => conversation.conversation._id === convo.conversation._id,
+    );
+    if (existingConvo) {
+      const uniqueConvoList = conversations.filter(
+        (convo) => convo.conversation._id !== existingConvo[0].conversation._id,
+      );
+
+      const updatedConvoList = [...uniqueConvoList, convo];
+      setConversations(updatedConvoList);
+      return;
+    }
     setConversations((prev) => [...prev, convo]);
   };
 

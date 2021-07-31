@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useStyles from '../useStyles';
 import { useSocket } from '../../../context/useSocketContext';
+import { useMessages } from '../../../context/useMessagingContext';
 import MessageList from './MessageList';
 import pushNewMessage from '../../../helpers/APICalls/createNewMessage';
 import { MessagingData, Message } from '../../../interface/Message';
@@ -19,6 +20,7 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
   const [arrivalMessage, setArrivalMessage] = useState<Message | null>(null);
 
   const { socket } = useSocket();
+  const { updateConversations } = useMessages();
 
   useEffect(() => {
     if (socket) {
@@ -27,6 +29,10 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
       });
     }
   }, [socket]);
+
+  useEffect(() => {
+    setMessages(convo.messages);
+  }, [convo]);
 
   useEffect(() => {
     if (arrivalMessage && convo.conversation.participants.includes(arrivalMessage.senderID)) {
@@ -54,7 +60,12 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
       socket.emit('sendMessage', emitMessage);
 
       setMessages(updatedMessages);
-
+      updateConversations({
+        conversation: convo.conversation,
+        participant: convo.participant,
+        messages: updatedMessages,
+        lastMessage: updatedMessages[updatedMessages.length - 1],
+      });
       setSubmitting(false);
     }
   };
