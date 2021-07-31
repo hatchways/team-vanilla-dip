@@ -2,6 +2,7 @@ import { MuiThemeProvider } from '@material-ui/core';
 import { theme } from './themes/theme';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import Profile from './pages/Profile/Profile';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -35,6 +36,9 @@ function App(): JSX.Element {
                   </ProtectedRoute>
                   <ProtectedRoute exact path="/dashboard">
                     <Dashboard />
+                  </ProtectedRoute>
+                  <ProtectedRoute exact path="/profile">
+                    <Profile />
                   </ProtectedRoute>
                   <ProtectedRoute exact path="/contest/:id">
                     <ContestPage />

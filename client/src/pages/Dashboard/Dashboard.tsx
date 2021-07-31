@@ -1,19 +1,22 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Box, Typography, Button } from '@material-ui/core';
+
 import useStyles from './useStyles';
 import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
 import { useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
-import { Box, Typography, Button } from '@material-ui/core';
 import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
-// import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
 import ProfileTabs from '../../components/ProfileTabs/ProfileTabs';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
+
   const { initSocket } = useSocket();
 
   useEffect(() => {
@@ -30,7 +33,6 @@ export default function Dashboard(): JSX.Element {
       <CssBaseline />
       <Box width="100%" className={classes.drawerWrapper}>
         <Navbar />
-        {/* <ChatSideBanner loggedInUser={loggedInUser} /> */}
         <AvatarDisplay
           style={{
             height: '100px',
@@ -42,7 +44,14 @@ export default function Dashboard(): JSX.Element {
         <Typography className={classes.largeUsername} component="h1" variant="h5">
           {loggedInUser.username}
         </Typography>
-        <Button size="large" variant="outlined" color="primary" className={classes.editProfileButton}>
+        <Button
+          size="large"
+          variant="outlined"
+          color="primary"
+          className={classes.editProfileButton}
+          component={Link}
+          to="/profile/"
+        >
           Edit profile
         </Button>
         <ProfileTabs />

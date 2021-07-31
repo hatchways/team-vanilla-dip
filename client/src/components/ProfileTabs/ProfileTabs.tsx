@@ -54,8 +54,8 @@ export default function ProfileTabs(): JSX.Element {
                 .filter((contest) => {
                   return new Date(contest.deadlineDate) > new Date();
                 })
-                .map((contest, key) => (
-                  <Grid item md={12} key={key}>
+                .map((contest) => (
+                  <Grid item md={12} key={contest.id}>
                     <CardPanel
                       id={contest.id}
                       imageFiles={contest.imageFiles}
@@ -72,8 +72,8 @@ export default function ProfileTabs(): JSX.Element {
               .filter((context) => {
                 return new Date(context.deadlineDate) <= new Date();
               })
-              .map((contest, key) => (
-                <Grid item md={12} key={key}>
+              .map((contest) => (
+                <Grid item md={12} key={contest.id}>
                   <CardPanel
                     id={contest.id}
                     imageFiles={contest.imageFiles}
