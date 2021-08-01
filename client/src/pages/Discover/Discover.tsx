@@ -5,6 +5,8 @@ import Navbar from '../../components/Navbar/Navbar';
 import { Contest } from '../../interface/Contest';
 import { useContests } from '../../context/useContestContext';
 import ContestCard from './ContestCard/ContestCard';
+import WinnerCard from './WinnersCard/Winner';
+import winnersTestData from './test data/winnersTestData.js';
 import { Typography, Grid, CssBaseline } from '@material-ui/core';
 
 export default function Discover(): JSX.Element {
@@ -34,7 +36,7 @@ export default function Discover(): JSX.Element {
           <img src={designerBanner} alt="Discover Banner" className={classes.discoverBanner} />
         </Grid>
         <Grid item container xs={10} justifyContent="center">
-          <Grid item className={classes.activeContestHeading}>
+          <Grid item className={classes.heading}>
             <Typography variant="h4">Active Contests</Typography>
           </Grid>
           <Grid item container spacing={4}>
@@ -48,6 +50,24 @@ export default function Discover(): JSX.Element {
                     deadlineDate={contest.deadlineDate}
                     image={contest.imageFiles[0]}
                     id={contest._id}
+                  />
+                </Grid>
+              );
+            })}
+          </Grid>
+          <Grid item className={classes.headingWinner}>
+            <Typography variant="h4">Latest Winners</Typography>
+          </Grid>
+          <Grid item container spacing={3}>
+            {winnersTestData.map((winner) => {
+              return (
+                <Grid item lg={2} md={3} sm={3} xs={6} key={winner.id}>
+                  <WinnerCard
+                    image={winner.image}
+                    winningDate={winner.winningDate}
+                    designTitle={winner.designTitle}
+                    contestTitle={winner.contestTitle}
+                    username={winner.username}
                   />
                 </Grid>
               );

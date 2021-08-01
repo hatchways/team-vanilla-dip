@@ -19,8 +19,12 @@ const useStyles = makeStyles(() => ({
     height: '420px',
     zIndex: 1,
   },
-  activeContestHeading: {
+  heading: {
     paddingTop: '5em',
+    paddingBottom: '2.5em',
+  },
+  headingWinner: {
+    paddingTop: '8em',
     paddingBottom: '2.5em',
   },
 }));
