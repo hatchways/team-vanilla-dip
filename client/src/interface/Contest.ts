@@ -7,6 +7,7 @@ export interface Contest {
   dateCreated: string;
   imageFiles: string[];
   id: string;
+  _id: string;
 }
 
 export interface ContestApiData {

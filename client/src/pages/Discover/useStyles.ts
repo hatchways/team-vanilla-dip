@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
   },
   activeContestHeading: {
     paddingTop: '5em',
-    paddingBottom: '2em',
+    paddingBottom: '2.5em',
   },
 }));
 
