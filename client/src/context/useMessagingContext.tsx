@@ -29,7 +29,7 @@ export const MessagesProvider: FunctionComponent = ({ children }): JSX.Element =
         (convo) => convo.conversation._id !== existingConvo[0].conversation._id,
       );
 
-      const updatedConvoList = [...uniqueConvoList, convo];
+      const updatedConvoList = [convo, ...uniqueConvoList];
       setConversations(updatedConvoList);
       return;
     }
