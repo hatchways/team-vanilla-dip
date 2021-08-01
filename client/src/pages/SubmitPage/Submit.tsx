@@ -1,16 +1,31 @@
-import { useAuth } from '../../context/useAuthContext';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Box } from '@material-ui/core';
+import { Box, Container, Paper } from '@material-ui/core';
+
+import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
 import { uploadImage } from '../../helpers/APICalls/uploadImage';
 import { useHistory, useParams } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
+import { useAuth } from '../../context/useAuthContext';
 import { addSubmissionToContest } from '../../helpers/APICalls/searchContest';
 import { SubmissionParams } from './SubmissionParams';
 import { useSnackBar } from '../../context/useSnackbarContext';
+
+import ImagesDropZone from './ImageDropZone/ImageDropZone';
+import ImageElement from './ImageElement/ImageElement';
+
+interface ImageListProps {
+  file: File;
+  filename: string;
+  status: string;
+  storageRef: string;
+  downloadUrl: string;
+  description: string;
+}
+
 export default function Submit(): JSX.Element {
   const { loggedInUser } = useAuth();
   if (loggedInUser === undefined) return <CircularProgress />;
@@ -30,10 +45,12 @@ export default function Submit(): JSX.Element {
 
 function FileUploader(): JSX.Element {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imageList, setImageList] = useState<ImageListProps[]>([]);
   const [processing, setProcessing] = useState<boolean>(false);
   const { id } = useParams<SubmissionParams>();
   const history = useHistory();
   const { updateSnackBarMessage } = useSnackBar();
+  const classes = useStyles();
   // On file select (from the pop up)
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // Update the state
@@ -41,6 +58,13 @@ function FileUploader(): JSX.Element {
       setSelectedFile(event.target.files[0]);
     }
   };
+
+  useEffect(() => {
+    imageList.forEach((image, index) => {
+      console.log(image);
+    });
+  }, [imageList]);
+
   // On file upload (click the upload button)
   const onFileUpload = () => {
     if (selectedFile) {
@@ -66,12 +90,26 @@ function FileUploader(): JSX.Element {
   };
   if (processing) return <CircularProgress />;
   return (
-    <Box>
-      <Typography variant="h5">Upload Image</Typography>
-      <br />
-      <input type="file" accept="image/*" onChange={onFileChange} />
-      <br />
-      <button onClick={onFileUpload}>Upload!</button>
-    </Box>
+    <Container>
+      <Box my={10} width="70%" m="auto" className={classes.alignCenter}>
+        <Paper elevation={2}>
+          <Container className={classes.paperContainer}>
+            <Typography component="h2" variant="h3" className={classes.header}>
+              Submit Design
+            </Typography>
+            <ImagesDropZone setImageList={setImageList} />
+            <br />
+            {/* <input type="file" accept="image/*" onChange={onFileChange} /> */}
+            <br />
+          </Container>
+        </Paper>
+        {imageList.length > 0 && <ImageElement imageList={imageList} />}
+        <Box className={classes.submitContainer}>
+          <button onClick={onFileUpload} className={classes.submitBtn}>
+            Submit
+          </button>
+        </Box>
+      </Box>
+    </Container>
   );
 }

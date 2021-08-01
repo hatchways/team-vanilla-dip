@@ -12,7 +12,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import SubmissionTabs from '../../components/SubmissionTabs/SubmissionTabs';
 import { fetchSubmissionByContestId } from '../../helpers/APICalls/searchContest';
 import { Submission } from '../../interface/Submission';
-import { SubmissionParams } from './SubmissionParams';
+import { SubmissionParams } from '../SubmitPage/SubmissionParams';
 
 export default function SubmissionPage(): JSX.Element {
   const classes = useStyles();

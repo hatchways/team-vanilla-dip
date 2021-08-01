@@ -7,7 +7,7 @@ import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
 import ContestPage from './pages/SubmissionPage/SubmissionPage';
-import Submit from './pages/SubmissionPage/Submit';
+import Submit from './pages/SubmitPage/Submit';
 import Contest from './pages/Contest/Contest';
 import Messages from './pages/Messages/Messages';
 import { MessagesProvider } from './context/useMessagingContext';
