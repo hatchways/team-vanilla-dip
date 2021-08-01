@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
-import { Box, Input, Grid, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 
 import useStyles from './useStyles';
 

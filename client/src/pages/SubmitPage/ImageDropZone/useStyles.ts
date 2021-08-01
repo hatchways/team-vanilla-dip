@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
+  imageItem: {
+    position: 'relative',
+  },
   dropOverContainer: {
     width: 'max-content',
     padding: '20px',

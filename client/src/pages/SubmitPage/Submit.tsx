@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -44,50 +44,67 @@ export default function Submit(): JSX.Element {
 }
 
 function FileUploader(): JSX.Element {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageList, setImageList] = useState<ImageListProps[]>([]);
   const [processing, setProcessing] = useState<boolean>(false);
   const { id } = useParams<SubmissionParams>();
   const history = useHistory();
   const { updateSnackBarMessage } = useSnackBar();
   const classes = useStyles();
-  // On file select (from the pop up)
-  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // Update the state
-    if (event.target.files && event.target.files[0]) {
-      setSelectedFile(event.target.files[0]);
-    }
-  };
 
-  useEffect(() => {
-    imageList.forEach((image, index) => {
-      console.log(image);
-    });
-  }, [imageList]);
+  const handleDeleteImage = (index: number) => {
+    const newArray = [...imageList];
+    newArray.splice(index, 1);
+    setImageList(newArray);
+  };
 
   // On file upload (click the upload button)
   const onFileUpload = () => {
-    if (selectedFile) {
+    if (imageList.length > 0) {
       setProcessing(true);
-      uploadImage({ image: selectedFile }).then((r) => {
-        if (r.success) {
-          addSubmissionToContest({ contestID: id, imageFile: r.success }).then((r) => {
-            if (r.submission) {
-              history.goBack();
-            } else {
-              setProcessing(false);
-              updateSnackBarMessage(r.status);
-            }
-          });
-        } else {
-          setProcessing(false);
-          updateSnackBarMessage(r.error ?? '');
-        }
+      imageList.forEach((image) => {
+        uploadImage({ image: image.file }).then((resp) => {
+          if (resp.success) {
+            addSubmissionToContest({ contestID: id, imageFile: resp.success }).then((resp) => {
+              if (resp.submission) {
+                console.log(resp.submission);
+              } else {
+                setProcessing(false);
+                updateSnackBarMessage(resp.status);
+              }
+            });
+          } else {
+            setProcessing(false);
+            updateSnackBarMessage(resp.error ?? '');
+          }
+        });
       });
-      // Request made to the backend api
-      // Send formData object
+      return history.goBack();
     }
+    updateSnackBarMessage('No image selected');
   };
+  // const onFileUpload = () => {
+  //   if (selectedFile) {
+  //     setProcessing(true);
+  //     uploadImage({ image: selectedFile }).then((r) => {
+  //       if (r.success) {
+  //         addSubmissionToContest({ contestID: id, imageFile: r.success }).then((r) => {
+  //           if (r.submission) {
+  //             history.goBack();
+  //           } else {
+  //             setProcessing(false);
+  //             updateSnackBarMessage(r.status);
+  //           }
+  //         });
+  //       } else {
+  //         setProcessing(false);
+  //         updateSnackBarMessage(r.error ?? '');
+  //       }
+  //     });
+  //     // Request made to the backend api
+  //     // Send formData object
+  //   }
+  // };
+
   if (processing) return <CircularProgress />;
   return (
     <Container>
@@ -103,7 +120,7 @@ function FileUploader(): JSX.Element {
             <br />
           </Container>
         </Paper>
-        {imageList.length > 0 && <ImageElement imageList={imageList} />}
+        {imageList.length > 0 && <ImageElement imageList={imageList} handleDeleteImage={handleDeleteImage} />}
         <Box className={classes.submitContainer}>
           <button onClick={onFileUpload} className={classes.submitBtn}>
             Submit
