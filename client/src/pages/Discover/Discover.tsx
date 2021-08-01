@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import designerBanner from '../Discover/images/tatto-designer-banner.jpg';
+import blackPattern from '../Discover/images/black-pattern.jpg';
 import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
 import { Contest } from '../../interface/Contest';
@@ -7,13 +9,17 @@ import { useContests } from '../../context/useContestContext';
 import ContestCard from './ContestCard/ContestCard';
 import WinnerCard from './WinnersCard/Winner';
 import winnersTestData from './test data/winnersTestData.js';
-import { Typography, Grid, CssBaseline } from '@material-ui/core';
+import { Typography, Grid, CssBaseline, Button } from '@material-ui/core';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import InstagramIcon from '@material-ui/icons/Instagram';
+import PinterestIcon from '@material-ui/icons/Pinterest';
 
 export default function Discover(): JSX.Element {
   const classes = useStyles();
 
   const [activeContests, setActiveContests] = useState<Contest[] | []>([]);
   const { allContests } = useContests();
+  const history = useHistory();
 
   useEffect(() => {
     const newActiveContests = allContests.filter((contest: Contest) => new Date(contest.deadlineDate) >= new Date());
@@ -73,6 +79,34 @@ export default function Discover(): JSX.Element {
               );
             })}
           </Grid>
+        </Grid>
+        <Grid item xs={12} className={classes.blackPattern}>
+          <Grid
+            container
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+            className={classes.blackPatternOverlay}
+          >
+            <Button variant="contained" className={classes.signup} onClick={() => history.push('/signup')}>
+              <Typography variant="h3">Sign up to share your ideas</Typography>
+            </Button>
+            <Typography variant="body2" color="secondary" className={classes.followUsText}>
+              Be the first to hear about deals, exciting new products and much more!
+            </Typography>
+            <Grid item xs={5} container className={classes.socialMedia}>
+              <Grid item xs={1}>
+                <FacebookIcon fontSize="large" color="secondary" />
+              </Grid>
+              <Grid item xs={1}>
+                <InstagramIcon fontSize="large" color="secondary" />
+              </Grid>
+              <Grid item xs={1}>
+                <PinterestIcon fontSize="large" color="secondary" />
+              </Grid>
+            </Grid>
+          </Grid>
+          <img src={blackPattern} alt="Discover Banner" className={classes.blackPattern} />
         </Grid>
       </Grid>
     </Grid>

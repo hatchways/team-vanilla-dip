@@ -12,11 +12,24 @@ const useStyles = makeStyles(() => ({
     width: '100%',
     height: '420px',
   },
+  blackPattern: {
+    width: '100%',
+    height: '300px',
+    marginTop: '5em',
+  },
   bannerBlackOverlay: {
     background: 'rgba(0,0,0,0.4)',
     position: 'absolute',
     width: '100%',
     height: '420px',
+    zIndex: 1,
+  },
+  blackPatternOverlay: {
+    marginTop: '5em',
+    background: 'rgba(0,0,0,0.4)',
+    position: 'absolute',
+    width: '100%',
+    height: '300px',
     zIndex: 1,
   },
   heading: {
@@ -26,6 +39,18 @@ const useStyles = makeStyles(() => ({
   headingWinner: {
     paddingTop: '8em',
     paddingBottom: '2.5em',
+  },
+  signup: {
+    padding: '1.75em',
+    margin: '1.5em',
+  },
+  followUsText: {
+    fontSize: 15,
+    margin: '1em',
+  },
+  socialMedia: {
+    paddingTop: '2em',
+    marginLeft: '38em',
   },
 }));
 

@@ -35,7 +35,7 @@ export default function ContestCard({ title, description, prizeAmount, image, de
       </CardContent>
       <Grid container>
         <Grid item container xs={12}>
-          <Grid item xs={6} className={classes.border} justifyContent="center">
+          <Grid item xs={6} container className={classes.border} justifyContent="center">
             <Grid item xs={12} className={classes.extendedInfo}>
               <Typography variant="h3" align="center" color="secondary">
                 Prize
