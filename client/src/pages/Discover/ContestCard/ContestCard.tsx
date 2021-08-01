@@ -13,7 +13,7 @@ interface Props {
   id: string;
 }
 
-export default function Discover({ title, description, prizeAmount, image, deadlineDate, id }: Props): JSX.Element {
+export default function ContestCard({ title, description, prizeAmount, image, deadlineDate, id }: Props): JSX.Element {
   const classes = useStyles();
 
   return (
