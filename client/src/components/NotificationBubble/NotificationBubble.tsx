@@ -2,6 +2,7 @@ import { Popover, Typography, Button, Box, AppBar } from '@material-ui/core';
 import { Notification } from '../../interface/Notification';
 import { useNotifications } from '../../context/useNotificationContext';
 import { Ref, useState } from 'react';
+
 const NotificationBubble = (): JSX.Element => {
   const { allNotifications, readNotification } = useNotifications();
   const handleClick = (notification: Notification) => {

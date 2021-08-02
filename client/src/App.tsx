@@ -50,7 +50,6 @@ function App(): JSX.Element {
                     </ProtectedRoute>
                   </Switch>
                 </NotificationProvider>
-
               </ContestProvider>
             </SocketProvider>
           </AuthProvider>
