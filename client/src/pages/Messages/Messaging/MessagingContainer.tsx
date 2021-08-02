@@ -46,6 +46,8 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
 
   const handleNewMessageSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!newMessage) return;
+
     setSubmitting(true);
     setNewMessage('');
 
