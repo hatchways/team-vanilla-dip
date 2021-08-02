@@ -14,7 +14,7 @@ import { ContestForm } from './ContestForm/ContestForm';
 import Navbar from '../../components/Navbar/Navbar';
 import createContest from '../../helpers/APICalls/createContests';
 
-export default function Login(): JSX.Element {
+export default function Contest(): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
   const { updateSnackBarMessage } = useSnackBar();
