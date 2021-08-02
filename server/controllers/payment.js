@@ -31,15 +31,32 @@ exports.createCheckoutSession = asyncHandler(async (req, res) => {
       });
 
     try {
-        if (!session) {
-        return res.status(404).json({ status: "unable to create checkout session" });
-        }
         res.status(201).json({
         status: "success",
         session,
         });
       } catch (error) {
-          console.log(session);
+        return res.status(500).json({ error });
+      }
+})
+
+//create a customer
+exports.createCustomer = asyncHandler(async (req, res) => {
+    const userID = req.user.id;
+
+    const user = await User.findById(userID);
+
+    const customer = await stripe.customers.create({
+        email: user.email,
+        name: user.username,
+      });
+
+    try {
+        res.status(201).json({
+        status: "success",
+        customer,
+        });
+      } catch (error) {
         return res.status(500).json({ error });
       }
 })
