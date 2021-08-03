@@ -55,6 +55,7 @@ export default function Contest(): JSX.Element {
           updateSnackBarMessage(data.error.message);
         } else if (data.success) {
           history.push('/dashboard');
+          updateSnackBarMessage('Created Contest Successfully');
         } else {
           console.error({ data });
           setSubmitting(false);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
@@ -10,15 +11,28 @@ import { useHistory, useParams, Link } from 'react-router-dom';
 import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
 import SubmissionTabs from '../../components/SubmissionTabs/SubmissionTabs';
-import { fetchSubmissionByContestId } from '../../helpers/APICalls/searchContest';
+import { fetchSubmissionByContestId, fetchContestById } from '../../helpers/APICalls/searchContest';
+import { Contest } from '../../interface/Contest';
 import { Submission } from '../../interface/Submission';
 import { SubmissionParams } from './SubmissionParams';
 
 export default function SubmissionPage(): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<SubmissionParams>();
+  const [contest, setContest] = useState<Contest>();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const history = useHistory();
+
+  useEffect(() => {
+    const ac = new AbortController();
+    fetchContestById({ id: id }).then((res) => {
+      if (res.success) {
+        setContest(res.success as Contest);
+      }
+    });
+    return ac.abort();
+  }, [id]);
+
   useEffect(() => {
     const ac = new AbortController();
     fetchSubmissionByContestId({ id: id }).then((res) => {
@@ -49,14 +63,18 @@ export default function SubmissionPage(): JSX.Element {
           <Grid container className={classes.gridContainer}>
             <Grid item>
               <Typography component="h2" variant="h3" className={classes.contestTitle}>
-                Lion tattoo concept in minimal style
+                {contest == undefined ? <CircularProgress style={{ color: 'black' }} /> : contest.title}
                 <Button className={classes.contestPriceBtn}>$150</Button>
               </Typography>
               <Box className={classes.profileDetails}>
                 <Avatar />
                 <Box className={classes.profileName}>
                   <Typography variant="h6" component="h3">
-                    By Kenneth Stewart
+                    {contest?.userID == undefined ? (
+                      <CircularProgress style={{ color: 'black' }} />
+                    ) : (
+                      contest.userID.username
+                    )}
                   </Typography>
                 </Box>
               </Box>
