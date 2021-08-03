@@ -1,3 +1,11 @@
+import { User } from './User';
+
+export interface AuthApiDataSuccess {
+  message: string;
+  user: User;
+  token: string;
+}
+
 export interface Profile {
   profileImage: string;
   userID: string;
@@ -5,6 +13,7 @@ export interface Profile {
 }
 
 export interface ProfileApiData {
-  profile?: Profile;
+  success?: AuthApiDataSuccess;
+  error?: { message: string };
   status: string;
 }

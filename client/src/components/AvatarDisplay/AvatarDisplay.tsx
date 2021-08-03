@@ -10,11 +10,7 @@ interface Props {
 
 const AvatarDisplay = ({ style }: Props): JSX.Element => {
   const { loggedInUser } = useAuth();
-  if (loggedInUser === undefined) return <CircularProgress />;
-  if (!loggedInUser) {
-    return <CircularProgress />;
-  }
-  if (loggedInUser.profile === undefined) return <CircularProgress />;
+  if (loggedInUser === undefined || !loggedInUser || loggedInUser.profile === undefined) return <CircularProgress />;
 
   return <Avatar style={style} alt="Profile Image" src={loggedInUser.profile.profileImage} />;
 };

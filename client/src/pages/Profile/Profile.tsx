@@ -10,21 +10,14 @@ import { uploadImage } from '../../helpers/APICalls/uploadImage';
 import { updateProfile } from '../../helpers/APICalls/updateProfile';
 
 function Profile(): JSX.Element {
-  const { loggedInUser } = useAuth();
+  const { loggedInUser, updateLoginContext } = useAuth();
   const [previewUrl, setPreviewUrl] = useState<string>();
   const [currentFile, setCurrentFile] = useState<File | null>(null);
   const [processing, setProcessing] = useState<boolean>(false);
   const classes = useStyles();
   const { updateSnackBarMessage } = useSnackBar();
 
-  if (loggedInUser === undefined) return <CircularProgress />;
-  if (!loggedInUser) {
-    return <CircularProgress />;
-  }
-  if (loggedInUser.profile === undefined) return <CircularProgress />;
-  if (!loggedInUser.profile) {
-    return <CircularProgress />;
-  }
+  if (loggedInUser === undefined || !loggedInUser || loggedInUser.profile === undefined) return <CircularProgress />;
 
   const fileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -44,15 +37,13 @@ function Profile(): JSX.Element {
       uploadImage({ image: currentFile }).then((resp) => {
         if (resp.success) {
           updateProfile({ profileImage: resp.success }).then((resp) => {
-            if (resp.profile) {
-              alert('Changed Succesfully');
-              window.location.reload();
+            if (resp.success) {
+              updateLoginContext(resp.success);
             } else {
               setProcessing(false);
               updateSnackBarMessage(resp.status);
             }
           });
-          console.log(resp);
           setProcessing(false);
         } else {
           setProcessing(false);
@@ -74,16 +65,22 @@ function Profile(): JSX.Element {
           <Grid container className={classes.alignCenter}>
             <Grid item className={classes.imageContainer}>
               {processing ? (
-                <CircularProgress />
+                <CircularProgress className={classes.circularProgress} />
               ) : (
                 [
                   previewUrl ? (
-                    <Avatar alt={'Placeholder for profile username'} src={previewUrl} className={classes.large} />
+                    <Avatar
+                      alt={'Placeholder for profile username'}
+                      src={previewUrl}
+                      className={classes.large}
+                      key="previewImage"
+                    />
                   ) : (
                     <Avatar
                       alt={'Placeholder for profile username'}
                       src={loggedInUser.profile.profileImage}
                       className={classes.large}
+                      key="profileImage"
                     />
                   ),
                 ]

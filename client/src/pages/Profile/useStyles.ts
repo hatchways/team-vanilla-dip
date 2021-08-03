@@ -36,20 +36,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: '0px',
     right: '0px',
   },
-  paperTab: {
-    padding: '50px 10px',
-    '& .MuiTab-wrapper': {
-      alignItems: 'flex-start !important',
-    },
-  },
-  displayPanel: {
-    flexGrow: 1,
-  },
   fileInputLabel: {
     cursor: 'pointer',
   },
   fileInput: {
     display: 'none',
+  },
+  circularProgress: {
+    width: '100px !important',
+    height: '100px !important',
   },
 }));
 
