@@ -18,7 +18,7 @@ export default function Contest(): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
   const { updateSnackBarMessage } = useSnackBar();
-  const handleSubmit = (
+  const handleSubmit = async (
     {
       title,
       description,
@@ -48,20 +48,26 @@ export default function Contest(): JSX.Element {
       imageFiles: string[];
     }>,
   ) => {
-    createContest(title, description, prizeAmount, createDeadlineDate(date, time, timeZone), imageFiles).then(
-      (data) => {
-        if (data.error) {
-          setSubmitting(false);
-          updateSnackBarMessage(data.error.message);
-        } else if (data.success) {
-          history.push('/dashboard');
-        } else {
-          console.error({ data });
-          setSubmitting(false);
-          updateSnackBarMessage('An unexpected error occured. Please try again');
-        }
-      },
+    console.log(imageFiles);
+
+    const contest = await createContest(
+      title,
+      description,
+      prizeAmount,
+      createDeadlineDate(date, time, timeZone),
+      imageFiles,
     );
+
+    if (contest.error) {
+      setSubmitting(false);
+      updateSnackBarMessage(contest.error.message);
+    } else if (contest.success) {
+      history.push('/dashboard');
+    } else {
+      console.error({ contest });
+      setSubmitting(false);
+      updateSnackBarMessage('An unexpected error occured. Please try again');
+    }
   };
 
   return (
