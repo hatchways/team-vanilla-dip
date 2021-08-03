@@ -1,14 +1,14 @@
-const users= []
+let users = []
 
 
 const addUser  = (userId, socketId) => {
-    !users.some(user=>user.userId === userId) &&
+    !users.some((user) => user.userId === userId) &&
         users.push({ userId, socketId });
     return users;
 };
 
 const removeUser = (socketID) => {
-    user = users.filter((user) => user.socketId !== socketId);
+    users = users.filter((user) => user.socketId !== socketID);
     return users;
 };
 

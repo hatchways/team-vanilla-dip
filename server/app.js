@@ -58,9 +58,11 @@ io.use(function(socket, next){
   })
 
 
-  socket.on("sendMessage", ({senderId, receiverId,text})=>{
-    const user = getUser(receiverId);
-    io.to(user.socketId).emit('getMessage', {senderId, text, createdAt: new Date().getTime()})
+  socket.on("sendMessage", ({receiverId, ...rest})=>{
+    const activeUser = getUser(receiverId);
+    if (activeUser) {
+      io.to(activeUser.socketId).emit('getMessage', {...rest});
+    }
   })
   
   socket.on('disconnect', () => {
