@@ -19,9 +19,7 @@ export default function ContestCard({ title, description, prizeAmount, image, de
   return (
     <Card elevation={2}>
       <CardActionArea component={Link} to={'/contest/' + id}>
-        <CardMedia>
-          <img src={image} alt="Contest Inspiration Image" width="100%" height="400px" />
-        </CardMedia>
+        <CardMedia component="img" image={image} alt="Contest Inspiration Image" height="400px" />
       </CardActionArea>
       <CardContent>
         <Grid container direction="column" className={classes.cardContentContainer}>

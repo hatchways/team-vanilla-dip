@@ -20,7 +20,11 @@ export const ContestProvider: FunctionComponent = ({ children }): JSX.Element =>
     if (loggedInUser) {
       const getAllContestByUserId = async () => {
         const contests = await fetchAllContestByUserId({ id: loggedInUser.id });
-        setAllContestsByUser(contests?.contests || []);
+        if (contests.contests && contests.contests.length > 0) {
+          setAllContestsByUser(contests.contests);
+        } else {
+          setAllContestsByUser([]);
+        }
       };
       getAllContestByUserId();
     }

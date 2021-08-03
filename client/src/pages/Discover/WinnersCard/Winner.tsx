@@ -25,9 +25,7 @@ export default function WinnerCard({ image, designTitle, contestTitle, username,
         </Grid>
       </Grid>
       <CardActionArea>
-        <CardMedia>
-          <img src={image} alt="Winner's Submitted Design" width="100%" height="175px" />
-        </CardMedia>
+        <CardMedia component="img" src={image} alt="Winner's Submitted Design" height="175px" />
       </CardActionArea>
       <Grid container>
         <Grid item>
