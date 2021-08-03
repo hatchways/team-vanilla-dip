@@ -14,7 +14,7 @@ import SubmissionTabs from '../../components/SubmissionTabs/SubmissionTabs';
 import { fetchSubmissionByContestId, fetchContestById } from '../../helpers/APICalls/searchContest';
 import { Contest } from '../../interface/Contest';
 import { Submission } from '../../interface/Submission';
-import { SubmissionParams } from './SubmissionParams';
+import { SubmissionParams } from '../SubmitPage/SubmissionParams';
 
 export default function SubmissionPage(): JSX.Element {
   const classes = useStyles();
