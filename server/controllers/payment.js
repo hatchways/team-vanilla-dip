@@ -2,6 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const asyncHandler = require('express-async-handler');
 const Contest = require('../models/Contest');
 const User = require('../models/User');
+const StripeCustomer = require('../models/StripeCustomer');
 
 //Based on ContestID, create a session and send a session id
 exports.createCheckoutSession = asyncHandler(async (req, res) => {
@@ -42,7 +43,17 @@ exports.createCheckoutSession = asyncHandler(async (req, res) => {
 exports.createCustomer = asyncHandler(async (req, res) => {
   const userID = req.user.id;
 
+  const existingStripeCustomer = await StripeCustomer.find({ userID });
+  
   try {
+    if (existingStripeCustomer[0]) {
+      const customer = await stripe.customers.retrieve(existingStripeCustomer[0].stripeCustomerID);
+      return res.status(200).json({
+        customerID: customer.id,
+        existingStripeCustomer: true,
+      });
+    }
+
     const user = await User.findById(userID);
 
     const customer = await stripe.customers.create({
@@ -50,9 +61,16 @@ exports.createCustomer = asyncHandler(async (req, res) => {
       name: user.username,
     });
 
+    const newStripeCustomer = new StripeCustomer({
+      stripeCustomerID: customer.id,
+      userID,
+    });
+
+    await newStripeCustomer.save();
+
     res.status(201).json({
-      status: 'success',
-      customer,
+      customerID: customer.id,
+      existingStripeCustomer: false,
     });
   } catch (error) {
     return res.status(500).json({ error });

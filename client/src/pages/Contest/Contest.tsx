@@ -11,6 +11,7 @@ import { useSnackBar } from '../../context/useSnackbarContext';
 import createDeadlineDate from './ContestForm/helpers/createDeadlineDate.js';
 import useStyles from './useStyles';
 import { ContestForm } from './ContestForm/ContestForm';
+import stripeCustomer from '../../helpers/APICalls/createStripeCustomer';
 import Navbar from '../../components/Navbar/Navbar';
 import createContest from '../../helpers/APICalls/createContests';
 
@@ -48,8 +49,6 @@ export default function Contest(): JSX.Element {
       imageFiles: string[];
     }>,
   ) => {
-    console.log(imageFiles);
-
     const contest = await createContest(
       title,
       description,
@@ -67,6 +66,14 @@ export default function Contest(): JSX.Element {
       console.error({ contest });
       setSubmitting(false);
       updateSnackBarMessage('An unexpected error occured. Please try again');
+    }
+
+    const stripeUser = await stripeCustomer();
+
+    if (stripeUser.existingStripeCustomer) {
+      console.log('Existing Stripe User');
+    } else {
+      console.log('New Stripe User Created.');
     }
   };
 
