@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Box, Container, Paper } from '@material-ui/core';
+import { Box, Container, Paper, Button } from '@material-ui/core';
 
 import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
@@ -13,6 +13,8 @@ import { useAuth } from '../../context/useAuthContext';
 import { addSubmissionToContest } from '../../helpers/APICalls/searchContest';
 import { SubmissionParams } from './SubmissionParams';
 import { useSnackBar } from '../../context/useSnackbarContext';
+import { Contest } from '../../interface/Contest';
+import { fetchContestById } from '../../helpers/APICalls/searchContest';
 
 import ImagesDropZone from './ImageDropZone/ImageDropZone';
 import ImageElement from './ImageElement/ImageElement';
@@ -28,10 +30,8 @@ interface ImageListProps {
 
 export default function Submit(): JSX.Element {
   const { loggedInUser } = useAuth();
-  if (loggedInUser === undefined) return <CircularProgress />;
-  if (!loggedInUser) {
-    return <CircularProgress />;
-  }
+  if (loggedInUser === undefined || !loggedInUser) return <CircularProgress />;
+
   return (
     <Grid container direction="column">
       <CssBaseline />
@@ -45,6 +45,7 @@ export default function Submit(): JSX.Element {
 
 function FileUploader(): JSX.Element {
   const [imageList, setImageList] = useState<ImageListProps[]>([]);
+  const [contest, setContest] = useState<Contest>();
   const [processing, setProcessing] = useState<boolean>(false);
   const { id } = useParams<SubmissionParams>();
   const history = useHistory();
@@ -57,6 +58,16 @@ function FileUploader(): JSX.Element {
     setImageList(newArray);
   };
 
+  useEffect(() => {
+    const ac = new AbortController();
+    fetchContestById({ id: id }).then((res) => {
+      if (res.success) {
+        setContest(res.success as Contest);
+      }
+    });
+    return ac.abort();
+  }, [id]);
+
   // On file upload (click the upload button)
   const onFileUpload = () => {
     if (imageList.length > 0) {
@@ -66,7 +77,10 @@ function FileUploader(): JSX.Element {
           if (resp.success) {
             addSubmissionToContest({ contestID: id, imageFile: resp.success }).then((resp) => {
               if (resp.submission) {
-                console.log(resp.submission);
+                updateSnackBarMessage(
+                  `Submitted ${imageList.length} images to ${contest == undefined ? 'Contest' : contest.title}`,
+                );
+                history.goBack();
               } else {
                 setProcessing(false);
                 updateSnackBarMessage(resp.status);
@@ -82,28 +96,6 @@ function FileUploader(): JSX.Element {
     }
     updateSnackBarMessage('No image selected');
   };
-  // const onFileUpload = () => {
-  //   if (selectedFile) {
-  //     setProcessing(true);
-  //     uploadImage({ image: selectedFile }).then((r) => {
-  //       if (r.success) {
-  //         addSubmissionToContest({ contestID: id, imageFile: r.success }).then((r) => {
-  //           if (r.submission) {
-  //             history.goBack();
-  //           } else {
-  //             setProcessing(false);
-  //             updateSnackBarMessage(r.status);
-  //           }
-  //         });
-  //       } else {
-  //         setProcessing(false);
-  //         updateSnackBarMessage(r.error ?? '');
-  //       }
-  //     });
-  //     // Request made to the backend api
-  //     // Send formData object
-  //   }
-  // };
 
   if (processing) return <CircularProgress />;
   return (
@@ -116,15 +108,14 @@ function FileUploader(): JSX.Element {
             </Typography>
             <ImagesDropZone setImageList={setImageList} />
             <br />
-            {/* <input type="file" accept="image/*" onChange={onFileChange} /> */}
             <br />
           </Container>
         </Paper>
         {imageList.length > 0 && <ImageElement imageList={imageList} handleDeleteImage={handleDeleteImage} />}
         <Box className={classes.submitContainer}>
-          <button onClick={onFileUpload} className={classes.submitBtn}>
+          <Button onClick={onFileUpload} className={classes.submitBtn}>
             Submit
-          </button>
+          </Button>
         </Box>
       </Box>
     </Container>
