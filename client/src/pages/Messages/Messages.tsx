@@ -3,8 +3,6 @@ import useStyles from './useStyles';
 import { useMessages } from '../../context/useMessagingContext';
 import createConvo from '../../helpers/APICalls/createNewConvo';
 import { User } from '../../interface/User';
-import { useSocket } from '../../context/useSocketContext';
-import { useAuth } from '../../context/useAuthContext';
 import { MessagingData } from '../../interface/Message';
 import Navbar from '../../components/Navbar/Navbar';
 import SearchUsers from '../../components/Search/Search';
@@ -14,8 +12,6 @@ import { Typography, Grid, CssBaseline, Divider, Paper, List } from '@material-u
 
 export default function Messages(): JSX.Element {
   const classes = useStyles();
-  const { socket } = useSocket();
-  const { loggedInUser } = useAuth();
 
   const { conversations, updateConversations } = useMessages();
   const [currentConvo, setCurrentConvo] = useState<MessagingData | null>(null);
@@ -32,11 +28,6 @@ export default function Messages(): JSX.Element {
       setSearch('');
     }
   };
-  useEffect(() => {
-    if (socket) {
-      socket.emit('addUser', loggedInUser?.id);
-    }
-  }, [socket, loggedInUser]);
 
   useEffect(() => {
     let active = true;
