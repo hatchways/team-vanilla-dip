@@ -1,8 +1,10 @@
+import { User } from './User';
+
 export interface Submission {
   active: boolean;
   imageFiles: string[];
   contestID: string;
-  userID: string;
+  userID: User;
 }
 
 export interface SingleSubmissionApiData {
