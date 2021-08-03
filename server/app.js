@@ -18,6 +18,7 @@ const contestRouter = require("./routes/contest");
 const conversationRouter = require("./routes/conversation");
 const messageRouter = require("./routes/message");
 const awsRouter = require("./routes/aws")
+const notificationRouter = require("./routes/notification")
 
 const { json, urlencoded } = express;
 
@@ -90,6 +91,7 @@ app.use("/contest", contestRouter);
 app.use("/chat", conversationRouter);
 app.use("/chat/message", messageRouter);
 app.use("/aws",awsRouter);
+app.use("/notification", notificationRouter)
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
