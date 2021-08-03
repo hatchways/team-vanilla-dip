@@ -6,7 +6,6 @@ export interface Contest {
   userID: string;
   dateCreated: string;
   imageFiles: string[];
-  id: string;
   _id: string;
 }
 
