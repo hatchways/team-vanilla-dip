@@ -19,6 +19,8 @@ const conversationRouter = require("./routes/conversation");
 const messageRouter = require("./routes/message");
 const awsRouter = require("./routes/aws");
 const paymentRouter = require("./routes/payment");
+const awsRouter = require("./routes/aws")
+const notificationRouter = require("./routes/notification")
 
 const { json, urlencoded } = express;
 
@@ -58,9 +60,11 @@ io.use(function(socket, next){
   })
 
 
-  socket.on("sendMessage", ({senderId, receiverId,text})=>{
-    const user = getUser(receiverId);
-    io.to(user.socketId).emit('getMessage', {senderId, text, createdAt: new Date().getTime()})
+  socket.on("sendMessage", ({receiverId, ...rest})=>{
+    const activeUser = getUser(receiverId);
+    if (activeUser) {
+      io.to(activeUser.socketId).emit('getMessage', {...rest});
+    }
   })
   
   socket.on('disconnect', () => {
@@ -90,6 +94,7 @@ app.use("/chat", conversationRouter);
 app.use("/chat/message", messageRouter);
 app.use("/aws",awsRouter);
 app.use("/payment", paymentRouter);
+app.use("/notification", notificationRouter)
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));

@@ -63,13 +63,13 @@ exports.updateContestById = asyncHandler(async (req, res, next) => {
 exports.getContestById = asyncHandler(async (req, res, next) => {
   const contestID = req.params.id;
   try {
-    const foundContest = await Contest.findById({ _id: contestID });
+    const foundContest = await Contest.findById({ _id: contestID }).populate('userID');
     if (!foundContest) {
     return res.status(404).json({ status: "contest not found!!" });
     }
     res.status(200).json({
     status: "contest found!!",
-    contest: foundContest,
+    success: foundContest,
     });
   } catch (error) {
     return res.status(500).json({ error });
@@ -141,7 +141,7 @@ exports.createSubmission = asyncHandler(async (req, res, next) => {
 exports.getSubmissionByContestId = asyncHandler(async (req, res, next) => {
     const contestId = req.params.id;
     try {
-        const foundSubmission = await Submission.find({ contestID: contestId });
+        const foundSubmission = await Submission.find({ contestID: contestId }).populate('userID');
         if (!foundSubmission) {
             return res.status(404).json({ status: "contest not found!!" });
         }

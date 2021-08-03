@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useStyles from '../useStyles';
+import { useSocket } from '../../../context/useSocketContext';
+import { useMessages } from '../../../context/useMessagingContext';
 import MessageList from './MessageList';
 import pushNewMessage from '../../../helpers/APICalls/createNewMessage';
 import { MessagingData, Message } from '../../../interface/Message';
@@ -12,10 +14,31 @@ interface Props {
 
 export default function MessagingContainer({ convo }: Props): JSX.Element {
   const classes = useStyles();
-
   const [newMessage, setNewMessage] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
   const [messages, setMessages] = useState<Message[] | []>(convo.messages);
+  const [arrivalMessage, setArrivalMessage] = useState<Message | null>(null);
+
+  const { socket } = useSocket();
+  const { updateConversations } = useMessages();
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('getMessage', (message) => {
+        setArrivalMessage(message);
+      });
+    }
+  }, [socket]);
+
+  useEffect(() => {
+    setMessages(convo.messages);
+  }, [convo]);
+
+  useEffect(() => {
+    if (arrivalMessage && convo.conversation.participants.includes(arrivalMessage.senderID)) {
+      setMessages((prev) => [...prev, arrivalMessage]);
+    }
+  }, [arrivalMessage, convo]);
 
   const handleNewMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewMessage(e.target.value);
@@ -23,15 +46,28 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
 
   const handleNewMessageSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!newMessage) return;
+
     setSubmitting(true);
     setNewMessage('');
 
     const response = await pushNewMessage(convo.conversation._id, newMessage);
 
-    if (response && response.message) {
+    if (response && response.message && socket) {
       const updatedMessages: Message[] = [...messages, response.message];
-      setMessages(updatedMessages);
+      const emitMessage = {
+        receiverId: convo.participant?._id,
+        ...response.message,
+      };
+      socket.emit('sendMessage', emitMessage);
 
+      setMessages(updatedMessages);
+      updateConversations({
+        conversation: convo.conversation,
+        participant: convo.participant,
+        messages: updatedMessages,
+        lastMessage: updatedMessages[updatedMessages.length - 1],
+      });
       setSubmitting(false);
     }
   };
