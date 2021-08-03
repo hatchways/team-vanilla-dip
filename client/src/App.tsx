@@ -10,6 +10,7 @@ import ContestPage from './pages/SubmissionPage/SubmissionPage';
 import Submit from './pages/SubmissionPage/Submit';
 import Contest from './pages/Contest/Contest';
 import Messages from './pages/Messages/Messages';
+import PersonalInformation from './pages/PersonalInformation/PersonalInformation';
 import { MessagesProvider } from './context/useMessagingContext';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
@@ -18,7 +19,6 @@ import { SnackBarProvider } from './context/useSnackbarContext';
 import './App.css';
 import { ContestProvider } from './context/useContestContext';
 import { NotificationProvider } from './context/useNotificationContext';
-import NotificationBubble from './components/NotificationBubble/NotificationBubble';
 
 function App(): JSX.Element {
   return (
@@ -43,6 +43,9 @@ function App(): JSX.Element {
                     </ProtectedRoute>
                     <ProtectedRoute exact path="/profile">
                       <Profile />
+                    </ProtectedRoute>
+                    <ProtectedRoute exact path="/personal-info">
+                      <PersonalInformation />
                     </ProtectedRoute>
                     <ProtectedRoute exact path="/contest/:id">
                       <ContestPage />

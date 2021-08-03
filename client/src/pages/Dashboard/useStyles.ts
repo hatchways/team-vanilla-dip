@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => ({
   largeUsername: {
     fontSize: 26,
     fontWeight: 'bold',
+    marginBottom: '10px',
   },
   editProfileButton: {
     fontWeight: 600,

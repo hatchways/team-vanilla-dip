@@ -35,11 +35,11 @@ export default function Dashboard(): JSX.Element {
         <Navbar />
         <AvatarDisplay
           style={{
-            height: '100px',
-            width: '100px',
+            height: '200px',
+            width: '200px',
+            marginTop: '50px',
           }}
           loggedIn={true}
-          user={loggedInUser}
         />
         <Typography className={classes.largeUsername} component="h1" variant="h5">
           {loggedInUser.username}

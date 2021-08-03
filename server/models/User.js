@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   register_date: {
     type: Date,
     default: Date.now
-  }
+  },
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
