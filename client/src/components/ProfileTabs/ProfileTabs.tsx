@@ -26,7 +26,7 @@ function ContestTabPanel(props: TabPanelProps) {
 
 export default function ProfileTabs(): JSX.Element {
   const [value, setValue] = React.useState(0);
-  const { allContests } = useContests();
+  const { allContestsByUser } = useContests();
   const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
     setValue(newValue);
   };
@@ -50,14 +50,14 @@ export default function ProfileTabs(): JSX.Element {
         <Box p={3}>
           <ContestTabPanel index={0} value={value}>
             <Grid container spacing={5}>
-              {allContests
+              {allContestsByUser
                 .filter((contest) => {
                   return new Date(contest.deadlineDate) > new Date();
                 })
                 .map((contest) => (
-                  <Grid item md={12} key={contest.id}>
+                  <Grid item md={12} key={contest._id}>
                     <CardPanel
-                      id={contest.id}
+                      id={contest._id}
                       imageFiles={contest.imageFiles}
                       title={contest.title}
                       description={contest.description}
@@ -68,14 +68,14 @@ export default function ProfileTabs(): JSX.Element {
             </Grid>
           </ContestTabPanel>
           <ContestTabPanel index={1} value={value}>
-            {allContests
+            {allContestsByUser
               .filter((context) => {
                 return new Date(context.deadlineDate) <= new Date();
               })
               .map((contest) => (
-                <Grid item md={12} key={contest.id}>
+                <Grid item md={12} key={contest._id}>
                   <CardPanel
-                    id={contest.id}
+                    id={contest._id}
                     imageFiles={contest.imageFiles}
                     title={contest.title}
                     description={contest.description}
