@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { AppBar, Toolbar, Avatar, Button, Box } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
@@ -8,7 +8,6 @@ import profile from '../../Images/profile.png';
 import useStyles from './useStyles';
 import { useHistory } from 'react-router-dom';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-
 const Navbar = (): JSX.Element => {
   const { loggedInUser, logout } = useAuth();
   const classes = useStyles();
@@ -22,7 +21,6 @@ const Navbar = (): JSX.Element => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return (
     <AppBar position="static" className={classes.root}>
       <Toolbar>
