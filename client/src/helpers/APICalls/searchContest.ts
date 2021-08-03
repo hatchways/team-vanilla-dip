@@ -1,9 +1,21 @@
-import { SearchContestApiData } from '../../interface/Contest';
+import { SearchContestApiData, ContestApiData } from '../../interface/Contest';
 import { FetchOptions } from '../../interface/FetchOptions';
 import { ArraySubmissionApiData, SingleSubmissionApiData } from '../../interface/Submission';
 
 interface Props {
   id: string;
+}
+
+export async function fetchContestById({ id }: Props): Promise<ContestApiData> {
+  const fetchOptions: FetchOptions = {
+    method: 'GET',
+    credentials: 'include',
+  };
+  return await fetch(`/contest/${id}`, fetchOptions)
+    .then((res) => res.json())
+    .catch(() => ({
+      error: { message: 'Unable to connect to server. Please try again' },
+    }));
 }
 
 export async function fetchAllContestByUserId({ id }: Props): Promise<SearchContestApiData> {

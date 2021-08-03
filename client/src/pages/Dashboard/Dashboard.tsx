@@ -7,8 +7,6 @@ import { Box, Typography, Button } from '@material-ui/core';
 
 import useStyles from './useStyles';
 import { useAuth } from '../../context/useAuthContext';
-import { useSocket } from '../../context/useSocketContext';
-import { useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import AvatarDisplay from '../../components/AvatarDisplay/AvatarDisplay';
 import ProfileTabs from '../../components/ProfileTabs/ProfileTabs';
@@ -16,12 +14,6 @@ import ProfileTabs from '../../components/ProfileTabs/ProfileTabs';
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
-
-  const { initSocket } = useSocket();
-
-  useEffect(() => {
-    initSocket();
-  }, [initSocket]);
 
   if (loggedInUser === undefined) return <CircularProgress />;
   if (!loggedInUser) {
@@ -35,11 +27,11 @@ export default function Dashboard(): JSX.Element {
         <Navbar />
         <AvatarDisplay
           style={{
-            height: '100px',
-            width: '100px',
+            height: '200px',
+            width: '200px',
+            marginTop: '50px',
           }}
           loggedIn={true}
-          user={loggedInUser}
         />
         <Typography className={classes.largeUsername} component="h1" variant="h5">
           {loggedInUser.username}

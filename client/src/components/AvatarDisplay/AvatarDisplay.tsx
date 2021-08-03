@@ -1,15 +1,18 @@
 import Avatar from '@material-ui/core/Avatar';
-import { User } from '../../interface/User';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import * as React from 'react';
+import { useAuth } from '../../context/useAuthContext';
 
 interface Props {
   loggedIn: boolean;
-  user: User;
   style?: React.CSSProperties | undefined;
 }
 
-const AvatarDisplay = ({ user, style }: Props): JSX.Element => {
-  return <Avatar style={style} alt="Profile Image" src={`https://robohash.org/${user.email}.png`} />;
+const AvatarDisplay = ({ style }: Props): JSX.Element => {
+  const { loggedInUser } = useAuth();
+  if (loggedInUser === undefined || !loggedInUser || loggedInUser.profile === undefined) return <CircularProgress />;
+
+  return <Avatar style={style} alt="Profile Image" src={loggedInUser.profile.profileImage} />;
 };
 
 export default AvatarDisplay;

@@ -15,6 +15,7 @@ export const ContestProvider: FunctionComponent = ({ children }): JSX.Element =>
   const [allContestsByUser, setAllContestsByUser] = useState<Contest[] | []>([]);
   const [allContests, setAllContests] = useState<Contest[] | []>([]);
   const { loggedInUser } = useAuth();
+
   // get all contests and submission by userID
   useEffect(() => {
     if (loggedInUser) {
@@ -33,7 +34,11 @@ export const ContestProvider: FunctionComponent = ({ children }): JSX.Element =>
   useEffect(() => {
     const getAllContests = async () => {
       const contests = await fetchAllContests();
-      setAllContests(contests?.contests || []);
+      if (contests.contests && contests.contests.length > 0) {
+        setAllContests(contests.contests);
+      } else {
+        setAllContests([]);
+      }
     };
     getAllContests();
   }, []);
