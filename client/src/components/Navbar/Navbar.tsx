@@ -2,9 +2,9 @@ import { useRef, useState } from 'react';
 import { AppBar, Toolbar, Avatar, Button, Box } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { useAuth } from '../../context/useAuthContext';
 import logo from '../../Images/logo.png';
-import profile from '../../Images/profile.png';
 import useStyles from './useStyles';
 import { useHistory } from 'react-router-dom';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
@@ -70,7 +70,15 @@ const Navbar = (): JSX.Element => {
         {loggedInUser && (
           <Box className={classes.navButtons} justifyContent="space-between" alignItems="center">
             <Button size="large" className={classes.button} onClick={handleClick}>
-              <Avatar alt={'Placeholder for profile username'} src={profile} className={classes.avatar}></Avatar>
+              {loggedInUser.profile === undefined ? (
+                <CircularProgress />
+              ) : (
+                <Avatar
+                  alt={'Placeholder for profile username'}
+                  src={loggedInUser.profile.profileImage}
+                  className={classes.avatar}
+                ></Avatar>
+              )}
               Account
               <ArrowDropDownIcon fontSize="small" />
             </Button>
