@@ -11,6 +11,7 @@ import Submit from './pages/SubmitPage/Submit';
 import Contest from './pages/Contest/Contest';
 import Messages from './pages/Messages/Messages';
 import PersonalInformation from './pages/PersonalInformation/PersonalInformation';
+import Notification from './pages/Notifications/Notification';
 import { MessagesProvider } from './context/useMessagingContext';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
@@ -49,6 +50,9 @@ function App(): JSX.Element {
                       </ProtectedRoute>
                       <ProtectedRoute exact path="/personal-info">
                         <PersonalInformation />
+                      </ProtectedRoute>
+                      <ProtectedRoute exact path="/notifications">
+                        <Notification />
                       </ProtectedRoute>
                       <ProtectedRoute exact path="/contest/:id">
                         <ContestPage />

@@ -24,6 +24,9 @@ const useStyles = makeStyles(() => ({
       color: '#000',
     },
   },
+  mainContent: {
+    flex: 1,
+  },
 }));
 
 export default useStyles;

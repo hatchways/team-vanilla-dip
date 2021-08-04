@@ -46,7 +46,7 @@ function SidePanel({ children }: PanelProps): JSX.Element {
                   <ListItem button component={Link} to="#">
                     <ListItemText primary="Payment details"></ListItemText>
                   </ListItem>
-                  <ListItem button component={Link} to="#">
+                  <ListItem button component={Link} to="/notifications">
                     <ListItemText primary="Notifications"></ListItemText>
                   </ListItem>
                 </List>
@@ -54,7 +54,9 @@ function SidePanel({ children }: PanelProps): JSX.Element {
             </Paper>
           </Grid>
           <Grid item>
-            <Box p={5}>{children}</Box>
+            <Box p={5} className={classes.mainContent}>
+              {children}
+            </Box>
           </Grid>
         </Grid>
       </Box>
