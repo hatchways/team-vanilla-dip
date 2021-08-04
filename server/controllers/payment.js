@@ -45,13 +45,12 @@ exports.createCustomer = asyncHandler(async (req, res) => {
 
   const existingStripeCustomer = await StripeCustomer.find({ userID });
 
+  if (existingStripeCustomer[0]) {
+    return res.status(200).json({
+      existingStripeCustomer: true,
+    });
+  }
   try {
-    if (existingStripeCustomer[0]) {
-      return res.status(200).json({
-        existingStripeCustomer: true,
-      });
-    }
-
     const user = await User.findById(userID);
 
     const customer = await stripe.customers.create({
@@ -75,6 +74,24 @@ exports.createCustomer = asyncHandler(async (req, res) => {
     res.status(201).json({
       existingStripeCustomer: false,
     });
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+});
+
+exports.getSetupIntent = asyncHandler(async (req, res) => {
+  const userID = req.user.id;
+
+  const [stripeCustomer] = await StripeCustomer.find({ userID });
+
+  if (!stripeCustomer) {
+    return res.status(404).json({ error: 'No Customer found' });
+  }
+
+  try {
+    const intent = await stripe.setupIntents.retrieve(stripeCustomer.cardSetupID);
+
+    res.status(200).json(intent);
   } catch (error) {
     return res.status(500).json({ error });
   }
