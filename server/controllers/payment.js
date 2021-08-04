@@ -44,12 +44,10 @@ exports.createCustomer = asyncHandler(async (req, res) => {
   const userID = req.user.id;
 
   const existingStripeCustomer = await StripeCustomer.find({ userID });
-  
+
   try {
     if (existingStripeCustomer[0]) {
-      const customer = await stripe.customers.retrieve(existingStripeCustomer[0].stripeCustomerID);
       return res.status(200).json({
-        customerID: customer.id,
         existingStripeCustomer: true,
       });
     }
@@ -61,15 +59,20 @@ exports.createCustomer = asyncHandler(async (req, res) => {
       name: user.username,
     });
 
+    const cardSetup = await stripe.setupIntents.create({
+      payment_method_types: ['card'],
+      customer: customer.id,
+    });
+
     const newStripeCustomer = new StripeCustomer({
       stripeCustomerID: customer.id,
       userID,
+      cardSetupID: cardSetup.id,
     });
 
     await newStripeCustomer.save();
 
     res.status(201).json({
-      customerID: customer.id,
       existingStripeCustomer: false,
     });
   } catch (error) {
