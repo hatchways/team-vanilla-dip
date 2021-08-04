@@ -4,38 +4,36 @@ const Contest = require('../models/Contest');
 const User = require('../models/User');
 const StripeCustomer = require('../models/StripeCustomer');
 
-//Based on ContestID, create a session and send a session id
-exports.createCheckoutSession = asyncHandler(async (req, res) => {
+//charge customer off session
+exports.chargeCustomer = asyncHandler(async (req, res) => {
   const { contestID } = req.params;
   const userID = req.user.id;
   try {
     const contest = await Contest.findById(contestID);
-    const user = await User.findById(userID);
+    const [stripeCustomer] = await StripeCustomer.find({ userID });
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      customer_email: user.email,
-      client_reference_id: contestID,
-      line_items: [
-        {
-          name: contest.title,
-          description: contest.description,
-          amount: contest.prizeAmount * 100,
-          currency: 'cad',
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: `${process.env.WEB_APP_URL}/`,
-      cancel_url: `${process.env.WEB_APP_URL}/contest`,
+    const paymentMethods = await stripe.paymentMethods.list({
+      customer: stripeCustomer.stripeCustomerID,
+      type: 'card',
     });
 
-    res.status(201).json({
+    await stripe.paymentIntents.create({
+      amount: contest.prizeAmount * 100,
+      currency: 'cad',
+      customer: stripeCustomer.stripeCustomerID,
+      payment_method: paymentMethods.data[paymentMethods.data.length - 1].id,
+      off_session: true,
+      confirm: true,
+    });
+
+    res.status(200).json({
       status: 'success',
-      session,
     });
   } catch (error) {
-    return res.status(500).json({ error });
+    if (error.code === 'authentication_required') {
+      const paymentIntent = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
+      return res.status(401).json({ payment_intent: paymentIntent });
+    }
   }
 });
 
@@ -43,9 +41,9 @@ exports.createCheckoutSession = asyncHandler(async (req, res) => {
 exports.createCustomer = asyncHandler(async (req, res) => {
   const userID = req.user.id;
 
-  const existingStripeCustomer = await StripeCustomer.find({ userID });
+  const [stripeCustomer] = await StripeCustomer.find({ userID });
 
-  if (existingStripeCustomer[0]) {
+  if (stripeCustomer) {
     return res.status(200).json({
       existingStripeCustomer: true,
     });
@@ -91,7 +89,7 @@ exports.getSetupIntent = asyncHandler(async (req, res) => {
   try {
     const intent = await stripe.setupIntents.retrieve(stripeCustomer.cardSetupID);
 
-    res.status(200).json({intent_secret: intent.client_secret});
+    res.status(200).json({ intent_secret: intent.client_secret });
   } catch (error) {
     return res.status(500).json({ error });
   }
