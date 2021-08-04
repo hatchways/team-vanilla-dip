@@ -27,6 +27,10 @@ function Profile(): JSX.Element {
   };
 
   const cancelUpload = () => {
+    const uploadBtn = document.getElementById('profile-button');
+    if (uploadBtn) {
+      uploadBtn.value = null;
+    }
     setCurrentFile(null);
     setPreviewUrl('');
   };
@@ -62,7 +66,7 @@ function Profile(): JSX.Element {
           Profile
         </Typography>
         <Box my={2}>
-          <Grid container className={classes.alignCenter}>
+          <Grid container justifyContent="center" alignItems="center" direction="column">
             <Grid item className={classes.imageContainer}>
               {processing ? (
                 <CircularProgress className={classes.circularProgress} />
@@ -94,14 +98,21 @@ function Profile(): JSX.Element {
                 </Box>
               )}
             </Grid>
-            <Grid item className={classes.ml20}>
-              <Typography component="h4" variant="h3">
+            <Grid item className={classes.textCenter}>
+              <Typography component="h4" variant="h2">
                 {loggedInUser.username}
               </Typography>
+              <br />
               <Typography component="p">Email: {loggedInUser.email}</Typography>
               <Box my={1}>
-                <Button onClick={imageUpload}>Update Image</Button>
-                {currentFile && <Button onClick={cancelUpload}>Reset Image</Button>}
+                <Button onClick={imageUpload} className={classes.btn}>
+                  Update Image
+                </Button>
+                {currentFile && (
+                  <Button onClick={cancelUpload} className={classes.ml20}>
+                    Reset Image
+                  </Button>
+                )}
               </Box>
             </Grid>
           </Grid>
