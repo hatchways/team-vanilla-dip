@@ -1,12 +1,14 @@
+import { User } from './User';
+
 export interface Contest {
   title: string;
   description: string;
   prizeAmount: number;
   deadlineDate: string;
-  userID: string;
+  userID?: User;
   dateCreated: string;
   imageFiles: string[];
-  id: string;
+  _id: string;
 }
 
 export interface ContestApiData {

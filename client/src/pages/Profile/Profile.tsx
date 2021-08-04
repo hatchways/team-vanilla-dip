@@ -1,80 +1,113 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Grid, CssBaseline, Box, Tabs, Tab, Typography, Paper, useMediaQuery } from '@material-ui/core';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import React, { useState } from 'react';
+import { Grid, Typography, Box, Avatar, CircularProgress, InputLabel, Input, Button } from '@material-ui/core';
+import CameraAltOutlinedIcon from '@material-ui/icons/CameraAltOutlined';
 
-import Navbar from '../../components/Navbar/Navbar';
+import SidePanel from '../../components/SidePanel/SidePanel';
+import { useSnackBar } from '../../context/useSnackbarContext';
+import { useAuth } from '../../context/useAuthContext';
 import useStyles from './useStyles';
-
-interface ProfilePanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function ProfileTabPanel(props: ProfilePanelProps) {
-  const { children, value, index, ...other } = props;
-  const classes = useStyles();
-  return (
-    <div role="tabpanel" hidden={value !== index} id={`tabpanel-${index}`} aria-labelledby={`tab-${index}`} {...other}>
-      {value === index && (
-        <Box p={3}>
-          <Grid container>
-            <Link to="/dashboard" className={classes.linkStyle}>
-              <ArrowBackIosIcon fontSize="small" /> Dashboard
-            </Link>
-          </Grid>
-          <Box py={3}>{children}</Box>
-        </Box>
-      )}
-    </div>
-  );
-}
+import { uploadImage } from '../../helpers/APICalls/uploadImage';
+import { updateProfile } from '../../helpers/APICalls/updateProfile';
 
 function Profile(): JSX.Element {
-  const [value, setValue] = React.useState(0);
+  const { loggedInUser, updateLoginContext } = useAuth();
+  const [previewUrl, setPreviewUrl] = useState<string>();
+  const [currentFile, setCurrentFile] = useState<File | null>(null);
+  const [processing, setProcessing] = useState<boolean>(false);
   const classes = useStyles();
-  const mediumViewport = useMediaQuery('(min-width:768px)');
+  const { updateSnackBarMessage } = useSnackBar();
 
-  const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
-    setValue(newValue);
+  if (loggedInUser === undefined || !loggedInUser || loggedInUser.profile === undefined) return <CircularProgress />;
+
+  const fileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setCurrentFile(event.target.files[0]);
+      setPreviewUrl(URL.createObjectURL(event.target.files[0]));
+    }
+  };
+
+  const cancelUpload = () => {
+    setCurrentFile(null);
+    setPreviewUrl('');
+  };
+
+  const imageUpload = () => {
+    if (currentFile) {
+      setProcessing(true);
+      uploadImage({ image: currentFile }).then((resp) => {
+        if (resp.success) {
+          updateProfile({ profileImage: resp.success }).then((resp) => {
+            if (resp.success) {
+              updateLoginContext(resp.success);
+            } else {
+              setProcessing(false);
+              updateSnackBarMessage(resp.status);
+            }
+          });
+          setProcessing(false);
+        } else {
+          setProcessing(false);
+          updateSnackBarMessage(resp.error ?? '');
+        }
+      });
+    } else {
+      updateSnackBarMessage('Please Select an Image to upload');
+    }
   };
 
   return (
-    <Grid container component="main">
-      <CssBaseline />
-      <Box width="100%">
-        <Navbar />
-        <Grid container className={classes.root}>
-          <Paper elevation={3} className={classes.paperTab}>
-            <Tabs
-              orientation={mediumViewport ? 'vertical' : 'horizontal'}
-              value={value}
-              onChange={handleChange}
-              variant="scrollable"
-            >
-              <Tab label="Profile" />
-              <Tab label="Personal Information" />
-              <Tab label="Payment Details" />
-              <Tab label="Notification" />
-              <Tab label="Password" />
-            </Tabs>
-          </Paper>
-          <Box p={5} className={classes.displayPanel}>
-            <ProfileTabPanel value={value} index={0}>
-              <Typography component="h2" variant="h2">
-                Profile
+    <SidePanel>
+      <Grid>
+        <Typography component="h2" variant="h2">
+          Profile
+        </Typography>
+        <Box my={2}>
+          <Grid container className={classes.alignCenter}>
+            <Grid item className={classes.imageContainer}>
+              {processing ? (
+                <CircularProgress className={classes.circularProgress} />
+              ) : (
+                [
+                  previewUrl ? (
+                    <Avatar
+                      alt={'Placeholder for profile username'}
+                      src={previewUrl}
+                      className={classes.large}
+                      key="previewImage"
+                    />
+                  ) : (
+                    <Avatar
+                      alt={'Placeholder for profile username'}
+                      src={loggedInUser.profile.profileImage}
+                      className={classes.large}
+                      key="profileImage"
+                    />
+                  ),
+                ]
+              )}
+              {!processing && (
+                <Box className={classes.cameraImage}>
+                  <InputLabel htmlFor="profile-button" className={classes.fileInputLabel}>
+                    <CameraAltOutlinedIcon fontSize="large" />
+                  </InputLabel>
+                  <Input id="profile-button" type="file" className={classes.fileInput} onChange={fileChange} />
+                </Box>
+              )}
+            </Grid>
+            <Grid item className={classes.ml20}>
+              <Typography component="h4" variant="h3">
+                {loggedInUser.username}
               </Typography>
-            </ProfileTabPanel>
-            <ProfileTabPanel value={value} index={2}>
-              <Typography component="h2" variant="h2">
-                Payment Details
-              </Typography>
-            </ProfileTabPanel>
-          </Box>
-        </Grid>
-      </Box>
-    </Grid>
+              <Typography component="p">Email: {loggedInUser.email}</Typography>
+              <Box my={1}>
+                <Button onClick={imageUpload}>Update Image</Button>
+                {currentFile && <Button onClick={cancelUpload}>Reset Image</Button>}
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      </Grid>
+    </SidePanel>
   );
 }
 
