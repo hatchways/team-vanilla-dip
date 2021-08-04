@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useStripe, useElements, CardNumberElement, CardCvcElement, CardExpiryElement } from '@stripe/react-stripe-js';
-import { Grid, Typography, Button } from '@material-ui/core';
+import { Grid, Typography, Button, CircularProgress } from '@material-ui/core';
+import { useSnackBar } from '../../../context/useSnackbarContext';
+import getSetupIntent from '../../../helpers/APICalls/getSetupIntent';
+import { useHistory } from 'react-router-dom';
 import useStyles from './useStyles';
 
 const useOptions = () => {
@@ -29,24 +32,48 @@ const StripeCard = (): JSX.Element => {
   const options = useOptions();
 
   const classes = useStyles();
+  const { updateSnackBarMessage } = useSnackBar();
+  const history = useHistory();
+
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
+    setLoading(true);
 
     if (!stripe || !elements) {
-      // Stripe.js has not loaded yet. Make sure to disable
-      // form submission until Stripe.js has loaded.
+      updateSnackBarMessage('Payment system not available. Please try again');
+      setLoading(false);
       return;
     }
 
     const stripeCardNumberElement = elements.getElement(CardNumberElement);
 
     if (stripeCardNumberElement) {
-      const payload = await stripe.createPaymentMethod({
-        type: 'card',
-        card: stripeCardNumberElement,
-      });
-      console.log('[PaymentMethod]', payload);
+      const intent = await getSetupIntent();
+
+      if (intent.error) {
+        setLoading(false);
+        history.push('/contest');
+        updateSnackBarMessage('Please create a contest before adding the card information. Thank you');
+        return;
+      }
+
+      if (intent.intent_secret) {
+        const result = await stripe.confirmCardSetup(intent.intent_secret, {
+          payment_method: {
+            card: stripeCardNumberElement,
+          },
+        });
+        if (result.error) {
+          setLoading(false);
+          updateSnackBarMessage('Cannot add card. Please try again.');
+          return;
+        } else {
+          setLoading(false);
+          updateSnackBarMessage('Successfully added the card');
+        }
+      }
     }
   };
 
@@ -90,7 +117,7 @@ const StripeCard = (): JSX.Element => {
             type="submit"
             disabled={!stripe}
           >
-            Add Card
+            {loading ? <CircularProgress /> : `Add Card`}
           </Button>
         </Grid>
       </Grid>

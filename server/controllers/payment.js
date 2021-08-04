@@ -91,7 +91,7 @@ exports.getSetupIntent = asyncHandler(async (req, res) => {
   try {
     const intent = await stripe.setupIntents.retrieve(stripeCustomer.cardSetupID);
 
-    res.status(200).json(intent);
+    res.status(200).json({intent_secret: intent.client_secret});
   } catch (error) {
     return res.status(500).json({ error });
   }
