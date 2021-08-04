@@ -7,7 +7,7 @@ function PersonalInformation(): JSX.Element {
     <SidePanel>
       <Grid>
         <Typography component="h2" variant="h2">
-          PersonalInformation
+          Personal Information
         </Typography>
       </Grid>
     </SidePanel>
