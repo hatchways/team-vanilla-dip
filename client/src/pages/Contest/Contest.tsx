@@ -61,19 +61,20 @@ export default function Contest(): JSX.Element {
       setSubmitting(false);
       updateSnackBarMessage(contest.error.message);
     } else if (contest.success) {
-      history.push('/dashboard');
+      const stripeUser = await stripeCustomer();
+
+      if (stripeUser.existingStripeCustomer) {
+        setSubmitting(false);
+        updateSnackBarMessage('Card on file will be charged when you select the winner!');
+        history.push('/dashboard');
+      } else {
+        setSubmitting(false);
+        history.push('/payment-details');
+      }
     } else {
       console.error({ contest });
       setSubmitting(false);
       updateSnackBarMessage('An unexpected error occured. Please try again');
-    }
-
-    const stripeUser = await stripeCustomer();
-
-    if (stripeUser.existingStripeCustomer) {
-      console.log('Existing Stripe User');
-    } else {
-      console.log('New Stripe User Created.');
     }
   };
 
