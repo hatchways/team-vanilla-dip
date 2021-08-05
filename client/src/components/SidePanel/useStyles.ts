@@ -13,7 +13,18 @@ const useStyles = makeStyles(() => ({
   },
   navSide: {
     '& a': {
-      paddingLeft: '50px',
+      paddingLeft: '70px',
+    },
+    '& a.Mui-selected': {
+      position: 'relative',
+    },
+    '& a.Mui-selected::before': {
+      position: 'absolute',
+      content: '""',
+      left: '10px',
+      width: '40px',
+      height: '2px',
+      backgroundColor: '#000',
     },
     '& .MuiTypography-body1': {
       fontSize: '16px',
@@ -23,6 +34,9 @@ const useStyles = makeStyles(() => ({
     '& .Mui-selected .MuiTypography-body1': {
       color: '#000',
     },
+  },
+  mainContent: {
+    flex: 1,
   },
 }));
 
