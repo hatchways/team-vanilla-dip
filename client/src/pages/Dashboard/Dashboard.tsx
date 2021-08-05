@@ -42,7 +42,7 @@ export default function Dashboard(): JSX.Element {
           color="primary"
           className={classes.editProfileButton}
           component={Link}
-          to="/profile/"
+          to="/profile"
         >
           Edit profile
         </Button>

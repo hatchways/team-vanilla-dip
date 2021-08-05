@@ -14,7 +14,6 @@ const useStyles = makeStyles(() => ({
   navSide: {
     '& a': {
       paddingLeft: '70px',
-      margin: '10px 0px',
     },
     '& a.Mui-selected': {
       position: 'relative',

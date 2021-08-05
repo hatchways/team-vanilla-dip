@@ -24,13 +24,12 @@ function Profile(): JSX.Element {
       setCurrentFile(event.target.files[0]);
       setPreviewUrl(URL.createObjectURL(event.target.files[0]));
     }
+    if (currentFile == null && !previewUrl) {
+      event.target.value = '';
+    }
   };
 
   const cancelUpload = () => {
-    const uploadBtn = document.getElementById('profile-button');
-    if (uploadBtn) {
-      uploadBtn.value = null;
-    }
     setCurrentFile(null);
     setPreviewUrl('');
   };
