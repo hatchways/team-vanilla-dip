@@ -46,6 +46,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100px !important',
     height: '100px !important',
   },
+  textCenter: {
+    textAlign: 'center',
+  },
+  btn: {
+    backgroundColor: 'black',
+    color: '#fff',
+    '&:hover': {
+      color: '#000',
+    },
+  },
 }));
 
 export default useStyles;
