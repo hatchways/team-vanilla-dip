@@ -10,11 +10,14 @@ const {
     getSubmissionByContestId
 } = require("../controllers/contest");
 
+const { sendWinnerEmail } = require("../controllers/gmail");
+
 const { createSubmission } = require('../controllers/submission')
 
 // CREATE  
 router.route("/create").post(protect, createContest);
 router.route("/:id/submission").post(protect,createSubmission)
+router.route("/:id/winner").post(protect, sendWinnerEmail)
 
 // READ
 router.route("/:id").get(getContestById);
