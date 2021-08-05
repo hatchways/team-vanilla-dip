@@ -1,6 +1,6 @@
 const Submission = require("../models/Submission");
 const Contest = require("../models/Contest");
-const asyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler")
 
 exports.createSubmission = asyncHandler(async (req, res, next) => {
     const userID = req.user.id;
