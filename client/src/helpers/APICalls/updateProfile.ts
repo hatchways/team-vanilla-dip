@@ -13,7 +13,6 @@ export async function updateProfile({ profileImage }: Props): Promise<ProfileApi
     body: JSON.stringify({ profileImage, status }),
     credentials: 'include',
   };
-  console.log(`Posting ${profileImage}`);
   return await fetch(`/users/profile`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({

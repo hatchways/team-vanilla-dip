@@ -55,7 +55,6 @@ export async function addSubmissionToContest({
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ imageFile }),
   };
-  console.log(JSON.stringify({ imageFile }));
   return await fetch(`/contest/${contestID}/submission`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({

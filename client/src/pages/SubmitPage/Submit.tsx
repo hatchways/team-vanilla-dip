@@ -87,7 +87,9 @@ function FileUploader(): JSX.Element {
                   contest.userID == undefined
                     ? updateSnackBarMessage('Could not send Notification to contest owner')
                     : createSubmitNotification({ receiverID: contest.userID._id }).then((resp) => {
-                        console.log(resp);
+                        if (resp.notification) {
+                          updateSnackBarMessage('Sent notification to contest owner');
+                        }
                       });
                 }
                 history.goBack();

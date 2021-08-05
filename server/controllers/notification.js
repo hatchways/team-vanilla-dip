@@ -20,7 +20,6 @@ exports.createNotification = asyncHandler(async (req, res, next) => {
         if (!notification) {
             return res.status(400).json({ status: "submission not saved"})
         }
-        console.log('Saved');
         return res.status(201).json({
             status: "notification sent",
             notification
