@@ -5,7 +5,6 @@ import SidePanel from '../../components/SidePanel/SidePanel';
 
 function Notification(): JSX.Element {
   const { allNotifications, readNotification } = useNotifications();
-  console.log(allNotifications);
   return (
     <SidePanel>
       <Grid>
