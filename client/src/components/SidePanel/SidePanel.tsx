@@ -49,7 +49,7 @@ function SidePanel({ children }: PanelProps): JSX.Element {
                   >
                     <ListItemText primary="Personal Information"></ListItemText>
                   </ListItem>
-                  <ListItem button component={Link} to="#">
+                  <ListItem button component={Link} to="/payment-details">
                     <ListItemText primary="Payment details"></ListItemText>
                   </ListItem>
                   <ListItem button component={Link} to="#">
