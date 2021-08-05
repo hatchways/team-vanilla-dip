@@ -11,6 +11,7 @@ import { useSnackBar } from '../../context/useSnackbarContext';
 import createDeadlineDate from './ContestForm/helpers/createDeadlineDate.js';
 import useStyles from './useStyles';
 import { ContestForm } from './ContestForm/ContestForm';
+import stripeCustomer from '../../helpers/APICalls/createStripeCustomer';
 import Navbar from '../../components/Navbar/Navbar';
 import createContest from '../../helpers/APICalls/createContests';
 
@@ -18,7 +19,7 @@ export default function Contest(): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
   const { updateSnackBarMessage } = useSnackBar();
-  const handleSubmit = (
+  const handleSubmit = async (
     {
       title,
       description,
@@ -48,21 +49,29 @@ export default function Contest(): JSX.Element {
       imageFiles: string[];
     }>,
   ) => {
-    createContest(title, description, prizeAmount, createDeadlineDate(date, time, timeZone), imageFiles).then(
-      (data) => {
-        if (data.error) {
-          setSubmitting(false);
-          updateSnackBarMessage(data.error.message);
-        } else if (data.success) {
-          history.push('/dashboard');
-          updateSnackBarMessage('Created Contest Successfully');
-        } else {
-          console.error({ data });
-          setSubmitting(false);
-          updateSnackBarMessage('An unexpected error occured. Please try again');
-        }
-      },
+    const contest = await createContest(
+      title,
+      description,
+      prizeAmount,
+      createDeadlineDate(date, time, timeZone),
+      imageFiles,
     );
+
+    if (contest.error) {
+      setSubmitting(false);
+      updateSnackBarMessage(contest.error.message);
+    } else if (contest.success) {
+      const stripeUser = await stripeCustomer();
+
+      if (stripeUser.existingStripeCustomer) {
+        setSubmitting(false);
+        updateSnackBarMessage('Card on file will be charged when you select the winner!');
+        history.push('/dashboard');
+      } else {
+        setSubmitting(false);
+        history.push('/payment-details');
+      }
+    }
   };
 
   return (

@@ -31,7 +31,23 @@ interface ImageListProps {
 
 export default function Submit(): JSX.Element {
   const { loggedInUser } = useAuth();
-  if (loggedInUser === undefined || !loggedInUser) return <CircularProgress />;
+  const { id } = useParams<SubmissionParams>();
+  const [contest, setContest] = useState<Contest>();
+  const history = useHistory();
+
+  useEffect(() => {
+    const ac = new AbortController();
+    fetchContestById({ id: id }).then((res) => {
+      if (res.success) {
+        setContest(res.success as Contest);
+      }
+    });
+    return ac.abort();
+  }, [id]);
+
+  if (loggedInUser === undefined || !loggedInUser || contest?.userID == undefined) return <CircularProgress />;
+
+  if (loggedInUser.id == contest?.userID._id) history.goBack();
 
   return (
     <Grid container direction="column">
