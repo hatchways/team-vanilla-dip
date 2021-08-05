@@ -8,6 +8,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { useHistory, useParams, Link } from 'react-router-dom';
+
 import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
 import SubmissionTabs from '../../components/SubmissionTabs/SubmissionTabs';
@@ -15,8 +16,10 @@ import { fetchSubmissionByContestId, fetchContestById } from '../../helpers/APIC
 import { Contest } from '../../interface/Contest';
 import { Submission } from '../../interface/Submission';
 import { SubmissionParams } from '../SubmitPage/SubmissionParams';
+import { useAuth } from '../../context/useAuthContext';
 
 export default function SubmissionPage(): JSX.Element {
+  const { loggedInUser } = useAuth();
   const classes = useStyles();
   const { id } = useParams<SubmissionParams>();
   const [contest, setContest] = useState<Contest>();
@@ -42,6 +45,9 @@ export default function SubmissionPage(): JSX.Element {
     });
     return ac.abort();
   }, [id]);
+
+  if (loggedInUser === undefined || !loggedInUser || contest == undefined || contest.userID == undefined)
+    return <CircularProgress />;
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -80,9 +86,11 @@ export default function SubmissionPage(): JSX.Element {
               </Box>
             </Grid>
             <Grid item>
-              <Button color="primary" component={Link} className={classes.submitBtn} to={`/contest/${id}/submit`}>
-                Submit Design
-              </Button>
+              {loggedInUser.id != contest.userID._id && (
+                <Button color="primary" component={Link} className={classes.submitBtn} to={`/contest/${id}/submit`}>
+                  Submit Design
+                </Button>
+              )}
             </Grid>
           </Grid>
           <SubmissionTabs card={submissions} />

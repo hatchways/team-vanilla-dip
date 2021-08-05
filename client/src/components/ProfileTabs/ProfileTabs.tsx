@@ -68,21 +68,23 @@ export default function ProfileTabs(): JSX.Element {
             </Grid>
           </ContestTabPanel>
           <ContestTabPanel index={1} value={value}>
-            {allContestsByUser
-              .filter((context) => {
-                return new Date(context.deadlineDate) <= new Date();
-              })
-              .map((contest) => (
-                <Grid item md={12} key={contest._id}>
-                  <CardPanel
-                    id={contest._id}
-                    imageFiles={contest.imageFiles}
-                    title={contest.title}
-                    description={contest.description}
-                    prizeAmount={contest.prizeAmount}
-                  />
-                </Grid>
-              ))}
+            <Grid container spacing={5}>
+              {allContestsByUser
+                .filter((context) => {
+                  return new Date(context.deadlineDate) <= new Date();
+                })
+                .map((contest) => (
+                  <Grid item md={12} key={contest._id}>
+                    <CardPanel
+                      id={contest._id}
+                      imageFiles={contest.imageFiles}
+                      title={contest.title}
+                      description={contest.description}
+                      prizeAmount={contest.prizeAmount}
+                    />
+                  </Grid>
+                ))}
+            </Grid>
           </ContestTabPanel>
         </Box>
       </Paper>
