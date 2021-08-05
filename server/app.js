@@ -20,6 +20,7 @@ const messageRouter = require('./routes/message');
 const awsRouter = require('./routes/aws');
 const paymentRouter = require('./routes/payment');
 const notificationRouter = require('./routes/notification');
+const winnerRouter = require('./routes/winner');
 
 const { json, urlencoded } = express;
 
@@ -91,6 +92,7 @@ app.use('/chat/message', messageRouter);
 app.use('/aws', awsRouter);
 app.use('/payment', paymentRouter);
 app.use('/notification', notificationRouter);
+app.use('/winner', winnerRouter);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/client/build')));
