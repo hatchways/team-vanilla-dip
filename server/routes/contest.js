@@ -20,7 +20,7 @@ router.route("/:id/submission").post(protect,createSubmission)
 router.route("/:id").get(getContestById);
 router.route("/").get(getContests);
 router.route("/user/:id").get(protect, getContestsByUserId);
-router.route("/submission/:id").get(getSubmissionByContestId)
+router.route("/submission/:id").get(protect, getSubmissionByContestId)
 
 // UPDATE
 router.route("/:id").patch(updateContestById);
