@@ -5,7 +5,6 @@ const stripeCustomer = async (): Promise<StripeCustomer> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({}),
     credentials: 'include',
   };
   return await fetch(`/payment/customer`, fetchOptions)

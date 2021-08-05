@@ -11,8 +11,8 @@ const stripeCustomerSchema = new mongoose.Schema(
         ref: 'user',
         required: true
     },
-    cardSetupID:{
-      type: String,
+    cardSetupIDs:{
+      type: [String],
       required: true,
     }
   },

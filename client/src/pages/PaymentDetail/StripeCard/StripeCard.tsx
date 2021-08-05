@@ -48,10 +48,12 @@ const StripeCard = (): JSX.Element => {
     }
 
     const stripeCardNumberElement = elements.getElement(CardNumberElement);
+    const stripeCardExpiryElement = elements.getElement(CardExpiryElement);
+    const stripeCardCvcElement = elements.getElement(CardCvcElement);
 
     if (stripeCardNumberElement) {
       const intent = await getSetupIntent();
-
+      console.log(intent);
       if (intent.error) {
         setLoading(false);
         history.push('/contest');
@@ -65,13 +67,16 @@ const StripeCard = (): JSX.Element => {
             card: stripeCardNumberElement,
           },
         });
-        if (result.error) {
+        if (result.error && result.error.message) {
           setLoading(false);
-          updateSnackBarMessage('Cannot add card. Please try again.');
+          updateSnackBarMessage(result.error.message);
           return;
         } else {
           setLoading(false);
           updateSnackBarMessage('Successfully added the card');
+          stripeCardNumberElement?.clear();
+          stripeCardExpiryElement?.clear();
+          stripeCardCvcElement?.clear();
         }
       }
     }

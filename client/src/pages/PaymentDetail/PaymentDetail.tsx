@@ -6,12 +6,12 @@ import SidePanel from '../../components/SidePanel/SidePanel';
 import StripeCard from './StripeCard/StripeCard';
 import useStyles from './useStyles';
 
+const stripePromise = loadStripe(
+  'pk_test_51JJmDgLdhiAD8tsO4INyf5m6KgIz5LmKFo0UEmm8jtZvdKFEgOjHf4Uj3viu8hN52yI2lCqsAKcQeD5TxYpOmjs000ECyz2UoJ',
+);
+
 function PaymentDetail(): JSX.Element {
   const classes = useStyles();
-
-  const stripePromise = loadStripe(
-    'pk_test_51JJmDgLdhiAD8tsO4INyf5m6KgIz5LmKFo0UEmm8jtZvdKFEgOjHf4Uj3viu8hN52yI2lCqsAKcQeD5TxYpOmjs000ECyz2UoJ',
-  );
 
   return (
     <SidePanel>

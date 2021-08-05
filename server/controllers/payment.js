@@ -21,7 +21,7 @@ exports.chargeCustomer = asyncHandler(async (req, res) => {
       amount: contest.prizeAmount * 100,
       currency: 'cad',
       customer: stripeCustomer.stripeCustomerID,
-      payment_method: paymentMethods.data[paymentMethods.data.length - 1].id,
+      payment_method: paymentMethods.data[0].id,
       off_session: true,
       confirm: true,
     });
@@ -64,7 +64,7 @@ exports.createCustomer = asyncHandler(async (req, res) => {
     const newStripeCustomer = new StripeCustomer({
       stripeCustomerID: customer.id,
       userID,
-      cardSetupID: cardSetup.id,
+      cardSetupIDs: [cardSetup.id],
     });
 
     await newStripeCustomer.save();
@@ -81,16 +81,35 @@ exports.getSetupIntent = asyncHandler(async (req, res) => {
   const userID = req.user.id;
 
   const [stripeCustomer] = await StripeCustomer.find({ userID });
+  console.log(stripeCustomer.cardSetupIDs.length);
 
   if (!stripeCustomer) {
     return res.status(404).json({ error: 'No Customer found' });
   }
 
   try {
-    const intent = await stripe.setupIntents.retrieve(stripeCustomer.cardSetupID);
+    const firstIntent = await stripe.setupIntents.retrieve(stripeCustomer.cardSetupIDs[0]);
+    if (stripeCustomer.cardSetupIDs.length === 1 && firstIntent.status !== 'succeeded') {
+      return res.status(200).json({ intent_secret: firstIntent.client_secret });
+    }
 
-    res.status(200).json({ intent_secret: intent.client_secret });
+    const cardSetup = await stripe.setupIntents.create({
+      payment_method_types: ['card'],
+      customer: stripeCustomer.stripeCustomerID,
+    });
+
+    await StripeCustomer.findOneAndUpdate(
+      { stripeCustomerID: stripeCustomer.stripeCustomerID },
+      { cardSetupIDs: [...stripeCustomer.cardSetupIDs, cardSetup.id] },
+    );
+
+    const newIntent = await stripe.setupIntents.retrieve(
+      cardSetup.id,
+    );
+
+    res.status(200).json({ intent_secret: newIntent.client_secret });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error });
   }
 });

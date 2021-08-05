@@ -71,10 +71,6 @@ export default function Contest(): JSX.Element {
         setSubmitting(false);
         history.push('/payment-details');
       }
-    } else {
-      console.error({ contest });
-      setSubmitting(false);
-      updateSnackBarMessage('An unexpected error occured. Please try again');
     }
   };
 
