@@ -38,26 +38,18 @@ function SidePanel({ children }: PanelProps): JSX.Element {
             <Paper elevation={3} className={classes.paperStyle}>
               <Box py={5}>
                 <List component="nav" aria-label="main mailbox folders" className={classes.navSide}>
-                  <ListItem
-                    button
-                    component={Link}
-                    to="/profile"
-                    selected={(location.pathname == '/profile' && true) || (location.pathname == '/profile/' && true)}
-                  >
+                  <ListItem button component={Link} to="/profile" selected={location.pathname == '/profile' && true}>
                     <ListItemText primary="Profile"></ListItemText>
                   </ListItem>
                   <ListItem
                     button
                     component={Link}
                     to="/personal-info"
-                    selected={
-                      (location.pathname == '/personal-info' && true) ||
-                      (location.pathname == '/personal-info/' && true)
-                    }
+                    selected={location.pathname == '/personal-info' && true}
                   >
                     <ListItemText primary="Personal Information"></ListItemText>
                   </ListItem>
-                  <ListItem button component={Link} to="#" selected={location.pathname == '/#' && true}>
+                  <ListItem button component={Link} to="#">
                     <ListItemText primary="Payment details"></ListItemText>
                   </ListItem>
                   <ListItem button component={Link} to="#">
