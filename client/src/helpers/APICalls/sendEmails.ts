@@ -1,19 +1,19 @@
 import { FetchOptions } from '../../interface/FetchOptions';
-import { ProfileApiData } from '../../interface/Profile';
+import { EmailApiData } from '../../interface/Email';
 
 interface Props {
-  profileImage?: string;
-  status?: string;
+  receiverID: string;
+  contestID: string;
 }
 
-export async function updateProfile({ profileImage }: Props): Promise<ProfileApiData> {
+export async function sendWinnerEmail({ receiverID, contestID }: Props): Promise<EmailApiData> {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ profileImage, status }),
+    body: JSON.stringify({ receiverID }),
     credentials: 'include',
   };
-  return await fetch(`/users/profile`, fetchOptions)
+  return await fetch(`/contest/${contestID}/winner`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },
