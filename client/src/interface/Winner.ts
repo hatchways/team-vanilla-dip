@@ -9,6 +9,7 @@ export interface Winner {
 export interface NewWinner {
   winner?: Winner;
   error?: { message: string };
+  status?: string;
 }
 export interface Winners {
   winners?: Winner[];

@@ -19,10 +19,6 @@ import chargeCustomer from '../../../helpers/APICalls/chargeCustomer';
 import { useSnackBar } from '../../../context/useSnackbarContext';
 import deadlinePassed from '../../../helpers/datePassed';
 
-export interface ParamProps {
-  id: string;
-}
-
 function SubmissionCard({ imageSrc, author, contest }: SubmissionCardProps): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
@@ -54,6 +50,8 @@ function SubmissionCard({ imageSrc, author, contest }: SubmissionCardProps): JSX
         // Send Email to the user and the winner
         console.log(`Email will be sent to ${author.username} and ${user?.username}`);
       }
+    } else if (saveWinner && saveWinner.status) {
+      updateSnackBarMessage(saveWinner.status);
     }
   };
 
