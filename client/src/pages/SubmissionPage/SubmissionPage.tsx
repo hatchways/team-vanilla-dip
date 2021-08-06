@@ -8,6 +8,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { useHistory, useParams, Link } from 'react-router-dom';
+
 import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
 import SubmissionTabs from '../../components/SubmissionTabs/SubmissionTabs';
@@ -19,6 +20,7 @@ import deadlinePassed from '../../helpers/datePassed';
 import { useAuth } from '../../context/useAuthContext';
 
 export default function SubmissionPage(): JSX.Element {
+  const { loggedInUser } = useAuth();
   const classes = useStyles();
   const { id } = useParams<SubmissionParams>();
   const [contest, setContest] = useState<Contest>();
@@ -54,6 +56,10 @@ export default function SubmissionPage(): JSX.Element {
       setContestCreator(currentUser === createrID);
     }
   }, [contest, loggedInUser]);
+
+  if (loggedInUser === undefined || !loggedInUser || contest == undefined || contest.userID == undefined)
+    return <CircularProgress />;
+
 
   return (
     <Grid container component="main" className={classes.root}>
