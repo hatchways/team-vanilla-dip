@@ -8,7 +8,7 @@ export const postWinner = async (winner: Winner, contestID: string): Promise<New
     body: JSON.stringify({ winner, contestID }),
     credentials: 'include',
   };
-  return await fetch(`/`, fetchOptions)
+  return await fetch(`/winner/`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },
@@ -20,7 +20,7 @@ export const getWinners = async (): Promise<Winners> => {
     method: 'GET',
     credentials: 'include',
   };
-  return await fetch(`/`, fetchOptions)
+  return await fetch(`/winner/`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },
