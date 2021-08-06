@@ -6,7 +6,7 @@ import moment from 'moment';
 
 export default function Conversation({ convo, setConvo }: ConversationProps): JSX.Element {
   const classes = useStyles();
-
+  const { profileImage } = convo.profile;
   return (
     <>
       <ListItem alignItems="flex-start" button onClick={() => setConvo(convo)}>
@@ -23,7 +23,7 @@ export default function Conversation({ convo, setConvo }: ConversationProps): JS
                   }}
                   classes={{ badge: classes.inactiveBadge }}
                 >
-                  <Avatar alt="profile picture" src={profilePicAvatar} />
+                  <Avatar alt="profile picture" src={profileImage || profilePicAvatar} />
                 </Badge>
               </ListItemAvatar>
             </Grid>
