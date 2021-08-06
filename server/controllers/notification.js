@@ -1,16 +1,21 @@
 const Notification = require("../models/Notification");
+const User = require("../models/User");
 const asyncHandler = require("express-async-handler");
 const mongoose = require('mongoose');
 
 exports.createNotification = asyncHandler(async (req, res, next) => {
     const sender = req.user.id;
-    const {receiver, content, notificationType} = req.body;
+    const {receiverID, content, notificationType} = req.body;
+    const receiver = await User.findById(receiverID);
+    if (!receiver) {
+        return res.status(400).json({ status: "An error Occured! Receiver does not exist"})
+    };
     try {
         const notification = await new Notification({
             sender,
             content,
             notificationType,
-            receiver
+            receiver: receiver._id,
         }).save();
         if (!notification) {
             return res.status(400).json({ status: "submission not saved"})

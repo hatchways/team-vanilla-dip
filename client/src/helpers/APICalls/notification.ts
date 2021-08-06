@@ -2,7 +2,7 @@ import { ArrayNotificationApiData, SingleNotificationApiData } from '../../inter
 import { FetchOptions } from '../../interface/FetchOptions';
 
 interface CreateNotificationProps {
-  receiver: string;
+  receiverID: string;
   content?: string;
 }
 interface Props {
@@ -23,17 +23,18 @@ async function createNotification(body: string): Promise<SingleNotificationApiDa
 }
 //When a user submits something, it notifies the contest owner
 export async function createSubmitNotification({
-  receiver,
+  receiverID,
+  content,
 }: CreateNotificationProps): Promise<SingleNotificationApiData> {
-  return createNotification(JSON.stringify({ receiver, notificationType: 'submit' }));
+  return createNotification(JSON.stringify({ receiverID, content, notificationType: 'submit' }));
 }
 //When someone messages to receiver
 //body is the message text
 export async function createMessageNotification({
-  receiver,
+  receiverID,
   content,
 }: CreateNotificationProps): Promise<SingleNotificationApiData> {
-  return createNotification(JSON.stringify({ receiver, content, notificationType: 'message' }));
+  return createNotification(JSON.stringify({ receiverID, content, notificationType: 'message' }));
 }
 //When someone messages to receiver
 //body is the message text
