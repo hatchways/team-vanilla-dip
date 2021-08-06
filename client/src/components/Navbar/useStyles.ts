@@ -4,6 +4,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     background: 'black',
   },
+  badge: {
+    top: '-18px !important',
+    right: '0px !important',
+  },
   navButtons: {
     marginLeft: 'auto',
   },
@@ -18,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     color: 'white',
     margin: theme.spacing(2),
+  },
+  inlineBlock: {
+    display: 'inline-block',
   },
   insideButton: {
     fontWeight: 'bold',

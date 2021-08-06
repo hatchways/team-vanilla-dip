@@ -1,15 +1,18 @@
 import { useRef, useState } from 'react';
-import { AppBar, Toolbar, Avatar, Button, Box } from '@material-ui/core';
+import { AppBar, Toolbar, Avatar, Button, Box, Badge, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useAuth } from '../../context/useAuthContext';
+import { useNotifications } from '../../context/useNotificationContext';
 import logo from '../../Images/logo.png';
 import useStyles from './useStyles';
 import { useHistory } from 'react-router-dom';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+
 const Navbar = (): JSX.Element => {
   const { loggedInUser, logout } = useAuth();
+  const { allNotifications } = useNotifications();
   const classes = useStyles();
   const { location } = useHistory();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -36,9 +39,18 @@ const Navbar = (): JSX.Element => {
             <Button size="large" component={Link} to={'/messages'} color="primary" className={classes.button}>
               Messages
             </Button>
-            <Button size="large" component={Link} to={'/notifications'} color="primary" className={classes.button}>
-              Notifications
-            </Button>
+            {allNotifications.length > 0 ? (
+              <Box component="span">
+                <Button size="large" color="primary" component={Link} to={'/notifications'} className={classes.button}>
+                  Notifications
+                  <Badge badgeContent={allNotifications.length} color="secondary" className={classes.badge}></Badge>
+                </Button>
+              </Box>
+            ) : (
+              <Button size="large" component={Link} to={'/notifications'} color="primary" className={classes.button}>
+                Notifications
+              </Button>
+            )}
             <Button
               size="large"
               color="secondary"
