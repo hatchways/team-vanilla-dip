@@ -4,6 +4,7 @@ import { useAuth } from './useAuthContext';
 import fetchConversations from '../helpers/APICalls/getConversations';
 import fetchUser from '../helpers/APICalls/getUserById';
 import fetchMessages from '../helpers/APICalls/getMessagesByConvoId';
+import { getProfile } from '../helpers/APICalls/getProfile';
 
 interface IMessagingContext {
   conversations: MessagingData[] | [];
@@ -56,6 +57,14 @@ export const MessagesProvider: FunctionComponent = ({ children }): JSX.Element =
     }
   };
 
+  const fetchProfile = async (userID: string) => {
+    const response = await getProfile({ userID });
+
+    if (response && response.profile) {
+      return response.profile[0];
+    }
+  };
+
   useEffect(() => {
     let active = true;
 
@@ -71,17 +80,23 @@ export const MessagesProvider: FunctionComponent = ({ children }): JSX.Element =
             participant: null,
             messages: [],
             lastMessage: null,
+            profile: {
+              profileImage: '',
+              userID: '',
+            },
           };
 
           if (participantId && convo) {
             const participant = await getParticipant(participantId);
             const messagesData = await getMessagesData(convo._id);
-            if (participant && messagesData?.messages && messagesData?.lastMessage) {
+            const profile = await fetchProfile(participantId);
+            if (participant && messagesData?.messages && messagesData?.lastMessage && profile) {
               messageDataObj = {
                 ...messageDataObj,
                 participant,
                 messages: messagesData.messages,
                 lastMessage: messagesData.lastMessage,
+                profile,
               };
               return messageDataObj;
             }

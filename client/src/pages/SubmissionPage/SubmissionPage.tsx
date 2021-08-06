@@ -8,7 +8,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { useHistory, useParams, Link } from 'react-router-dom';
-
 import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
 import SubmissionTabs from '../../components/SubmissionTabs/SubmissionTabs';
@@ -16,15 +15,17 @@ import { fetchSubmissionByContestId, fetchContestById } from '../../helpers/APIC
 import { Contest } from '../../interface/Contest';
 import { Submission } from '../../interface/Submission';
 import { SubmissionParams } from '../SubmitPage/SubmissionParams';
+import deadlinePassed from '../../helpers/datePassed';
 import { useAuth } from '../../context/useAuthContext';
 
 export default function SubmissionPage(): JSX.Element {
-  const { loggedInUser } = useAuth();
   const classes = useStyles();
   const { id } = useParams<SubmissionParams>();
   const [contest, setContest] = useState<Contest>();
+  const [contestCreator, setContestCreator] = useState<boolean>(false);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const history = useHistory();
+  const { loggedInUser } = useAuth();
 
   useEffect(() => {
     const ac = new AbortController();
@@ -46,8 +47,13 @@ export default function SubmissionPage(): JSX.Element {
     return ac.abort();
   }, [id]);
 
-  if (loggedInUser === undefined || !loggedInUser || contest == undefined || contest.userID == undefined)
-    return <CircularProgress />;
+  useEffect(() => {
+    if (contest?.userID && loggedInUser) {
+      const createrID: string = contest.userID._id;
+      const currentUser: string = loggedInUser.id;
+      setContestCreator(currentUser === createrID);
+    }
+  }, [contest, loggedInUser]);
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -69,15 +75,21 @@ export default function SubmissionPage(): JSX.Element {
           <Grid container className={classes.gridContainer}>
             <Grid item>
               <Typography component="h2" variant="h3" className={classes.contestTitle}>
-                {contest == undefined ? <CircularProgress style={{ color: 'black' }} /> : contest.title}
-                <Button className={classes.contestPriceBtn}>$150</Button>
+                {contest == undefined ? <CircularProgress style={{ color: 'black' }} size={30} /> : contest.title}
+                {contest ? (
+                  <Button className={classes.contestPriceBtn}>{`$${contest.prizeAmount}`}</Button>
+                ) : (
+                  <Button className={classes.contestPriceBtn}>
+                    <CircularProgress style={{ color: 'white' }} size={20} />
+                  </Button>
+                )}
               </Typography>
               <Box className={classes.profileDetails}>
                 <Avatar />
                 <Box className={classes.profileName}>
                   <Typography variant="h6" component="h3">
                     {contest?.userID == undefined ? (
-                      <CircularProgress style={{ color: 'black' }} />
+                      <CircularProgress style={{ color: 'black' }} size={30} />
                     ) : (
                       contest.userID.username
                     )}
@@ -86,14 +98,18 @@ export default function SubmissionPage(): JSX.Element {
               </Box>
             </Grid>
             <Grid item>
-              {loggedInUser.id != contest.userID._id && (
+              {!contestCreator && !deadlinePassed(contest?.deadlineDate) ? (
                 <Button color="primary" component={Link} className={classes.submitBtn} to={`/contest/${id}/submit`}>
                   Submit Design
                 </Button>
-              )}
+              ) : null}
             </Grid>
           </Grid>
-          <SubmissionTabs card={submissions} />
+          {contest ? (
+            <SubmissionTabs card={submissions} contest={contest} />
+          ) : (
+            <CircularProgress style={{ color: 'black', margin: '15em 50em' }} size={75} />
+          )}
         </Box>
       </Box>
     </Grid>

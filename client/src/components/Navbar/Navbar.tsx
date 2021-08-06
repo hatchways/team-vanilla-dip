@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { AppBar, Toolbar, Avatar, Button, Box, Badge, Typography } from '@material-ui/core';
+import { useState } from 'react';
+import { AppBar, Toolbar, Avatar, Button, Box, Badge } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import CircularProgress from '@material-ui/core/CircularProgress';

@@ -5,10 +5,12 @@ import blackPattern from '../Discover/images/black-pattern.jpg';
 import useStyles from './useStyles';
 import Navbar from '../../components/Navbar/Navbar';
 import { Contest } from '../../interface/Contest';
+import { Winner } from '../../interface/Winner';
 import { useContests } from '../../context/useContestContext';
+import { getWinners } from '../../helpers/APICalls/winners';
 import ContestCard from './ContestCard/ContestCard';
 import WinnerCard from './WinnersCard/Winner';
-import winnersTestData from './test data/winnersTestData.js';
+import deadlinePassed from '../../helpers/datePassed';
 import { Typography, Grid, CssBaseline, Button } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -18,13 +20,32 @@ export default function Discover(): JSX.Element {
   const classes = useStyles();
 
   const [activeContests, setActiveContests] = useState<Contest[] | []>([]);
+  const [winners, setWinners] = useState<Winner[] | []>([]);
   const { allContests } = useContests();
   const history = useHistory();
 
   useEffect(() => {
-    const newActiveContests = allContests.filter((contest: Contest) => new Date(contest.deadlineDate) >= new Date());
+    const newActiveContests = allContests.filter((contest: Contest) => !deadlinePassed(contest.deadlineDate));
     setActiveContests(newActiveContests);
   }, [allContests]);
+
+  useEffect(() => {
+    let active = true;
+
+    const fetchWinners = async () => {
+      const response = await getWinners();
+
+      if (active && response && response.winners) {
+        setWinners(response.winners);
+      }
+    };
+
+    fetchWinners();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <Grid container className={classes.root} direction="column" alignItems="center">
@@ -65,13 +86,12 @@ export default function Discover(): JSX.Element {
             <Typography variant="h4">Latest Winners</Typography>
           </Grid>
           <Grid item container spacing={3}>
-            {winnersTestData.map((winner) => {
+            {winners.map((winner) => {
               return (
-                <Grid item lg={2} md={3} sm={3} xs={6} key={winner.id}>
+                <Grid item lg={2} md={3} sm={3} xs={6} key={winner._id}>
                   <WinnerCard
                     image={winner.image}
-                    winningDate={winner.winningDate}
-                    designTitle={winner.designTitle}
+                    winningDate={winner.winningDate.toString()}
                     contestTitle={winner.contestTitle}
                     username={winner.username}
                   />

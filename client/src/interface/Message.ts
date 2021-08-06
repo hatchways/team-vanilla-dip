@@ -1,5 +1,6 @@
 import { User } from './User';
 import { Conversation } from './Conversation';
+import { Profile } from './Profile';
 
 export interface Message {
   _id?: string;
@@ -27,4 +28,5 @@ export interface MessagingData {
   participant: User | null;
   messages: Message[] | [];
   lastMessage: Message | null;
+  profile: Profile;
 }

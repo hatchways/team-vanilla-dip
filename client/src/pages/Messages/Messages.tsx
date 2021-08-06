@@ -1,6 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import useStyles from './useStyles';
 import { useMessages } from '../../context/useMessagingContext';
+import { getProfile } from '../../helpers/APICalls/getProfile';
 import createConvo from '../../helpers/APICalls/createNewConvo';
 import { User } from '../../interface/User';
 import { MessagingData } from '../../interface/Message';
@@ -36,12 +37,15 @@ export default function Messages(): JSX.Element {
       const createAndPushConvo = async () => {
         const response = await createConvo(newParticipant._id);
 
-        if (active && response && response.conversation) {
+        const participantProfile = await getProfile({ userID: newParticipant._id });
+
+        if (active && response && response.conversation && participantProfile.profile) {
           const convoDataObj: MessagingData = {
             conversation: response.conversation,
             participant: newParticipant,
             messages: [],
             lastMessage: null,
+            profile: participantProfile.profile[0],
           };
           setCurrentConvo(convoDataObj);
           updateConversations(convoDataObj);

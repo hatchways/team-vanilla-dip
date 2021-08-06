@@ -17,3 +17,8 @@ export interface ProfileApiData {
   error?: { message: string };
   status: string;
 }
+
+export interface NewProfile {
+  profile?: Profile[];
+  error?: { message: string };
+}

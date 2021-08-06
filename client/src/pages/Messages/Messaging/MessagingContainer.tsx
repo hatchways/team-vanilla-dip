@@ -67,6 +67,7 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
         participant: convo.participant,
         messages: updatedMessages,
         lastMessage: updatedMessages[updatedMessages.length - 1],
+        profile: convo.profile,
       });
       setSubmitting(false);
     }
@@ -86,7 +87,7 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
               }}
               classes={{ badge: classes.activeBadge }}
             >
-              <Avatar alt="profile picture" src={profileAvatar} />
+              <Avatar alt="profile picture" src={convo.profile.profileImage || profileAvatar} />
             </Badge>
           </Grid>
         </Grid>
@@ -104,7 +105,7 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
         </Grid>
       </Grid>
       <Grid item container alignItems="flex-end" justifyContent="flex-end" className={classes.chatboxContainer}>
-        <MessageList messages={messages} participant={convo.participant} />
+        <MessageList messages={messages} profile={convo.profile} />
       </Grid>
       <form onSubmit={handleNewMessageSubmit} style={{ width: '100%' }}>
         <Divider />
