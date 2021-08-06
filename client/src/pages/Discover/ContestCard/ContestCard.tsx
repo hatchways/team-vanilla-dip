@@ -56,7 +56,7 @@ export default function ContestCard({ title, description, prizeAmount, image, de
                 {moment(deadlineDate).format('MMMM, Do')}
               </Typography>
               <Typography variant="body1" align="center" className={classes.time}>
-                {moment(deadlineDate).format('h:m A')}
+                {moment(deadlineDate).format('hh:mm A')}
               </Typography>
             </Grid>
           </Grid>

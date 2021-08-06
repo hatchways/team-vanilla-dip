@@ -16,6 +16,7 @@ import { Winner } from '../../../interface/Winner';
 import { postWinner } from '../../../helpers/APICalls/winners';
 import chargeCustomer from '../../../helpers/APICalls/chargeCustomer';
 import { useSnackBar } from '../../../context/useSnackbarContext';
+import deadlinePassed from '../../../helpers/datePassed';
 
 function SubmissionCard({ imageSrc, author, contest }: SubmissionCardProps): JSX.Element {
   const classes = useStyles();
@@ -55,13 +56,15 @@ function SubmissionCard({ imageSrc, author, contest }: SubmissionCardProps): JSX
       <Box className={classes.displayOver}>
         <CardContent className={classes.submissionContent}>
           <Typography gutterBottom variant="h5" component="h2">
-            <Button
-              className={classes.winner}
-              onClick={() => handleWinnerSelection(imageSrc, author, contest, loggedInUser)}
-            >
-              <DoneIcon />
-              Winner
-            </Button>
+            {deadlinePassed(contest.deadlineDate) ? (
+              <Button
+                className={classes.winner}
+                onClick={() => handleWinnerSelection(imageSrc, author, contest, loggedInUser)}
+              >
+                <DoneIcon />
+                Winner
+              </Button>
+            ) : null}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             By @{author.username}

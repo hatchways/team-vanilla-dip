@@ -35,6 +35,7 @@ export const ContestProvider: FunctionComponent = ({ children }): JSX.Element =>
     const getAllContests = async () => {
       const contests = await fetchAllContests();
       if (contests.contests && contests.contests.length > 0) {
+        console.log(contests.contests);
         setAllContests(contests.contests);
       } else {
         setAllContests([]);

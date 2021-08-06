@@ -10,7 +10,7 @@ import { useContests } from '../../context/useContestContext';
 import { getWinners } from '../../helpers/APICalls/winners';
 import ContestCard from './ContestCard/ContestCard';
 import WinnerCard from './WinnersCard/Winner';
-//import winnersTestData from './test data/winnersTestData.js';
+import deadlinePassed from '../../helpers/datePassed';
 import { Typography, Grid, CssBaseline, Button } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -25,7 +25,7 @@ export default function Discover(): JSX.Element {
   const history = useHistory();
 
   useEffect(() => {
-    const newActiveContests = allContests.filter((contest: Contest) => new Date(contest.deadlineDate) >= new Date());
+    const newActiveContests = allContests.filter((contest: Contest) => !deadlinePassed(contest.deadlineDate));
     setActiveContests(newActiveContests);
   }, [allContests]);
 

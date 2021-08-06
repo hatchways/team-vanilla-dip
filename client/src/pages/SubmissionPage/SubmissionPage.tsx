@@ -15,6 +15,7 @@ import { fetchSubmissionByContestId, fetchContestById } from '../../helpers/APIC
 import { Contest } from '../../interface/Contest';
 import { Submission } from '../../interface/Submission';
 import { SubmissionParams } from '../SubmitPage/SubmissionParams';
+import deadlinePassed from '../../helpers/datePassed';
 
 export default function SubmissionPage(): JSX.Element {
   const classes = useStyles();
@@ -86,9 +87,11 @@ export default function SubmissionPage(): JSX.Element {
               </Box>
             </Grid>
             <Grid item>
-              <Button color="primary" component={Link} className={classes.submitBtn} to={`/contest/${id}/submit`}>
-                Submit Design
-              </Button>
+              {!deadlinePassed(contest?.deadlineDate) ? (
+                <Button color="primary" component={Link} className={classes.submitBtn} to={`/contest/${id}/submit`}>
+                  Submit Design
+                </Button>
+              ) : null}
             </Grid>
           </Grid>
           {contest ? (

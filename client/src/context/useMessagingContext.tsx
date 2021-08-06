@@ -98,7 +98,6 @@ export const MessagesProvider: FunctionComponent = ({ children }): JSX.Element =
                 lastMessage: messagesData.lastMessage,
                 profile,
               };
-              console.log(profile);
               return messageDataObj;
             }
           }
