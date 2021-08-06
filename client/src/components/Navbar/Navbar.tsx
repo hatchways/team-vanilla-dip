@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { AppBar, Toolbar, Avatar, Button, Box } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';

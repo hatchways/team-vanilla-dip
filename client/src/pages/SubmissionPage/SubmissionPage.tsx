@@ -63,15 +63,21 @@ export default function SubmissionPage(): JSX.Element {
           <Grid container className={classes.gridContainer}>
             <Grid item>
               <Typography component="h2" variant="h3" className={classes.contestTitle}>
-                {contest == undefined ? <CircularProgress style={{ color: 'black' }} /> : contest.title}
-                <Button className={classes.contestPriceBtn}>$150</Button>
+                {contest == undefined ? <CircularProgress style={{ color: 'black' }} size={30} /> : contest.title}
+                {contest ? (
+                  <Button className={classes.contestPriceBtn}>{`$${contest.prizeAmount}`}</Button>
+                ) : (
+                  <Button className={classes.contestPriceBtn}>
+                    <CircularProgress style={{ color: 'white' }} size={20} />
+                  </Button>
+                )}
               </Typography>
               <Box className={classes.profileDetails}>
                 <Avatar />
                 <Box className={classes.profileName}>
                   <Typography variant="h6" component="h3">
                     {contest?.userID == undefined ? (
-                      <CircularProgress style={{ color: 'black' }} />
+                      <CircularProgress style={{ color: 'black' }} size={30} />
                     ) : (
                       contest.userID.username
                     )}
@@ -85,7 +91,11 @@ export default function SubmissionPage(): JSX.Element {
               </Button>
             </Grid>
           </Grid>
-          <SubmissionTabs card={submissions} />
+          {contest ? (
+            <SubmissionTabs card={submissions} contest={contest} />
+          ) : (
+            <CircularProgress style={{ color: 'black', margin: '15em 50em' }} size={75} />
+          )}
         </Box>
       </Box>
     </Grid>

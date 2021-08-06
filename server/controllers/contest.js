@@ -13,14 +13,14 @@ exports.createContest = asyncHandler(async (req, res, next) => {
         prizeAmount,
         deadlineDate,
         userID,
-        imageFiles
+        imageFiles,
+        closed: false,
     });
     try {
         const result = await contest.save();
         if (!result) {
             return res.status(400).json({ status: "contest not saved!!" });
         }
-        console.log("Saved Contest Successfully")
         res.status(201).json({
             success:{
                 status: "contest saved!!",
@@ -79,7 +79,7 @@ exports.getContestById = asyncHandler(async (req, res, next) => {
 // A list of contests that are available for submission
 exports.getContests = asyncHandler(async (req, res, next) => {
   try {
-    const contests = await Contest.find({});
+    const contests = await Contest.find({closed: false});
     if (contests.length === 0) {
       return res.status(404).json({ status: "no contests in records!!" });
     }

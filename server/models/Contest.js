@@ -29,6 +29,9 @@ const contestSchema = new mongoose.Schema({
   dateCreated: {
     type: Date,
     default: Date.now,
+  },
+  closed: {
+    type: Boolean,
   }
 });
 

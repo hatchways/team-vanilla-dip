@@ -9,6 +9,7 @@ export interface Contest {
   dateCreated: string;
   imageFiles: string[];
   _id: string;
+  closed?: boolean;
 }
 
 export interface ContestApiData {

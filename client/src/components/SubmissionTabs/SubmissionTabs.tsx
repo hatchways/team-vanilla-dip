@@ -8,9 +8,11 @@ import { Paper } from '@material-ui/core';
 import useStyles from './useStyles';
 import SubmissionCard from './SubmissionCard/SubmissionCard';
 import { Submission } from '../../interface/Submission';
+import { Contest } from '../../interface/Contest';
 
-interface cardProps {
+interface Props {
   card: Submission[];
+  contest: Contest;
 }
 
 interface TabPanelProps {
@@ -29,7 +31,7 @@ function SubmissionTabPanel(props: TabPanelProps) {
   );
 }
 
-function SubmissionTabs({ card }: cardProps): JSX.Element {
+function SubmissionTabs({ card, contest }: Props): JSX.Element {
   const [value, setValue] = React.useState(0);
   const classes = useStyles();
 
@@ -66,12 +68,12 @@ function SubmissionTabs({ card }: cardProps): JSX.Element {
                 data.imageFiles.length > 1 ? (
                   data.imageFiles.map((image) => (
                     <Grid item md={3} xs={12} key={data.contestID + image}>
-                      <SubmissionCard imageSrc={image} author={data.userID.username} />
+                      <SubmissionCard imageSrc={image} author={data.userID} contest={contest} />
                     </Grid>
                   ))
                 ) : (
                   <Grid item md={3} xs={12} key={data.contestID + data.imageFiles[0]}>
-                    <SubmissionCard imageSrc={data.imageFiles[0]} author={data.userID.username} />
+                    <SubmissionCard imageSrc={data.imageFiles[0]} author={data.userID} contest={contest} />
                   </Grid>
                 ),
               )}

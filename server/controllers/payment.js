@@ -34,6 +34,7 @@ exports.chargeCustomer = asyncHandler(async (req, res) => {
       const paymentIntent = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
       return res.status(401).json({ payment_intent: paymentIntent });
     }
+    res.status(500).json({ error });
   }
 });
 
