@@ -1,17 +1,17 @@
 import { useRef, useEffect } from 'react';
 import useStyles from './useStyles';
 import profileAvatar from '../../../Images/user.png';
-import { User } from '../../../interface/User';
+import { Profile } from '../../../interface/Profile';
 import { Message } from '../../../interface/Message';
 import { useAuth } from '../../../context/useAuthContext';
 import { Typography, Grid, Avatar, Paper } from '@material-ui/core';
 
 interface Props {
   messages: Message[] | [];
-  participant?: User | null;
+  profile: Profile;
 }
 
-export default function MessageList({ messages }: Props): JSX.Element {
+export default function MessageList({ messages, profile }: Props): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
 
@@ -45,7 +45,7 @@ export default function MessageList({ messages }: Props): JSX.Element {
           <Grid ref={scrollRef} key={message._id} item container className={classes.messageContainer}>
             <Grid item container justifyContent="center" xs={1}>
               <Grid item>
-                <Avatar alt="profile picture" src={profileAvatar} />
+                <Avatar alt="profile picture" src={profile.profileImage || profileAvatar} />
               </Grid>
             </Grid>
             <Grid item container justifyContent="flex-start" xs={5}>

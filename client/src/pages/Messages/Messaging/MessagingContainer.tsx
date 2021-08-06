@@ -105,7 +105,7 @@ export default function MessagingContainer({ convo }: Props): JSX.Element {
         </Grid>
       </Grid>
       <Grid item container alignItems="flex-end" justifyContent="flex-end" className={classes.chatboxContainer}>
-        <MessageList messages={messages} participant={convo.participant} />
+        <MessageList messages={messages} profile={convo.profile} />
       </Grid>
       <form onSubmit={handleNewMessageSubmit} style={{ width: '100%' }}>
         <Divider />
