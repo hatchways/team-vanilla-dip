@@ -1,7 +1,5 @@
-
 import { useAuth } from '../../../context/useAuthContext';
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -11,8 +9,6 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import DoneIcon from '@material-ui/icons/Done';
 
-import { useAuth } from '../../../context/useAuthContext';
-import { Contest } from '../../../interface/Contest';
 import useStyles from './useStyles';
 import SubmissionCardProps from '../SumissionCardInterface';
 import { Contest } from '../../../interface/Contest';
@@ -22,7 +18,6 @@ import { postWinner } from '../../../helpers/APICalls/winners';
 import chargeCustomer from '../../../helpers/APICalls/chargeCustomer';
 import { useSnackBar } from '../../../context/useSnackbarContext';
 import deadlinePassed from '../../../helpers/datePassed';
-import { fetchContestById } from '../../../helpers/APICalls/searchContest';
 
 export interface ParamProps {
   id: string;
@@ -31,24 +26,10 @@ export interface ParamProps {
 function SubmissionCard({ imageSrc, author, contest }: SubmissionCardProps): JSX.Element {
   const classes = useStyles();
   const { loggedInUser } = useAuth();
-  const [contest, setContest] = useState<Contest>();
-  const { id } = useParams<ParamProps>();
-
-  useEffect(() => {
-    const ac = new AbortController();
-    fetchContestById({ id: id }).then((res) => {
-      if (res.success) {
-        setContest(res.success as Contest);
-      }
-    });
-    return ac.abort();
-  }, [id]);
+  const { updateSnackBarMessage } = useSnackBar();
 
   if (loggedInUser === undefined || !loggedInUser || contest == undefined || contest.userID == undefined)
     return <CircularProgress />;
-
-  const { loggedInUser } = useAuth();
-  const { updateSnackBarMessage } = useSnackBar();
 
   const handleWinnerSelection = async (
     imageSrc: string,
