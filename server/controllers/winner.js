@@ -8,7 +8,7 @@ exports.selectWinner = asyncHandler(async (req, res) => {
     await Contest.findByIdAndUpdate(contestID, { closed: true });
 
     const existingWinner = await Winner.find({ contestTitle: winner.contestTitle });
-    if (!existingWinner[0].contestTitle) {
+    if (!existingWinner[0]) {
       const newWinner = new Winner({
         contestTitle: winner.contestTitle,
         winningDate: winner.winningDate,
@@ -22,6 +22,7 @@ exports.selectWinner = asyncHandler(async (req, res) => {
 
     res.status(200).json({ status: 'Winner has been declared already.' });
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 });
