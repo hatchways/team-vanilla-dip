@@ -132,11 +132,29 @@ exports.createSubmission = asyncHandler(async (req, res, next) => {
 });
 // Given an contest ID, return contest with that ID
 exports.getSubmissionByContestId = asyncHandler(async (req, res, next) => {
-  const contestId = req.params.id;
-  try {
-    const foundSubmission = await Submission.find({ contestID: contestId }).populate('userID');
-    if (!foundSubmission) {
-      return res.status(404).json({ status: 'contest not found!!' });
+    const userID = req.user.id;
+    const contestID = req.params.id;
+    let foundSubmission;
+    try {
+        const contest = await Contest.findById({ _id: contestID })
+        if (!contest) {
+            return res.status(404).json({ status: "contest not found!!" });
+        }
+        if (userID == contest.userID) {
+            foundSubmission = await Submission.find({ contestID: contestID }).populate('userID');
+        } else {
+            foundSubmission = await Submission.find({ contestID: contestID, userID: userID}).populate('userID')
+        }
+        if (!foundSubmission) {
+            return res.status(404).json({ status: "Submission not found!!" });
+        }
+        return res.status(200).json({
+            status: "submissions found!!",
+            submissions: foundSubmission,
+        });
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ error });
     }
     res.status(200).json({
       status: 'submissions found!!',
