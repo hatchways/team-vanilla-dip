@@ -66,16 +66,28 @@ const Navbar = (): JSX.Element => {
 
         <Box className={classes.navButtons} justifyContent="space-between" alignItems="center">
           {!loggedInUser && (
-            <Button
-              size="large"
-              component={Link}
-              to={location.pathname == '/signup' ? '/login' : '/signup'}
-              color="primary"
-              className={classes.authButton}
-              variant="outlined"
-            >
-              {location.pathname == '/signup' ? 'log in' : 'sign up'}
-            </Button>
+            <>
+              <Button
+                size="large"
+                component={Link}
+                to={location.pathname == '/discover' ? '/signup' : '/login'}
+                color="primary"
+                className={classes.authButton}
+                variant="outlined"
+              >
+                {location.pathname == '/discover' ? 'sign up' : 'log in'}
+              </Button>
+              <Button
+                size="large"
+                component={Link}
+                to={location.pathname == '/discover' ? '/login' : '/signup'}
+                color="primary"
+                className={classes.authButton}
+                variant="outlined"
+              >
+                {location.pathname == '/discover' ? 'log in' : 'sign up'}
+              </Button>
+            </>
           )}
         </Box>
 
@@ -113,6 +125,17 @@ const Navbar = (): JSX.Element => {
                 className={classes.insideButton}
               >
                 Profile
+              </Button>
+              <Button
+                variant="contained"
+                size="large"
+                component={Link}
+                to={'/dashboard'}
+                fullWidth
+                color="primary"
+                className={classes.insideButton}
+              >
+                Dashboard
               </Button>
               <Button
                 variant="contained"

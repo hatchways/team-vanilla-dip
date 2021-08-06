@@ -34,9 +34,9 @@ function App(): JSX.Element {
                 <MessagesProvider>
                   <NotificationProvider>
                     <Switch>
+                      <Route exact path="/discover" component={Discover} />
                       <Route exact path="/login" component={Login} />
                       <Route exact path="/signup" component={Signup} />
-                      <Route exact path="/discover" component={Discover} />
                       <ProtectedRoute exact path="/messages">
                         <Messages />
                       </ProtectedRoute>
@@ -65,7 +65,7 @@ function App(): JSX.Element {
                         <Submit />
                       </ProtectedRoute>
                       <ProtectedRoute path="*" exact>
-                        <Redirect to="/dashboard" />
+                        <Redirect to="/discover" />
                       </ProtectedRoute>
                     </Switch>
                   </NotificationProvider>
