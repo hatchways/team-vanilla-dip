@@ -16,13 +16,16 @@ import { Contest } from '../../interface/Contest';
 import { Submission } from '../../interface/Submission';
 import { SubmissionParams } from '../SubmitPage/SubmissionParams';
 import deadlinePassed from '../../helpers/datePassed';
+import { useAuth } from '../../context/useAuthContext';
 
 export default function SubmissionPage(): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<SubmissionParams>();
   const [contest, setContest] = useState<Contest>();
+  const [contestCreator, setContestCreator] = useState<boolean>(false);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const history = useHistory();
+  const { loggedInUser } = useAuth();
 
   useEffect(() => {
     const ac = new AbortController();
@@ -43,6 +46,14 @@ export default function SubmissionPage(): JSX.Element {
     });
     return ac.abort();
   }, [id]);
+
+  useEffect(() => {
+    if (contest?.userID && loggedInUser) {
+      const createrID: string = contest.userID._id;
+      const currentUser: string = loggedInUser.id;
+      setContestCreator(currentUser === createrID);
+    }
+  }, [contest, loggedInUser]);
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -87,7 +98,7 @@ export default function SubmissionPage(): JSX.Element {
               </Box>
             </Grid>
             <Grid item>
-              {!deadlinePassed(contest?.deadlineDate) ? (
+              {!contestCreator && !deadlinePassed(contest?.deadlineDate) ? (
                 <Button color="primary" component={Link} className={classes.submitBtn} to={`/contest/${id}/submit`}>
                   Submit Design
                 </Button>
