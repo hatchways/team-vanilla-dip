@@ -7,7 +7,7 @@ const chargeCustomer = async (contestID: string): Promise<ChargeCustomer> => {
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   };
-  return await fetch(`/charge/${contestID}`, fetchOptions)
+  return await fetch(`/payment/charge/${contestID}`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },

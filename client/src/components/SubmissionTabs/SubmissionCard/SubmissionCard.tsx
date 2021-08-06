@@ -12,20 +12,41 @@ import useStyles from './useStyles';
 import SubmissionCardProps from '../SumissionCardInterface';
 import { Contest } from '../../../interface/Contest';
 import { User } from '../../../interface/User';
+import { Winner } from '../../../interface/Winner';
+import { postWinner } from '../../../helpers/APICalls/winners';
+import chargeCustomer from '../../../helpers/APICalls/chargeCustomer';
+import { useSnackBar } from '../../../context/useSnackbarContext';
 
 function SubmissionCard({ imageSrc, author, contest }: SubmissionCardProps): JSX.Element {
   const classes = useStyles();
 
   const { loggedInUser } = useAuth();
+  const { updateSnackBarMessage } = useSnackBar();
 
-  const handleWinnerSelection = (imageSrc: string, author: User, contest: Contest, user: User | null | undefined) => {
-    console.log(imageSrc, author, contest, user);
-    //Winner Selection Client End Logic
-    //2. Make a winner object similar to database model
-    //3. Post the winner object to the server
-    //4. Send Email to the user and the winner
-    //5. Charge the customer
-    //6. updateSnackbar message "Card Charged"
+  const handleWinnerSelection = async (
+    imageSrc: string,
+    author: User,
+    contest: Contest,
+    user: User | null | undefined,
+  ) => {
+    const winner: Winner = {
+      contestTitle: contest.title,
+      image: imageSrc,
+      username: author.username,
+      winningDate: new Date(),
+    };
+
+    const saveWinner = await postWinner(winner, contest._id);
+
+    if (saveWinner && saveWinner.winner) {
+      const processingPayment = await chargeCustomer(contest._id);
+
+      if (processingPayment && processingPayment.status) {
+        updateSnackBarMessage('Card on file has been successfully charged. Thank you');
+        // Send Email to the user and the winner
+        console.log(`Email will be sent to ${author.username} and ${user?.username}`);
+      }
+    }
   };
 
   return (

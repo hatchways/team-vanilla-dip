@@ -30,6 +30,7 @@ exports.chargeCustomer = asyncHandler(async (req, res) => {
       status: 'success',
     });
   } catch (error) {
+    console.log(error);
     if (error.code === 'authentication_required') {
       const paymentIntent = await stripe.paymentIntents.retrieve(error.raw.payment_intent.id);
       return res.status(401).json({ payment_intent: paymentIntent });
