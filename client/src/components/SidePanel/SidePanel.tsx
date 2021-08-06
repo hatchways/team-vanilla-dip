@@ -49,20 +49,28 @@ function SidePanel({ children }: PanelProps): JSX.Element {
                   >
                     <ListItemText primary="Personal Information"></ListItemText>
                   </ListItem>
-                  <ListItem button component={Link} to="/payment-details">
+                  <ListItem
+                    button
+                    component={Link}
+                    to="/payment-details"
+                    selected={location.pathname == '/payment-details' && true}
+                  >
                     <ListItemText primary="Payment details"></ListItemText>
                   </ListItem>
-                  <ListItem button component={Link} to="/notifications">
+                  <ListItem
+                    button
+                    component={Link}
+                    to="/notifications"
+                    selected={location.pathname == '/notifications' && true}
+                  >
                     <ListItemText primary="Notifications"></ListItemText>
                   </ListItem>
                 </List>
               </Box>
             </Paper>
           </Grid>
-          <Grid item>
-            <Box p={5} className={classes.mainContent}>
-              {children}
-            </Box>
+          <Grid item className={classes.mainContent}>
+            <Box p={5}>{children}</Box>
           </Grid>
         </Grid>
       </Box>

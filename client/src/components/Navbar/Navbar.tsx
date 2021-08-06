@@ -21,7 +21,6 @@ const Navbar = (): JSX.Element => {
     setAnchorEl(event.currentTarget);
   };
 
-
   const handleClose = () => {
     setAnchorEl(null);
   };

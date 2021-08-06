@@ -24,8 +24,9 @@ async function createNotification(body: string): Promise<SingleNotificationApiDa
 //When a user submits something, it notifies the contest owner
 export async function createSubmitNotification({
   receiverID,
+  content,
 }: CreateNotificationProps): Promise<SingleNotificationApiData> {
-  return createNotification(JSON.stringify({ receiverID, notificationType: 'submit' }));
+  return createNotification(JSON.stringify({ receiverID, content, notificationType: 'submit' }));
 }
 //When someone messages to receiver
 //body is the message text

@@ -61,6 +61,7 @@ export default function Submit(): JSX.Element {
 }
 
 function FileUploader(): JSX.Element {
+  const { loggedInUser } = useAuth();
   const [imageList, setImageList] = useState<ImageListProps[]>([]);
   const [contest, setContest] = useState<Contest>();
   const [processing, setProcessing] = useState<boolean>(false);
@@ -79,7 +80,15 @@ function FileUploader(): JSX.Element {
     return ac.abort();
   }, [id]);
 
-  if (contest === undefined || !contest || contest.userID === undefined || !contest.userID) return <CircularProgress />;
+  if (
+    loggedInUser == undefined ||
+    loggedInUser.profile == undefined ||
+    contest === undefined ||
+    !contest ||
+    contest.userID === undefined ||
+    !contest.userID
+  )
+    return <CircularProgress />;
 
   const handleDeleteImage = (index: number) => {
     const newArray = [...imageList];
@@ -102,7 +111,13 @@ function FileUploader(): JSX.Element {
                 {
                   contest.userID == undefined
                     ? updateSnackBarMessage('Could not send Notification to contest owner')
-                    : createSubmitNotification({ receiverID: contest.userID._id }).then((resp) => {
+                    : createSubmitNotification({
+                        receiverID: contest.userID._id,
+                        content: JSON.stringify({
+                          message: `Submission made by ${loggedInUser.email} on ${contest.title}`,
+                          image: loggedInUser.profile?.profileImage,
+                        }),
+                      }).then((resp) => {
                         if (resp.notification) {
                           updateSnackBarMessage('Sent notification to contest owner');
                         }

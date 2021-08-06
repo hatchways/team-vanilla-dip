@@ -1,4 +1,5 @@
 import { createContext, FunctionComponent, useCallback, useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useAuth } from './useAuthContext';
 import { fetchAllNotificationByUserId, markNotificationRead } from '../helpers/APICalls/notification';
 import { Notification } from '../interface/Notification';
@@ -15,6 +16,7 @@ export const NotificationContext = createContext<INotificationContext>({
   },
 });
 export const NotificationProvider: FunctionComponent = ({ children }): JSX.Element => {
+  const history = useHistory();
   const { loggedInUser } = useAuth();
   // get all Notifications and submission by userID
   useEffect(() => {
@@ -25,7 +27,7 @@ export const NotificationProvider: FunctionComponent = ({ children }): JSX.Eleme
       };
       getAllNotificationByUserId();
     }
-  }, [loggedInUser]);
+  }, [loggedInUser, history]);
   const [allNotifications, setAllNotifications] = useState<Notification[]>();
   return (
     <NotificationContext.Provider
