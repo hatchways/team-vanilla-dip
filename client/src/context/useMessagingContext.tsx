@@ -112,6 +112,7 @@ export const MessagesProvider: FunctionComponent = ({ children }): JSX.Element =
 
     return () => {
       active = false;
+      setConversations([]);
     };
   }, [loggedInUser]);
 
